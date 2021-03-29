@@ -2,6 +2,7 @@ import Globals from "../collections/Globals";
 import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
 import ServerDeviceEvents from "../../types/ServerDeviceEvents";
 import ServerDevicePayloads from "../../types/ServerDevicePayloads";
+import Cookie from "js-cookie";
 
 function reduceGlobals(
   state: Globals = {
@@ -67,6 +68,11 @@ function reduceGlobals(
         localUser: undefined,
       };
     case ServerDeviceEvents.LocalDeviceReady:
+      // Store cookie of uuid
+      const payload = action.payload as ServerDevicePayloads.LocalDeviceReady;
+      if( payload.uuid ) {
+        Cookie.set("device", payload.uuid);
+      }
       return {
         ...state,
         localDeviceId: action.payload._id,

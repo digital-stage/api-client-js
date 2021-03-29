@@ -1,8 +1,9 @@
-import { Store } from "redux";
-import { TeckosClient } from "teckos-client";
+import {Store} from "redux";
+import {TeckosClient} from "teckos-client";
 import ServerDeviceEvents from "../types/ServerDeviceEvents";
 import allActions from "./actions";
 import ServerDevicePayloads from "../types/ServerDevicePayloads";
+import Cookie from "js-cookie";
 
 const registerSocketHandler = (
   store: Store,
@@ -24,6 +25,9 @@ const registerSocketHandler = (
       store.dispatch(
         allActions.deviceActions.server.handleLocalDeviceReady(payload)
       );
+      if( payload.requestSession && payload.uuid ) {
+        Cookie.set("device", payload.uuid);
+      }
     }
   );
 
