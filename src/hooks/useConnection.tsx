@@ -2,23 +2,22 @@ import React, {createContext, useEffect, useState} from "react";
 import {useStore} from "react-redux";
 import {useAuth} from "./useAuth";
 import {ITeckosClient, TeckosClient, TeckosClientWithJWT} from "teckos-client";
-import {registerSocketHandler, getInitialDevice} from "@digitalstage/api-client-js";
 import {debug} from "debug";
+import registerSocketHandler from "../redux/registerSocketHandler";
+import getInitialDevice from "../utils/getInitialDevice";
 
-const d = debug("api-connection");
+const d = debug("connection");
 
-interface IApiConnectionContext {
-  socket?: ITeckosClient
-}
+type IApiConnectionContext = ITeckosClient | undefined;
 
-const ApiConnectionContext = createContext<IApiConnectionContext>({});
+const ApiConnectionContext = createContext<IApiConnectionContext>(undefined);
 
-const useApiConnection = (): IApiConnectionContext => React.useContext<IApiConnectionContext>(ApiConnectionContext);
+const useConnection = (): IApiConnectionContext => React.useContext<IApiConnectionContext>(ApiConnectionContext);
 
 export const ApiConnectionProvider = (props: { children: React.ReactNode; apiUrl: string }) => {
   const {token} = useAuth();
   const store = useStore();
-  const [socket, setSocket] = useState<TeckosClient>();
+  const [connection, setConnection] = useState<TeckosClient>();
   const {children, apiUrl} = props;
 
   useEffect(() => {
@@ -39,27 +38,26 @@ export const ApiConnectionProvider = (props: { children: React.ReactNode; apiUrl
           socket.on("reconnect", () => d("Reconnected"));
           d("Connecting...");
           socket.connect();
-          setSocket(socket);
+          setConnection(socket);
         })
     }
   }, [store, token]);
 
   useEffect(() => {
-    if (socket) {
+    if (connection) {
       return () => {
-        socket.removeAllListeners();
-        socket.disconnect();
+        connection.removeAllListeners();
+        connection.disconnect();
       }
     }
-  }, [socket])
+    return;
+  }, [connection])
 
   return (
-    <ApiConnectionContext.Provider value={{
-      socket
-    }}>
+    <ApiConnectionContext.Provider value={connection}>
       {children}
     </ApiConnectionContext.Provider>
   )
 }
 
-export default useApiConnection;
+export default useConnection;

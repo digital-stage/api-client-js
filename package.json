@@ -13,11 +13,16 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test",
+    "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17",
+    "react-redux": ">=17"
   },
   "husky": {
     "hooks": {
@@ -30,35 +35,47 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@digitalstage/api-client-js",
+  "name": "@digitalstage/api-client-react",
   "author": "Tobias Hegemann",
   "module": "dist/api-client-js.esm.js",
   "size-limit": [
     {
-      "path": "dist/api-client-js.cjs.production.min.js",
+      "path": "dist/api-client-react.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/api-client-js.esm.js",
+      "path": "dist/api-client-react.esm.js",
       "limit": "10 KB"
     }
   ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.10.1",
+    "@size-limit/preset-small-lib": "^4.10.2",
+    "@types/debug": "^4.1.5",
     "@types/js-cookie": "^2.2.6",
     "@types/lodash": "^4.14.168",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "bufferutil": "^4.0.3",
+    "encoding": "^0.1.13",
     "husky": "^6.0.0",
-    "size-limit": "^4.10.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "size-limit": "^4.10.2",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "utf-8-validate": "^5.0.4"
   },
   "dependencies": {
+    "debug": "^4.3.1",
+    "isomorphic-unfetch": "^3.1.0",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
+    "react-redux": "^7.2.3",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
-    "teckos-client": "^0.1.3"
+    "teckos-client": "^0.1.3",
+    "ws": "7.4.4"
   }
 }

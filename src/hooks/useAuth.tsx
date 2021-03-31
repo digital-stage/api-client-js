@@ -16,7 +16,7 @@ export const ErrorCodes = {
 export class AuthError extends Error {
   protected _code: number;
 
-  public get code(): number {
+  public code(): number {
     return this._code;
   }
 
@@ -34,9 +34,9 @@ export interface AuthUser {
 }
 
 export interface AuthProps {
-  user: AuthUser;
+  user?: AuthUser;
   loading: boolean;
-  token: string | null;
+  token?: string;
 
   createUserWithEmailAndPassword(
     email: string,
@@ -58,7 +58,20 @@ export interface AuthProps {
   logout(): Promise<any>;
 }
 
-const AuthContext = React.createContext<AuthProps>(undefined);
+const throwAddProviderError = () => {
+  throw new Error('Please wrap the DOM tree with the AuthContextProvider');
+};
+
+const AuthContext = React.createContext<AuthProps>({
+  loading: false,
+  createUserWithEmailAndPassword: throwAddProviderError,
+  signInWithEmailAndPassword: throwAddProviderError,
+  requestPasswordReset: throwAddProviderError,
+  resetPassword: throwAddProviderError,
+  activate: throwAddProviderError,
+  resendActivationLink: throwAddProviderError,
+  logout: throwAddProviderError,
+});
 
 export const useAuth = (): AuthProps => React.useContext<AuthProps>(AuthContext);
 
@@ -81,7 +94,7 @@ const getUserByToken = (token: string): Promise<AuthUser> =>
 export const AuthContextConsumer = AuthContext.Consumer;
 
 export const AuthContextProvider = (props: { children: React.ReactNode, authUrl: string }): JSX.Element => {
-  const { children, authUrl } = props;
+  const {children, authUrl} = props;
 
   const [token, setToken] = React.useState<string>();
   const [user, setUser] = React.useState<AuthUser>();
@@ -131,7 +144,7 @@ export const AuthContextProvider = (props: { children: React.ReactNode, authUrl:
           getUserByToken(resToken).then((resUser) => {
             setUser(resUser);
             setToken(resToken);
-            cookie.set('token', resToken, { expires: staySignedIn ? 7 : 1 });
+            cookie.set('token', resToken, {expires: staySignedIn ? 7 : 1});
           })
         )
         .finally(() => {
@@ -284,7 +297,7 @@ export const withAuth = (ComposedComponent: any) => {
   const DecoratedComponent = () => (
     <AuthContext.Consumer>
       {(auth: AuthProps) => (
-        <ComposedComponent user={auth.user} loading={auth.loading} token={auth.token} />
+        <ComposedComponent user={auth.user} loading={auth.loading} token={auth.token}/>
       )}
     </AuthContext.Consumer>
   );
