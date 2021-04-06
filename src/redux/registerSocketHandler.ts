@@ -4,6 +4,8 @@ import Cookie from 'js-cookie';
 import ServerDeviceEvents from '../types/ServerDeviceEvents';
 import allActions from './actions';
 import ServerDevicePayloads from '../types/ServerDevicePayloads';
+import { ClientDeviceEvents } from '../types';
+import MediasoupDevice from '../types/model/mediasoup/MediasoupDevice';
 
 const registerSocketHandler = (
   store: Store,
@@ -25,8 +27,42 @@ const registerSocketHandler = (
       store.dispatch(
         allActions.deviceActions.server.handleLocalDeviceReady(payload)
       );
+      // Store device for later
       if (payload.requestSession && payload.uuid) {
         Cookie.set('device', payload.uuid);
+      }
+      // Set default media device selections if necessary
+      const device = payload as MediasoupDevice;
+      let update = {};
+      if (!device.inputVideoDeviceId && device.inputVideoDevices.length > 0) {
+        update = {
+          ...update,
+          inputVideoDeviceId:
+            device.inputVideoDevices.find((d) => d.id === 'default') ||
+            device.inputVideoDevices[0],
+        };
+      }
+      if (!device.inputAudioDeviceId && device.inputVideoDevices.length > 0) {
+        update = {
+          ...update,
+          inputAudioDeviceId:
+            device.inputAudioDevices.find((d) => d.id === 'default') ||
+            device.inputAudioDevices[0],
+        };
+      }
+      if (!device.outputAudioDeviceId && device.outputAudioDevices.length > 0) {
+        update = {
+          ...update,
+          outputAudioDeviceId:
+            device.outputAudioDevices.find((d) => d.id === 'default') ||
+            device.outputAudioDevices[0],
+        };
+      }
+      if (Object.keys(update).length > 0) {
+        socket.emit(ClientDeviceEvents.ChangeDevice, {
+          _id: device._id,
+          ...update,
+        });
       }
     }
   );

@@ -3,6 +3,7 @@ import Globals from '../collections/Globals';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 import ServerDeviceEvents from '../../types/ServerDeviceEvents';
 import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import MediasoupDevice from '../../types/model/mediasoup/MediasoupDevice';
 
 function reduceGlobals(
   state: Globals = {
@@ -69,7 +70,7 @@ function reduceGlobals(
       };
     case ServerDeviceEvents.LocalDeviceReady: {
       // Store cookie of uuid
-      const payload = action.payload as ServerDevicePayloads.LocalDeviceReady;
+      const payload = (action.payload as ServerDevicePayloads.LocalDeviceReady) as MediasoupDevice;
       if (payload.uuid) {
         Cookie.set('device', payload.uuid);
       }

@@ -1,206 +1,212 @@
-import React, {createContext, useCallback, useEffect, useState} from 'react';
-import mediasoupClient from 'mediasoup-client';
-import omit from 'lodash/omit';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import debug from 'debug';
-import {
-  ClientDeviceEvents,
-  ClientDevicePayloads,
-  Device,
-  LocalVideoTrack,
-  RemoteVideoTrack,
-  Stage,
-} from '../../types';
-import useMediasoupTransport from './useMediasoupTransport';
-import {MediasoupDevice} from '../../types/model/mediasoup';
-import MediasoupRemoteVideoTrack from '../../types/model/mediasoup/MediasoupRemoteVideoTrack';
 import useStageSelector from '../useStageSelector';
-import useConnection from '../useConnection';
+import useMediasoupTransport from './useMediasoupTransport';
+import RemoteVideoTrack from '../../types/model/RemoteVideoTrack';
+import RemoteAudioTrack from '../../types/model/RemoteAudioTrack';
 
-const d = debug('useMediasoup');
-const err = d.extend('err');
+let working = false;
 
-interface MediasoupTrack {
+const report = debug('useMediasoup');
+
+const reportError = report.extend('error');
+
+function isRemoteAudioTrack(
+  producer: RemoteVideoTrack | RemoteAudioTrack
+): producer is RemoteAudioTrack {
+  return (producer as RemoteAudioTrack).localAudioTrackId !== undefined;
 }
 
-interface IMediasoupContext {
-  videos: {
-    [remoteVideoTrackId: string]: MediasoupTrack;
-  };
-  audios: {
-    [remoteAudioTrackId: string]: MediasoupTrack;
-  };
-}
+const MediasoupProvider = (props: {
+  children: React.ReactNode;
+}): JSX.Element => {
+  const { children } = props;
+  // const dispatch = useDispatch();
 
-const MediasoupContext = createContext<IMediasoupContext>({
-  videos: {},
-  audios: {}
-});
-
-export const MediasoupProvider = (props: { children: React.ReactNode }) => {
-  const {children} = props;
-
-  // Stage data and its cache
-  const stage = useStageSelector<Stage | undefined>((state) =>
-    state.globals.stageId ? state.stages.byId[state.globals.stageId] : undefined
-  );
-  const localDevice = useStageSelector<Device | undefined>((state) =>
+  const localDevice = useStageSelector((state) =>
     state.globals.localDeviceId
       ? state.devices.byId[state.globals.localDeviceId]
       : undefined
   );
-  const [, setSendAudio] = useState<boolean>(false);
-  const [sendVideo, setSendVideo] = useState<boolean>(false);
-  const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
-  const [, setReceiveAudio] = useState<boolean>(false);
+  const stage = useStageSelector((state) =>
+    state.globals.stageId ? state.stages.byId[state.globals.stageId] : undefined
+  );
+
+  /**
+   * SYNC ROUTER URL AND RESULTING TRANSPORT
+   */
   const [routerUrl, setRouterUrl] = useState<string>();
-
-  // Local Consumers, assigned to the remote tracks
-  const [videoConsumers, setVideoConsumers] = useState<{
-    [remoteAudioTrackId: string]: mediasoupClient.types.Consumer;
-  }>({});
-  // Local Producers
-  const [localVideoProducers, setLocalVideoProducers] = useState<{
-    [localVideoTrackId: string]: mediasoupClient.types.Producer;
-  }>({});
-
   useEffect(() => {
-    if (stage && localDevice) {
+    if (stage) {
       if (stage.videoType === 'mediasoup') {
         setRouterUrl(stage.videoRouter);
-        if (localDevice.receiveVideo) {
-          setReceiveVideo(true);
-        } else {
-          setReceiveVideo(false);
-        }
-        if (localDevice.sendVideo) {
-          setSendVideo(true);
-        } else {
-          setSendVideo(false);
-        }
-      }
-      if (stage.audioType === 'mediasoup') {
-        if (localDevice.receiveAudio) {
-          setReceiveAudio(true);
-        } else {
-          setReceiveAudio(false);
-        }
-        if (localDevice.sendAudio) {
-          setSendAudio(true);
-        } else {
-          setSendAudio(false);
-        }
-        if (stage.videoType !== 'mediasoup') {
-          setRouterUrl(stage.audioRouter);
-        }
+      } else if (stage.audioType === 'mediasoup') {
+        setRouterUrl(stage.audioRouter);
       }
     } else {
-      setReceiveVideo(false);
-      setReceiveAudio(false);
-      setSendAudio(false);
-      setSendVideo(false);
+      setRouterUrl(undefined);
     }
-  }, [stage, localDevice]);
-
+  }, [stage]);
   const {
     ready,
     consume,
-    stopConsuming,
     produce,
     stopProducing,
-  } = useMediasoupTransport({routerUrl});
+    stopConsuming,
+  } = useMediasoupTransport({
+    routerUrl,
+  });
 
-  const remoteVideoTracks = useStageSelector<RemoteVideoTrack[]>((state) =>
-    state.remoteVideoTracks.allIds.map((id) => state.remoteVideoTracks.byId[id])
+  /**
+   * SYNC DEVICE
+   */
+  const [sendAudio, setSendAudio] = useState<boolean>(false);
+  const [sendVideo, setSendVideo] = useState<boolean>(false);
+  const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
+  const [receiveAudio, setReceiveAudio] = useState<boolean>(false);
+  const [sendAudioOptions, setSendAudioOptions] = useState<{
+    inputAudioDeviceId?: string;
+    autoGainControl?: boolean;
+    echoCancellation?: boolean;
+    noiseSuppression?: boolean;
+  }>(
+    localDevice
+      ? {
+          inputAudioDeviceId: localDevice.inputAudioDeviceId || undefined,
+          autoGainControl: localDevice.autoGainControl || false,
+          echoCancellation: localDevice.echoCancellation || false,
+          noiseSuppression: localDevice.noiseSuppression || false,
+        }
+      : {
+          autoGainControl: false,
+          echoCancellation: false,
+          noiseSuppression: false,
+        }
   );
-  const consumeVideoTrack = useCallback((track: RemoteVideoTrack) => {
-    return consume(
-      (track as MediasoupRemoteVideoTrack).producerId
-    )
-      .then(consumer => setVideoConsumers(prev => ({...prev, [track._id]: consumer})))
-  }, [consume]);
-  const stopConsumingVideoTrack = useCallback((trackId: string) => {
-    const videoConsumer = videoConsumers[trackId];
-    if (videoConsumer) {
-      return stopConsuming(videoConsumer)
-        .then(() => setVideoConsumers(prev => omit(prev, trackId)));
-    }
-    throw new Error("Could not found video consumer " + trackId);
-  }, [stopConsuming, videoConsumers]);
-  const syncRemoteVideoTracks = useCallback(() => {
-    // Consume new remote video tracks
-    remoteVideoTracks
-      .filter(track => track.type === "mediasoup" && !videoConsumers[track._id])
-      .map(track => consumeVideoTrack(track));
-    // Clean up removed remote video tracks
-    Object.keys(videoConsumers)
-      .filter(id => !remoteVideoTracks.find(track => track._id === id))
-      .map(id => stopConsumingVideoTrack(id));
-  }, [remoteVideoTracks, videoConsumers]);
+  const [inputVideoDeviceId, setInputVideoDeviceId] = useState<
+    string | undefined
+  >(localDevice ? localDevice.inputVideoDeviceId : undefined);
   useEffect(() => {
-    if (ready && consume && remoteVideoTracks && receiveVideo) {
-      syncRemoteVideoTracks();
+    if (localDevice) {
+      setReceiveAudio((prev) => {
+        if (prev !== localDevice.receiveAudio) {
+          report('RECEIVE AUDIO CHANGED');
+          return localDevice.receiveAudio;
+        }
+        return prev;
+      });
+      setReceiveVideo((prev) => {
+        if (prev !== localDevice.receiveVideo) {
+          report('RECEIVE VIDEO CHANGED');
+          return localDevice.receiveVideo;
+        }
+        return prev;
+      });
+      setSendAudio((prev) => {
+        if (prev !== localDevice.sendAudio) {
+          report('SEND AUDIO CHANGED');
+          return localDevice.sendAudio;
+        }
+        return prev;
+      });
+      setSendVideo((prev) => {
+        if (prev !== localDevice.sendVideo) {
+          report('SEND VIDEO CHANGED');
+          return localDevice.sendVideo;
+        }
+        return prev;
+      });
+      setInputVideoDeviceId((prev) => {
+        if (prev !== localDevice.inputVideoDeviceId) {
+          report('SEND VIDEO DEVICE ID CHANGED');
+          return localDevice.inputVideoDeviceId;
+        }
+        return prev;
+      });
+      setSendAudioOptions((prev) => {
+        report('SEND AUDIO DEVICE CHANGED');
+        if (
+          (localDevice.inputAudioDeviceId !== undefined &&
+            localDevice.inputAudioDeviceId !== prev.inputAudioDeviceId) ||
+          (localDevice.echoCancellation !== undefined &&
+            localDevice.echoCancellation !== prev.echoCancellation) ||
+          (localDevice.autoGainControl !== undefined &&
+            localDevice.autoGainControl !== prev.autoGainControl) ||
+          (localDevice.noiseSuppression !== undefined &&
+            localDevice.noiseSuppression !== prev.noiseSuppression)
+        ) {
+          return {
+            inputAudioDeviceId: localDevice.inputAudioDeviceId || undefined,
+            autoGainControl: localDevice.autoGainControl || false,
+            echoCancellation: localDevice.echoCancellation || false,
+            noiseSuppression: localDevice.noiseSuppression || false,
+          };
+        }
+        return prev;
+      });
     }
-  }, [ready, consume, receiveVideo, remoteVideoTracks]);
+  }, [localDevice]);
 
-  const connection = useConnection();
+  /**
+   * List of local media tracks, that are produced - only setter allowed to avoid deadlocks
+   */
+  const [, setVideoProducerList] = useState<{
+    [mediaTrackId: string]: boolean;
+  }>({});
+
+  const [, setVideoStream] = useState<MediaStream>();
   useEffect(() => {
-    if (ready && localDevice && connection && produce) {
-      if (sendVideo) {
-        console.log("CONSUME VIDEOS");
-        navigator.mediaDevices.getUserMedia({
-          video: {
-            deviceId: (localDevice as MediasoupDevice).inputVideoDeviceId,
-          },
-          audio: false
-        })
-          .then(tracks => tracks.getVideoTracks())
-          .then(tracks => tracks.map(track => produce(track).then((producer) => {
-            return connection.emit(
-              ClientDeviceEvents.CreateLocalVideoTrack,
-              {
-                type: 'mediasoup',
-                producerId: producer.id,
-              } as ClientDevicePayloads.CreateLocalVideoTrack,
-              (error: string | null, localVideoTrack: LocalVideoTrack) => {
-                if (error) {
-                  return err(error);
-                }
-                return setLocalVideoProducers((prev) => ({
-                  ...prev,
-                  [localVideoTrack._id]: producer,
-                }));
+    // if(ready) {
+    if (!working) {
+      working = true;
+      if (sendVideo && inputVideoDeviceId) {
+        navigator.mediaDevices
+          .getUserMedia({
+            video: {
+              deviceId: inputVideoDeviceId,
+            },
+            audio: false,
+          })
+          .then((videoStream) =>
+            setVideoStream((prev) => {
+              // End existing
+              if (prev) {
+                report(
+                  `Stop publishing ${
+                    prev.getTracks().length
+                  } in grace of adding new`
+                );
+                prev.getTracks().map((track) => track.stop());
               }
-            );
-          })))
-      }
-    }
-  }, [ready, connection, produce, sendVideo, localDevice]);
-  useEffect(() => {
-    if (ready && connection && stopProducing) {
-      if (!sendVideo) {
-        Object.keys(localVideoProducers).map((id) => {
-          const producer = localVideoProducers[id];
-          return stopProducing(producer).then(() =>
-            connection.emit(ClientDeviceEvents.RemoveLocalVideoTrack, id)
-          );
+              return videoStream;
+            })
+          )
+          .finally(() => {
+            working = true;
+          })
+          .catch((error) => reportError(error));
+      } else {
+        setVideoStream((prev) => {
+          if (prev) {
+            report(`Stop publishing ${prev.getTracks().length}`);
+            prev.getTracks().map((track) => track.stop());
+          } else {
+            report('No tracks given');
+          }
+          return undefined;
         });
+        working = true;
       }
     }
-  }, [ready, connection, stopProducing, localVideoProducers, sendVideo]);
+    return undefined;
+    // }
+  }, [inputVideoDeviceId, sendVideo]);
 
-  return (
-    <MediasoupContext.Provider
-      value={{
-        audios: {},
-        videos: videoConsumers
-      }}
-    >
-      {children}
-    </MediasoupContext.Provider>
-  );
+  return <>{children}</>;
 };
 
-const useMediasoup = (): IMediasoupContext =>
-  React.useContext<IMediasoupContext>(MediasoupContext);
+const useMediasoup = undefined;
 
+export { MediasoupProvider };
 export default useMediasoup;

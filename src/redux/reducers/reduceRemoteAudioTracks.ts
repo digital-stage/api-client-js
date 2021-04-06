@@ -82,19 +82,20 @@ function reduceRemoteAudioTracks(
       return addRemoteAudioTrack(state, remoteAudioTrack);
     }
     case ServerDeviceEvents.RemoteAudioTrackChanged: {
+      const update = action.payload as ServerDevicePayloads.RemoteAudioTrackChanged;
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.payload._id]: {
-            ...state.byId[action.payload._id],
-            ...action.payload,
+          [update._id]: {
+            ...state.byId[update._id],
+            ...update,
           },
         },
       };
     }
     case ServerDeviceEvents.RemoteAudioTrackRemoved: {
-      const id = action.payload as string;
+      const id = action.payload as ServerDevicePayloads.RemoteAudioTrackRemoved;
       if (!state.byId[id]) {
         return state;
       }

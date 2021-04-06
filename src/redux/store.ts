@@ -4,4 +4,6 @@ import reducer from './reducers';
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware()));
 
+export type AppDispatch = typeof store.dispatch;
+
 export default store;

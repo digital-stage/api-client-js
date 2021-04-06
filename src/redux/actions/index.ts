@@ -1,37 +1,42 @@
-import { AnyAction } from 'redux';
+import { Action, AnyAction } from 'redux';
 import stageActions from './stageActions';
 import deviceActions from './deviceActions';
 import AdditionalReducerTypes from './AdditionalReducerTypes';
 import User from '../../types/model/User';
-import ServerDeviceEvents from '../../types/ServerDeviceEvents';
 import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import mediasoupActions from './mediasoup';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
 
 export interface ReducerAction extends AnyAction {
-  type: typeof ServerDeviceEvents | AdditionalReducerTypes;
+  type: string | AdditionalReducerTypes;
   payload?: any;
 }
 
-const changeUser = (user: Partial<User>) => ({
+const changeUser = (user: Partial<User>): ReducerAction => ({
   type: ServerDeviceEvents.UserAdded,
   payload: user,
 });
-const handleUserReady = (user: ServerDevicePayloads.UserReady) => ({
+const handleUserReady = (
+  user: ServerDevicePayloads.UserReady
+): ReducerAction => ({
   type: ServerDeviceEvents.UserReady,
   payload: user,
 });
-const setReady = () => ({
+const setReady = (): ReducerAction => ({
   type: ServerDeviceEvents.Ready,
 });
 
-const handleStageJoined = (payload: ServerDevicePayloads.StageJoined) => ({
+const handleStageJoined = (
+  payload: ServerDevicePayloads.StageJoined
+): ReducerAction => ({
   type: ServerDeviceEvents.StageJoined,
   payload,
 });
-const handleStageLeft = () => ({
+const handleStageLeft = (): ReducerAction => ({
   type: ServerDeviceEvents.StageLeft,
 });
 
-const reset = () => ({
+const reset = (): Action<AdditionalReducerTypes> => ({
   type: AdditionalReducerTypes.RESET,
 });
 
@@ -45,6 +50,7 @@ const allActions = {
   },
   client: {
     reset,
+    mediasoupActions,
   },
   stageActions,
   deviceActions,

@@ -9,6 +9,9 @@ import { debug } from 'debug';
 import { useAuth } from './useAuth';
 import registerSocketHandler from '../redux/registerSocketHandler';
 import getInitialDevice from '../utils/getInitialDevice';
+import { ClientDeviceEvents, ServerDeviceEvents } from '../types';
+import ServerDevicePayloads from '../types/ServerDevicePayloads';
+import MediasoupDevice from '../types/model/mediasoup/MediasoupDevice';
 
 const d = debug('connection');
 const err = d.extend('error');

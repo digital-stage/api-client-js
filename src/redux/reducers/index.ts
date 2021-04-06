@@ -33,6 +33,12 @@ import reduceCustomStageMemberVolumes from './reduceCustomStageMemberVolumes';
 import reduceCustomRemoteAudioTrackVolumes from './reduceCustomRemoteAudioTrackVolumes';
 import reduceCustomRemoteAudioTrackPositions from './reduceCustomRemoteAudioTrackPositions';
 import reduceCustomStageMemberPositions from './reduceCustomStageMemberPositions';
+import Mediasoup from '../collections/Mediasoup';
+import reduceMediasoup from './reduceMediasoup';
+import LocalAudioTracks from '../collections/LocalAudioTracks';
+import LocalVideoTracks from '../collections/LocalVideoTracks';
+import reduceLocalAudioTracks from './reduceLocalAudioTracks';
+import reduceLocalVideoTracks from './reduceLocalVideoTracks';
 
 export interface RootReducer {
   globals: Globals;
@@ -52,6 +58,9 @@ export interface RootReducer {
   customStageMemberPositions: CustomStageMemberPositions;
   customRemoteAudioTrackVolumes: CustomRemoteAudioTrackVolumes;
   customRemoteAudioTrackPositions: CustomRemoteAudioTrackPositions;
+  localVideoTracks: LocalVideoTracks;
+  localAudioTracks: LocalAudioTracks;
+  mediasoup: Mediasoup;
 }
 
 const reducer = combineReducers<RootReducer>({
@@ -72,5 +81,8 @@ const reducer = combineReducers<RootReducer>({
   customStageMemberPositions: reduceCustomStageMemberPositions,
   customRemoteAudioTrackVolumes: reduceCustomRemoteAudioTrackVolumes,
   customRemoteAudioTrackPositions: reduceCustomRemoteAudioTrackPositions,
+  localVideoTracks: reduceLocalVideoTracks,
+  localAudioTracks: reduceLocalAudioTracks,
+  mediasoup: reduceMediasoup,
 });
 export default reducer;

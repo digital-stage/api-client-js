@@ -82,19 +82,20 @@ function reduceRemoteVideoTracks(
       return addRemoteVideoTrack(state, remoteVideoTrack);
     }
     case ServerDeviceEvents.RemoteVideoTrackChanged: {
+      const update = action.payload as ServerDevicePayloads.RemoteVideoTrackChanged;
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.payload._id]: {
-            ...state.byId[action.payload._id],
-            ...action.payload,
+          [update._id]: {
+            ...state.byId[update._id],
+            ...update,
           },
         },
       };
     }
     case ServerDeviceEvents.RemoteVideoTrackRemoved: {
-      const id = action.payload as string;
+      const id = action.payload as ServerDevicePayloads.RemoteVideoTrackRemoved;
       if (!state.byId[id]) {
         return state;
       }
