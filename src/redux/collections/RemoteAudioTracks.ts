@@ -1,4 +1,4 @@
-import RemoteAudioTrack from "../../types/model/RemoteAudioTrack";
+import RemoteAudioTrack from '../../types/model/RemoteAudioTrack';
 
 interface RemoteAudioTracks {
   byId: {

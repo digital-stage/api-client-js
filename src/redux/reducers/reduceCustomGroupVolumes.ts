@@ -1,44 +1,42 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import CustomGroupVolumes from "../collections/CustomGroupVolumes";
-import CustomGroupVolume from "../../types/model/CustomGroupVolume";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import CustomGroupVolumes from '../collections/CustomGroupVolumes';
+import CustomGroupVolume from '../../types/model/CustomGroupVolume';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
 
 const addCustomGroupVolume = (
   state: CustomGroupVolumes,
   customGroup: CustomGroupVolume
-): CustomGroupVolumes => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [customGroup._id]: customGroup,
+): CustomGroupVolumes => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [customGroup._id]: customGroup,
+  },
+  byGroup: {
+    ...state.byGroup,
+    [customGroup.groupId]: state.byGroup[customGroup.groupId]
+      ? [...state.byGroup[customGroup.groupId], customGroup._id]
+      : [customGroup._id],
+  },
+  byDevice: {
+    ...state.byDevice,
+    [customGroup.deviceId]: state.byDevice[customGroup.deviceId]
+      ? [...state.byDevice[customGroup.deviceId], customGroup._id]
+      : [customGroup._id],
+  },
+  byDeviceAndGroup: {
+    ...state.byDeviceAndGroup,
+    [customGroup.deviceId]: {
+      ...state.byDeviceAndGroup[customGroup.deviceId],
+      [customGroup.groupId]: customGroup._id,
     },
-    byGroup: {
-      ...state.byGroup,
-      [customGroup.groupId]: state.byGroup[customGroup.groupId]
-        ? [...state.byGroup[customGroup.groupId], customGroup._id]
-        : [customGroup._id],
-    },
-    byDevice: {
-      ...state.byDevice,
-      [customGroup.deviceId]: state.byDevice[customGroup.deviceId]
-        ? [...state.byDevice[customGroup.deviceId], customGroup._id]
-        : [customGroup._id],
-    },
-    byDeviceAndGroup: {
-      ...state.byDeviceAndGroup,
-      [customGroup.deviceId]: {
-        ...state.byDeviceAndGroup[customGroup.deviceId],
-        [customGroup.groupId]: customGroup._id,
-      },
-    },
-    allIds: upsert<string>(state.allIds, customGroup._id),
-  };
-};
+  },
+  allIds: upsert<string>(state.allIds, customGroup._id),
+});
 
 function reduceCustomGroupVolumes(
   state: CustomGroupVolumes = {

@@ -1,46 +1,48 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import StageMember from "../../types/model/StageMember";
-import StageMembers from "../collections/StageMembers";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import debug from 'debug';
+import upsert from '../utils/upsert';
+import StageMember from '../../types/model/StageMember';
+import StageMembers from '../collections/StageMembers';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+
+const d = debug('reduceStageMembers');
+const err = d.extend('error');
 
 const addStageMember = (
   prev: StageMembers,
   stageMember: StageMember
-): StageMembers => {
-  return {
-    ...prev,
-    byId: {
-      ...prev.byId,
-      [stageMember._id]: stageMember,
-    },
-    byStage: {
-      ...prev.byStage,
-      [stageMember.stageId]: upsert<string>(
-        prev.byStage[stageMember.stageId],
-        stageMember._id
-      ),
-    },
-    byUser: {
-      ...prev.byUser,
-      [stageMember.userId]: without<string>(
-        prev.byUser[stageMember.userId],
-        stageMember._id
-      ),
-    },
-    byGroup: {
-      ...prev.byGroup,
-      [stageMember.groupId]: upsert<string>(
-        prev.byGroup[stageMember.groupId],
-        stageMember._id
-      ),
-    },
-    allIds: upsert<string>(prev.allIds, stageMember._id),
-  };
-};
+): StageMembers => ({
+  ...prev,
+  byId: {
+    ...prev.byId,
+    [stageMember._id]: stageMember,
+  },
+  byStage: {
+    ...prev.byStage,
+    [stageMember.stageId]: upsert<string>(
+      prev.byStage[stageMember.stageId],
+      stageMember._id
+    ),
+  },
+  byUser: {
+    ...prev.byUser,
+    [stageMember.userId]: without<string>(
+      prev.byUser[stageMember.userId],
+      stageMember._id
+    ),
+  },
+  byGroup: {
+    ...prev.byGroup,
+    [stageMember.groupId]: upsert<string>(
+      prev.byGroup[stageMember.groupId],
+      stageMember._id
+    ),
+  },
+  allIds: upsert<string>(prev.allIds, stageMember._id),
+});
 
 function reduceStageMembers(
   prev: StageMembers = {
@@ -87,9 +89,7 @@ function reduceStageMembers(
       };
       const previousStageMember = prev.byId[stageMember._id];
       if (!previousStageMember) {
-        console.error(
-          `Could not find previous stage member ${stageMember._id}`
-        );
+        err(`Could not find previous stage member ${stageMember._id}`);
         return prev;
       }
       if (

@@ -1,56 +1,54 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import CustomRemoteAudioTrackPosition from "../../types/model/CustomRemoteAudioTrackPosition";
-import CustomRemoteAudioTrackPositions from "../collections/CustomRemoteAudioTrackPositions";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import CustomRemoteAudioTrackPosition from '../../types/model/CustomRemoteAudioTrackPosition';
+import CustomRemoteAudioTrackPositions from '../collections/CustomRemoteAudioTrackPositions';
 
 const addCustomRemoteAudioTrackPosition = (
   state: CustomRemoteAudioTrackPositions,
   customRemoteAudioTrack: CustomRemoteAudioTrackPosition
-): CustomRemoteAudioTrackPositions => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [customRemoteAudioTrack._id]: customRemoteAudioTrack,
+): CustomRemoteAudioTrackPositions => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [customRemoteAudioTrack._id]: customRemoteAudioTrack,
+  },
+  byRemoteAudioTrack: {
+    ...state.byRemoteAudioTrack,
+    [customRemoteAudioTrack.remoteAudioTrackId]: state.byRemoteAudioTrack[
+      customRemoteAudioTrack.remoteAudioTrackId
+    ]
+      ? [
+          ...state.byRemoteAudioTrack[
+            customRemoteAudioTrack.remoteAudioTrackId
+          ],
+          customRemoteAudioTrack._id,
+        ]
+      : [customRemoteAudioTrack._id],
+  },
+  byDevice: {
+    ...state.byDevice,
+    [customRemoteAudioTrack.deviceId]: state.byDevice[
+      customRemoteAudioTrack.deviceId
+    ]
+      ? [
+          ...state.byDevice[customRemoteAudioTrack.deviceId],
+          customRemoteAudioTrack._id,
+        ]
+      : [customRemoteAudioTrack._id],
+  },
+  byDeviceAndRemoteAudioTrack: {
+    ...state.byDeviceAndRemoteAudioTrack,
+    [customRemoteAudioTrack.deviceId]: {
+      ...state.byDeviceAndRemoteAudioTrack[customRemoteAudioTrack.deviceId],
+      [customRemoteAudioTrack.remoteAudioTrackId]: customRemoteAudioTrack._id,
     },
-    byRemoteAudioTrack: {
-      ...state.byRemoteAudioTrack,
-      [customRemoteAudioTrack.remoteAudioTrackId]: state.byRemoteAudioTrack[
-        customRemoteAudioTrack.remoteAudioTrackId
-      ]
-        ? [
-            ...state.byRemoteAudioTrack[
-              customRemoteAudioTrack.remoteAudioTrackId
-            ],
-            customRemoteAudioTrack._id,
-          ]
-        : [customRemoteAudioTrack._id],
-    },
-    byDevice: {
-      ...state.byDevice,
-      [customRemoteAudioTrack.deviceId]: state.byDevice[
-        customRemoteAudioTrack.deviceId
-      ]
-        ? [
-            ...state.byDevice[customRemoteAudioTrack.deviceId],
-            customRemoteAudioTrack._id,
-          ]
-        : [customRemoteAudioTrack._id],
-    },
-    byDeviceAndRemoteAudioTrack: {
-      ...state.byDeviceAndRemoteAudioTrack,
-      [customRemoteAudioTrack.deviceId]: {
-        ...state.byDeviceAndRemoteAudioTrack[customRemoteAudioTrack.deviceId],
-        [customRemoteAudioTrack.remoteAudioTrackId]: customRemoteAudioTrack._id,
-      },
-    },
-    allIds: upsert<string>(state.allIds, customRemoteAudioTrack._id),
-  };
-};
+  },
+  allIds: upsert<string>(state.allIds, customRemoteAudioTrack._id),
+});
 
 function reduceCustomRemoteAudioTrackPositions(
   state: CustomRemoteAudioTrackPositions = {

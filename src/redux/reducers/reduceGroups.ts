@@ -1,26 +1,24 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import Groups from "../collections/Groups";
-import Group from "../../types/model/Group";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import Groups from '../collections/Groups';
+import Group from '../../types/model/Group';
 
-const addGroup = (state: Groups, group: Group): Groups => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [group._id]: group,
-    },
-    byStage: {
-      ...state.byStage,
-      [group.stageId]: upsert<string>(state.byStage[group.stageId], group._id),
-    },
-    allIds: upsert<string>(state.allIds, group._id),
-  };
-};
+const addGroup = (state: Groups, group: Group): Groups => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [group._id]: group,
+  },
+  byStage: {
+    ...state.byStage,
+    [group.stageId]: upsert<string>(state.byStage[group.stageId], group._id),
+  },
+  allIds: upsert<string>(state.allIds, group._id),
+});
 
 function reduceGroups(
   prev: Groups = {

@@ -1,22 +1,20 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import User from "../../types/model/User";
-import RemoteUsers from "../collections/RemoteUsers";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import User from '../../types/model/User';
+import RemoteUsers from '../collections/RemoteUsers';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
 
-const addUser = (state: RemoteUsers, user: User): RemoteUsers => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [user._id]: user,
-    },
-    allIds: upsert<string>(state.allIds, user._id),
-  };
-};
+const addUser = (state: RemoteUsers, user: User): RemoteUsers => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [user._id]: user,
+  },
+  allIds: upsert<string>(state.allIds, user._id),
+});
 
 function reduceRemoteUsers(
   state: RemoteUsers = {

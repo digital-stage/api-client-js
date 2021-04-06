@@ -1,3 +1,3 @@
-import ChatMessage from "../../types/model/ChatMessage";
+import ChatMessage from '../../types/model/ChatMessage';
 
 export type ChatMessages = ChatMessage[];

@@ -1,48 +1,46 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import RemoteAudioTracks from "../collections/RemoteAudioTracks";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import RemoteAudioTrack from "../../types/model/RemoteAudioTrack";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import RemoteAudioTracks from '../collections/RemoteAudioTracks';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import RemoteAudioTrack from '../../types/model/RemoteAudioTrack';
 
 const addRemoteAudioTrack = (
   state: RemoteAudioTracks,
   remoteAudioTrack: RemoteAudioTrack
-): RemoteAudioTracks => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [remoteAudioTrack._id]: remoteAudioTrack,
-    },
-    byStageMember: {
-      ...state.byStageMember,
-      [remoteAudioTrack.stageMemberId]: state.byStageMember[
-        remoteAudioTrack.stageMemberId
-      ]
-        ? [
-            ...state.byStageMember[remoteAudioTrack.stageMemberId],
-            remoteAudioTrack._id,
-          ]
-        : [remoteAudioTrack._id],
-    },
-    byUser: {
-      ...state.byUser,
-      [remoteAudioTrack.userId]: state.byUser[remoteAudioTrack.userId]
-        ? [...state.byUser[remoteAudioTrack.userId], remoteAudioTrack._id]
-        : [remoteAudioTrack._id],
-    },
-    byStage: {
-      ...state.byStage,
-      [remoteAudioTrack.stageId]: state.byStage[remoteAudioTrack.stageId]
-        ? [...state.byStage[remoteAudioTrack.stageId], remoteAudioTrack._id]
-        : [remoteAudioTrack._id],
-    },
-    allIds: upsert<string>(state.allIds, remoteAudioTrack._id),
-  };
-};
+): RemoteAudioTracks => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [remoteAudioTrack._id]: remoteAudioTrack,
+  },
+  byStageMember: {
+    ...state.byStageMember,
+    [remoteAudioTrack.stageMemberId]: state.byStageMember[
+      remoteAudioTrack.stageMemberId
+    ]
+      ? [
+          ...state.byStageMember[remoteAudioTrack.stageMemberId],
+          remoteAudioTrack._id,
+        ]
+      : [remoteAudioTrack._id],
+  },
+  byUser: {
+    ...state.byUser,
+    [remoteAudioTrack.userId]: state.byUser[remoteAudioTrack.userId]
+      ? [...state.byUser[remoteAudioTrack.userId], remoteAudioTrack._id]
+      : [remoteAudioTrack._id],
+  },
+  byStage: {
+    ...state.byStage,
+    [remoteAudioTrack.stageId]: state.byStage[remoteAudioTrack.stageId]
+      ? [...state.byStage[remoteAudioTrack.stageId], remoteAudioTrack._id]
+      : [remoteAudioTrack._id],
+  },
+  allIds: upsert<string>(state.allIds, remoteAudioTrack._id),
+});
 
 function reduceRemoteAudioTracks(
   state: RemoteAudioTracks = {

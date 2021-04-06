@@ -1,9 +1,9 @@
-import omit from "lodash/omit";
-import upsert from "../utils/upsert";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import SoundCards from "../collections/SoundCards";
-import SoundCard from "../../types/model/SoundCard";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
+import omit from 'lodash/omit';
+import upsert from '../utils/upsert';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import SoundCards from '../collections/SoundCards';
+import SoundCard from '../../types/model/SoundCard';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
 
 function reduceSoundCards(
   state: SoundCards = {

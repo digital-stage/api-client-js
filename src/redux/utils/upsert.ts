@@ -1,4 +1,4 @@
-import indexOf from "lodash/indexOf";
+import indexOf from 'lodash/indexOf';
 
 const upsert = <T>(arr: Readonly<T[]>, value: T): T[] => {
   if (!arr) {

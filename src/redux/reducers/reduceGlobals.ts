@@ -1,16 +1,16 @@
-import Globals from "../collections/Globals";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import Cookie from "js-cookie";
+import Cookie from 'js-cookie';
+import Globals from '../collections/Globals';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
 
 function reduceGlobals(
   state: Globals = {
     ready: false,
     stageId: undefined,
+    groupId: undefined,
     localDeviceId: undefined,
     localUser: undefined,
-    groupId: undefined,
   },
   action: {
     type: string;
@@ -22,9 +22,9 @@ function reduceGlobals(
       return {
         ready: false,
         stageId: undefined,
+        groupId: undefined,
         localDeviceId: undefined,
         localUser: undefined,
-        groupId: undefined,
       };
     }
     case ServerDeviceEvents.Ready:
@@ -67,18 +67,20 @@ function reduceGlobals(
         ...state,
         localUser: undefined,
       };
-    case ServerDeviceEvents.LocalDeviceReady:
+    case ServerDeviceEvents.LocalDeviceReady: {
       // Store cookie of uuid
       const payload = action.payload as ServerDevicePayloads.LocalDeviceReady;
-      if( payload.uuid ) {
-        Cookie.set("device", payload.uuid);
+      if (payload.uuid) {
+        Cookie.set('device', payload.uuid);
       }
       return {
         ...state,
         localDeviceId: action.payload._id,
       };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }
 

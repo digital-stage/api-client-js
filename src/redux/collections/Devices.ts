@@ -1,4 +1,4 @@
-import Device from "../../types/model/Device";
+import Device from '../../types/model/Device';
 
 interface Devices {
   byId: {

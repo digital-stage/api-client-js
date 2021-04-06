@@ -1,7 +1,7 @@
-import { ChatMessages } from "../collections/ChatMessages";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
+import { ChatMessages } from '../collections/ChatMessages';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function reduceChatMessage(
   state: ChatMessages = [],

@@ -1,4 +1,4 @@
-import CustomStageMemberVolume from "../../types/model/CustomStageMemberVolume";
+import CustomStageMemberVolume from '../../types/model/CustomStageMemberVolume';
 
 interface CustomStageMemberVolumes {
   byId: {

@@ -1,19 +1,21 @@
 module.exports = {
-  "extends": [
-    'airbnb-typescript/base',
-    "plugin:promise/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "rules": {
-    "no-underscore-dangle": 0,
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'auto',
-      },
+    "extends": [
+        'airbnb-typescript',
+        "plugin:prettier/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:promise/recommended",
+        "prettier"
     ],
-  },
-  "parserOptions": {
-    "project": './tsconfig.json'
-  }
+    "plugins": [
+        "promise",
+        "prettier",
+        "react"
+    ],
+    "rules": {
+        "no-underscore-dangle": 0
+    },
+    "parserOptions": {
+        "project": './tsconfig.json'
+    }
 }

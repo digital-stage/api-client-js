@@ -1,10 +1,10 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import Routers from "../collections/Routers";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import Routers from '../collections/Routers';
 
 function reduceRouters(
   state: Routers = {

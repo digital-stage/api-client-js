@@ -1,50 +1,56 @@
-import MediasoupDevice, {WebMediaDevice} from "../types/model/mediasoup/MediasoupDevice";
-import Cookie from "js-cookie";
+import Cookie from 'js-cookie';
+import MediasoupDevice, {
+  WebMediaDevice,
+} from '../types/model/mediasoup/MediasoupDevice';
 
-const getInitialDevice = async (): Promise<Partial<Omit<MediasoupDevice, "_id">>> => {
-  const uuid = Cookie.get("device");
+const getInitialDevice = async (): Promise<
+  Partial<Omit<MediasoupDevice, '_id'>>
+> => {
+  const uuid = Cookie.get('device');
   if (navigator !== undefined) {
     const inputAudioDevices: WebMediaDevice[] = [];
     const outputAudioDevices: WebMediaDevice[] = [];
     const inputVideoDevices: WebMediaDevice[] = [];
     const devices = await navigator.mediaDevices.enumerateDevices();
-    devices.forEach(mediaDevice => {
+    devices.forEach((mediaDevice) => {
       switch (mediaDevice.kind) {
-        case "audioinput": {
+        case 'audioinput': {
           inputAudioDevices.push({
             id: mediaDevice.deviceId,
-            label: mediaDevice.label
-          })
+            label: mediaDevice.label,
+          });
           break;
         }
-        case"audiooutput": {
+        case 'audiooutput': {
           outputAudioDevices.push({
             id: mediaDevice.deviceId,
-            label: mediaDevice.label
-          })
+            label: mediaDevice.label,
+          });
           break;
         }
-        case "videoinput": {
+        case 'videoinput': {
           inputVideoDevices.push({
             id: mediaDevice.deviceId,
-            label: mediaDevice.label
-          })
+            label: mediaDevice.label,
+          });
           break;
         }
+        default:
+          break;
       }
-    })
+    });
     return {
-      uuid: uuid,
+      uuid,
       requestSession: !uuid,
-      type: "web",
+      type: 'web',
       inputAudioDevices,
       outputAudioDevices,
-      inputVideoDevices
+      inputVideoDevices,
     };
   }
   return {
-    type: "node",
-    uuid: uuid,
+    type: 'node',
+    uuid,
     requestSession: !uuid,
   };
 };

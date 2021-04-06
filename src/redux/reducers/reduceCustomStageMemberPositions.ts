@@ -1,49 +1,47 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import CustomStageMemberPositions from "../collections/CustomStageMemberPositions";
-import CustomStageMemberPosition from "../../types/model/CustomStageMemberPosition";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import CustomStageMemberPositions from '../collections/CustomStageMemberPositions';
+import CustomStageMemberPosition from '../../types/model/CustomStageMemberPosition';
 
 const addCustomStageMemberPosition = (
   state: CustomStageMemberPositions,
   customStageMember: CustomStageMemberPosition
-): CustomStageMemberPositions => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [customStageMember._id]: customStageMember,
+): CustomStageMemberPositions => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [customStageMember._id]: customStageMember,
+  },
+  byStageMember: {
+    ...state.byStageMember,
+    [customStageMember.stageMemberId]: state.byStageMember[
+      customStageMember.stageMemberId
+    ]
+      ? [
+          ...state.byStageMember[customStageMember.stageMemberId],
+          customStageMember._id,
+        ]
+      : [customStageMember._id],
+  },
+  byDevice: {
+    ...state.byDevice,
+    [customStageMember.deviceId]: state.byDevice[customStageMember.deviceId]
+      ? [...state.byDevice[customStageMember.deviceId], customStageMember._id]
+      : [customStageMember._id],
+  },
+  byDeviceAndStageMember: {
+    ...state.byDeviceAndStageMember,
+    [customStageMember.deviceId]: {
+      ...state.byDeviceAndStageMember[customStageMember.deviceId],
+      [customStageMember.stageMemberId]: customStageMember._id,
     },
-    byStageMember: {
-      ...state.byStageMember,
-      [customStageMember.stageMemberId]: state.byStageMember[
-        customStageMember.stageMemberId
-      ]
-        ? [
-            ...state.byStageMember[customStageMember.stageMemberId],
-            customStageMember._id,
-          ]
-        : [customStageMember._id],
-    },
-    byDevice: {
-      ...state.byDevice,
-      [customStageMember.deviceId]: state.byDevice[customStageMember.deviceId]
-        ? [...state.byDevice[customStageMember.deviceId], customStageMember._id]
-        : [customStageMember._id],
-    },
-    byDeviceAndStageMember: {
-      ...state.byDeviceAndStageMember,
-      [customStageMember.deviceId]: {
-        ...state.byDeviceAndStageMember[customStageMember.deviceId],
-        [customStageMember.stageMemberId]: customStageMember._id,
-      },
-    },
-    allIds: upsert<string>(state.allIds, customStageMember._id),
-  };
-};
+  },
+  allIds: upsert<string>(state.allIds, customStageMember._id),
+});
 
 function reduceCustomStageMemberPositions(
   state: CustomStageMemberPositions = {

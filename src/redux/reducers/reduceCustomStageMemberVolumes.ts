@@ -1,49 +1,47 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import CustomStageMemberVolumes from "../collections/CustomStageMemberVolumes";
-import CustomStageMemberVolume from "../../types/model/CustomStageMemberVolume";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import CustomStageMemberVolumes from '../collections/CustomStageMemberVolumes';
+import CustomStageMemberVolume from '../../types/model/CustomStageMemberVolume';
 
 const addCustomStageMemberVolume = (
   state: CustomStageMemberVolumes,
   customStageMember: CustomStageMemberVolume
-): CustomStageMemberVolumes => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [customStageMember._id]: customStageMember,
+): CustomStageMemberVolumes => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [customStageMember._id]: customStageMember,
+  },
+  byStageMember: {
+    ...state.byStageMember,
+    [customStageMember.stageMemberId]: state.byStageMember[
+      customStageMember.stageMemberId
+    ]
+      ? [
+          ...state.byStageMember[customStageMember.stageMemberId],
+          customStageMember._id,
+        ]
+      : [customStageMember._id],
+  },
+  byDevice: {
+    ...state.byDevice,
+    [customStageMember.deviceId]: state.byDevice[customStageMember.deviceId]
+      ? [...state.byDevice[customStageMember.deviceId], customStageMember._id]
+      : [customStageMember._id],
+  },
+  byDeviceAndStageMember: {
+    ...state.byDeviceAndStageMember,
+    [customStageMember.deviceId]: {
+      ...state.byDeviceAndStageMember[customStageMember.deviceId],
+      [customStageMember.stageMemberId]: customStageMember._id,
     },
-    byStageMember: {
-      ...state.byStageMember,
-      [customStageMember.stageMemberId]: state.byStageMember[
-        customStageMember.stageMemberId
-      ]
-        ? [
-            ...state.byStageMember[customStageMember.stageMemberId],
-            customStageMember._id,
-          ]
-        : [customStageMember._id],
-    },
-    byDevice: {
-      ...state.byDevice,
-      [customStageMember.deviceId]: state.byDevice[customStageMember.deviceId]
-        ? [...state.byDevice[customStageMember.deviceId], customStageMember._id]
-        : [customStageMember._id],
-    },
-    byDeviceAndStageMember: {
-      ...state.byDeviceAndStageMember,
-      [customStageMember.deviceId]: {
-        ...state.byDeviceAndStageMember[customStageMember.deviceId],
-        [customStageMember.stageMemberId]: customStageMember._id,
-      },
-    },
-    allIds: upsert<string>(state.allIds, customStageMember._id),
-  };
-};
+  },
+  allIds: upsert<string>(state.allIds, customStageMember._id),
+});
 
 function reduceCustomStageMemberVolumes(
   state: CustomStageMemberVolumes = {

@@ -1,4 +1,4 @@
-import CustomRemoteAudioTrackPosition from "../../types/model/CustomRemoteAudioTrackPosition";
+import CustomRemoteAudioTrackPosition from '../../types/model/CustomRemoteAudioTrackPosition';
 
 interface CustomRemoteAudioTrackPositions {
   byId: {

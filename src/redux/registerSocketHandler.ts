@@ -1,16 +1,16 @@
-import {Store} from "redux";
-import {TeckosClient} from "teckos-client";
-import ServerDeviceEvents from "../types/ServerDeviceEvents";
-import allActions from "./actions";
-import ServerDevicePayloads from "../types/ServerDevicePayloads";
-import Cookie from "js-cookie";
+import { Store } from 'redux';
+import { TeckosClient } from 'teckos-client';
+import Cookie from 'js-cookie';
+import ServerDeviceEvents from '../types/ServerDeviceEvents';
+import allActions from './actions';
+import ServerDevicePayloads from '../types/ServerDevicePayloads';
 
 const registerSocketHandler = (
   store: Store,
   socket: TeckosClient
 ): TeckosClient => {
   // socket.setMaxListeners(70);
-  socket.on("disconnect", () => {
+  socket.on('disconnect', () => {
     // Cleanup
     store.dispatch(allActions.client.reset());
   });
@@ -25,8 +25,8 @@ const registerSocketHandler = (
       store.dispatch(
         allActions.deviceActions.server.handleLocalDeviceReady(payload)
       );
-      if( payload.requestSession && payload.uuid ) {
-        Cookie.set("device", payload.uuid);
+      if (payload.requestSession && payload.uuid) {
+        Cookie.set('device', payload.uuid);
       }
     }
   );

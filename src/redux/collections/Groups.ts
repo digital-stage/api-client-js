@@ -1,4 +1,4 @@
-import Group from "../../types/model/Group";
+import Group from '../../types/model/Group';
 
 interface Groups {
   byId: {

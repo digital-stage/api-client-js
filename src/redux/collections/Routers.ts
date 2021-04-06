@@ -1,4 +1,4 @@
-import Router from "../../types/model/Router";
+import Router from '../../types/model/Router';
 
 interface Routers {
   byId: {

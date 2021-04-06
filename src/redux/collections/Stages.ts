@@ -1,4 +1,4 @@
-import Stage from "../../types/model/Stage";
+import Stage from '../../types/model/Stage';
 
 interface Stages {
   byId: {

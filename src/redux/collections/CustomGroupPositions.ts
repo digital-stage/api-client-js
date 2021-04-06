@@ -1,4 +1,4 @@
-import CustomGroupPosition from "../../types/model/CustomGroupPosition";
+import CustomGroupPosition from '../../types/model/CustomGroupPosition';
 
 interface CustomGroupPositions {
   byId: {

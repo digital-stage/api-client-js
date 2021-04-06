@@ -1,22 +1,20 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import Stage from "../../types/model/Stage";
-import Stages from "../collections/Stages";
-import upsert from "../utils/upsert";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import Stage from '../../types/model/Stage';
+import Stages from '../collections/Stages';
+import upsert from '../utils/upsert';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
-const addStage = (state: Stages, stage: Stage): Stages => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [stage._id]: stage,
-    },
-    allIds: upsert<string>(state.allIds, stage._id),
-  };
-};
+const addStage = (state: Stages, stage: Stage): Stages => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [stage._id]: stage,
+  },
+  allIds: upsert<string>(state.allIds, stage._id),
+});
 
 function reduceStages(
   state: Stages = {

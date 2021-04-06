@@ -1,4 +1,4 @@
-import RemoteVideoTrack from "../../types/model/RemoteVideoTrack";
+import RemoteVideoTrack from '../../types/model/RemoteVideoTrack';
 
 interface RemoteVideoTracks {
   byId: {

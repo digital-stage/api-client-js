@@ -1,4 +1,4 @@
-import User from "../../types/model/User";
+import User from '../../types/model/User';
 
 interface RemoteUsers {
   byId: {

@@ -1,4 +1,4 @@
-import SoundCard from "../../types/model/SoundCard";
+import SoundCard from '../../types/model/SoundCard';
 
 interface SoundCards {
   byId: {

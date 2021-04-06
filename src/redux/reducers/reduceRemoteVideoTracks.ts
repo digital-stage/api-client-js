@@ -1,48 +1,46 @@
-import omit from "lodash/omit";
-import without from "lodash/without";
-import upsert from "../utils/upsert";
-import RemoteVideoTracks from "../collections/RemoteVideoTracks";
-import ServerDeviceEvents from "../../types/ServerDeviceEvents";
-import AdditionalReducerTypes from "../actions/AdditionalReducerTypes";
-import ServerDevicePayloads from "../../types/ServerDevicePayloads";
-import RemoteVideoTrack from "../../types/model/RemoteVideoTrack";
+import omit from 'lodash/omit';
+import without from 'lodash/without';
+import upsert from '../utils/upsert';
+import RemoteVideoTracks from '../collections/RemoteVideoTracks';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import RemoteVideoTrack from '../../types/model/RemoteVideoTrack';
 
 const addRemoteVideoTrack = (
   state: RemoteVideoTracks,
   remoteVideoTrack: RemoteVideoTrack
-): RemoteVideoTracks => {
-  return {
-    ...state,
-    byId: {
-      ...state.byId,
-      [remoteVideoTrack._id]: remoteVideoTrack,
-    },
-    byStageMember: {
-      ...state.byStageMember,
-      [remoteVideoTrack.stageMemberId]: state.byStageMember[
-        remoteVideoTrack.stageMemberId
-      ]
-        ? [
-            ...state.byStageMember[remoteVideoTrack.stageMemberId],
-            remoteVideoTrack._id,
-          ]
-        : [remoteVideoTrack._id],
-    },
-    byUser: {
-      ...state.byUser,
-      [remoteVideoTrack.userId]: state.byUser[remoteVideoTrack.userId]
-        ? [...state.byUser[remoteVideoTrack.userId], remoteVideoTrack._id]
-        : [remoteVideoTrack._id],
-    },
-    byStage: {
-      ...state.byStage,
-      [remoteVideoTrack.stageId]: state.byStage[remoteVideoTrack.stageId]
-        ? [...state.byStage[remoteVideoTrack.stageId], remoteVideoTrack._id]
-        : [remoteVideoTrack._id],
-    },
-    allIds: upsert<string>(state.allIds, remoteVideoTrack._id),
-  };
-};
+): RemoteVideoTracks => ({
+  ...state,
+  byId: {
+    ...state.byId,
+    [remoteVideoTrack._id]: remoteVideoTrack,
+  },
+  byStageMember: {
+    ...state.byStageMember,
+    [remoteVideoTrack.stageMemberId]: state.byStageMember[
+      remoteVideoTrack.stageMemberId
+    ]
+      ? [
+          ...state.byStageMember[remoteVideoTrack.stageMemberId],
+          remoteVideoTrack._id,
+        ]
+      : [remoteVideoTrack._id],
+  },
+  byUser: {
+    ...state.byUser,
+    [remoteVideoTrack.userId]: state.byUser[remoteVideoTrack.userId]
+      ? [...state.byUser[remoteVideoTrack.userId], remoteVideoTrack._id]
+      : [remoteVideoTrack._id],
+  },
+  byStage: {
+    ...state.byStage,
+    [remoteVideoTrack.stageId]: state.byStage[remoteVideoTrack.stageId]
+      ? [...state.byStage[remoteVideoTrack.stageId], remoteVideoTrack._id]
+      : [remoteVideoTrack._id],
+  },
+  allIds: upsert<string>(state.allIds, remoteVideoTrack._id),
+});
 
 function reduceRemoteVideoTracks(
   state: RemoteVideoTracks = {

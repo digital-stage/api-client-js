@@ -1,6 +1,10 @@
 import * as React from 'react';
 import cookie from 'js-cookie';
 import fetch from 'isomorphic-unfetch';
+import debug from 'debug';
+
+const d = debug('useAuth');
+const err = d.extend('error');
 
 export const ErrorCodes = {
   Unauthorized: 401,
@@ -45,7 +49,11 @@ export interface AuthProps {
     avatarUrl?: string
   ): Promise<any>;
 
-  signInWithEmailAndPassword(email: string, password: string, staySignedIn?: boolean): Promise<any>;
+  signInWithEmailAndPassword(
+    email: string,
+    password: string,
+    staySignedIn?: boolean
+  ): Promise<any>;
 
   requestPasswordReset(email: string): Promise<any>;
 
@@ -73,7 +81,8 @@ const AuthContext = React.createContext<AuthProps>({
   logout: throwAddProviderError,
 });
 
-export const useAuth = (): AuthProps => React.useContext<AuthProps>(AuthContext);
+export const useAuth = (): AuthProps =>
+  React.useContext<AuthProps>(AuthContext);
 
 const getUserByToken = (token: string): Promise<AuthUser> =>
   fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/profile`, {
@@ -85,25 +94,32 @@ const getUserByToken = (token: string): Promise<AuthUser> =>
     .then((result) => {
       if (result.ok) {
         return result.json();
-      } else {
-        throw new AuthError(result.status, result.statusText);
       }
+      throw new AuthError(result.status, result.statusText);
     })
     .then((json) => json as AuthUser);
 
 export const AuthContextConsumer = AuthContext.Consumer;
 
-export const AuthContextProvider = (props: { children: React.ReactNode, authUrl: string }): JSX.Element => {
-  const {children, authUrl} = props;
+export const AuthContextProvider = (props: {
+  children: React.ReactNode;
+  authUrl: string;
+}): JSX.Element => {
+  const { children, authUrl } = props;
 
   const [token, setToken] = React.useState<string>();
   const [user, setUser] = React.useState<AuthUser>();
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const createUserWithEmailAndPassword = React.useCallback(
-    (email: string, password: string, name: string, avatarUrl?: string): Promise<void> => {
-      //setLoading(true);
-      return fetch(`${authUrl}/signup`, {
+    (
+      email: string,
+      password: string,
+      name: string,
+      avatarUrl?: string
+    ): Promise<void> =>
+      // setLoading(true);
+      fetch(`${authUrl}/signup`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -118,9 +134,9 @@ export const AuthContextProvider = (props: { children: React.ReactNode, authUrl:
         if (!res.ok) {
           throw new AuthError(res.status, res.statusText);
         }
-      });
-    },
-    []
+        return undefined;
+      }),
+    [authUrl]
   );
 
   const signInWithEmailAndPassword = React.useCallback(
@@ -140,18 +156,18 @@ export const AuthContextProvider = (props: { children: React.ReactNode, authUrl:
           if (res.ok) return res.json();
           throw new AuthError(res.status, res.statusText);
         })
-        .then((resToken) =>
-          getUserByToken(resToken).then((resUser) => {
-            setUser(resUser);
-            setToken(resToken);
-            cookie.set('token', resToken, {expires: staySignedIn ? 7 : 1});
-          })
-        )
+        .then(async (resToken) => {
+          const resUser = await getUserByToken(resToken);
+          setUser(resUser);
+          setToken(resToken);
+          cookie.set('token', resToken, { expires: staySignedIn ? 7 : 1 });
+          return undefined;
+        })
         .finally(() => {
           setLoading(false);
         });
     },
-    []
+    [authUrl]
   );
 
   const requestPasswordReset = React.useCallback(
@@ -167,11 +183,12 @@ export const AuthContextProvider = (props: { children: React.ReactNode, authUrl:
       })
         .then((res) => {
           if (!res.ok) throw new AuthError(res.status, res.statusText);
+          return undefined;
         })
-        .catch((err) => {
-          throw err;
+        .catch((error) => {
+          throw error;
         }),
-    []
+    [authUrl]
   );
 
   const resetPassword = React.useCallback(
@@ -189,37 +206,44 @@ export const AuthContextProvider = (props: { children: React.ReactNode, authUrl:
         if (!res.ok) {
           throw new AuthError(res.status, res.statusText);
         }
+        return undefined;
       }),
-    []
+    [authUrl]
   );
 
-  const activate = React.useCallback((code: string): Promise<void> => {
-    return fetch(`${authUrl}/activate`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        code: code,
+  const activate = React.useCallback(
+    (code: string): Promise<void> =>
+      fetch(`${authUrl}/activate`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          code,
+        }),
+      }).then((res) => {
+        if (!res.ok) throw new AuthError(res.status, res.statusText);
+        return undefined;
       }),
-    }).then((res) => {
-      if (!res.ok) throw new AuthError(res.status, res.statusText);
-    });
-  }, []);
+    [authUrl]
+  );
 
-  const resendActivationLink = React.useCallback((email: string): Promise<void> => {
-    return fetch(`${authUrl}/reactivate`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        email: email,
+  const resendActivationLink = React.useCallback(
+    (email: string): Promise<void> =>
+      fetch(`${authUrl}/reactivate`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+        }),
+      }).then((res) => {
+        if (!res.ok) throw new AuthError(res.status, res.statusText);
+        return undefined;
       }),
-    }).then((res) => {
-      if (!res.ok) throw new AuthError(res.status, res.statusText);
-    });
-  }, []);
+    [authUrl]
+  );
 
   const logout = React.useCallback(() => {
     setLoading(true);
@@ -235,14 +259,14 @@ export const AuthContextProvider = (props: { children: React.ReactNode, authUrl:
           cookie.remove('token');
           setToken(undefined);
           setUser(undefined);
-        } else {
-          throw new AuthError(res.status, res.statusText);
+          return undefined;
         }
+        throw new AuthError(res.status, res.statusText);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [token]);
+  }, [authUrl, token]);
 
   React.useEffect(() => {
     // First get cookie
@@ -253,9 +277,10 @@ export const AuthContextProvider = (props: { children: React.ReactNode, authUrl:
         .then((resUser) => {
           setUser(resUser);
           setToken(resToken);
+          return undefined;
         })
         .catch((resError) => {
-          console.error(resError);
+          err(resError);
           setUser(undefined);
           setToken(undefined);
           cookie.remove('token');
@@ -297,7 +322,11 @@ export const withAuth = (ComposedComponent: any) => {
   const DecoratedComponent = () => (
     <AuthContext.Consumer>
       {(auth: AuthProps) => (
-        <ComposedComponent user={auth.user} loading={auth.loading} token={auth.token}/>
+        <ComposedComponent
+          user={auth.user}
+          loading={auth.loading}
+          token={auth.token}
+        />
       )}
     </AuthContext.Consumer>
   );

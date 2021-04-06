@@ -1,6 +1,6 @@
-import {applyMiddleware, createStore} from "redux";
-import reducer from "./reducers";
-import {composeWithDevTools} from 'redux-devtools-extension';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import reducer from './reducers';
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware()));
 
