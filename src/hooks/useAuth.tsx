@@ -279,14 +279,14 @@ export const AuthContextProvider = (props: {
           setToken(resToken);
           return undefined;
         })
+        .finally(() => {
+          setLoading(false);
+        })
         .catch((resError) => {
           err(resError);
           setUser(undefined);
           setToken(undefined);
           cookie.remove('token');
-        })
-        .finally(() => {
-          setLoading(false);
         });
     } else {
       setUser(undefined);

@@ -42,10 +42,12 @@ const getInitialDevice = async (): Promise<
     return {
       uuid,
       requestSession: !uuid,
-      type: 'web',
+      type: 'mediasoup',
       inputAudioDevices,
       outputAudioDevices,
       inputVideoDevices,
+      canAudio: outputAudioDevices.length > 0 || inputAudioDevices.length > 0,
+      canVideo: inputVideoDevices.length > 0,
     };
   }
   return {

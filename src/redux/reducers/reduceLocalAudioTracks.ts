@@ -21,7 +21,7 @@ function reduceLocalAudioTracks(
       return {
         byId: {
           ...state.byId,
-          localAudioTrack,
+          [localAudioTrack._id]: localAudioTrack,
         },
         allIds: upsert<string>(state.allIds, localAudioTrack._id),
       };

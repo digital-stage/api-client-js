@@ -1,4 +1,3 @@
-import { ChatMessages } from './ChatMessages';
 import CustomGroupPositions from './CustomGroupPositions';
 import CustomGroupVolumes from './CustomGroupVolumes';
 import CustomRemoteAudioTrackPositions from './CustomRemoteAudioTrackPositions';
@@ -17,7 +16,6 @@ import StageMembers from './StageMembers';
 import Stages from './Stages';
 
 export type {
-  ChatMessages,
   CustomGroupPositions,
   CustomGroupVolumes,
   CustomRemoteAudioTrackPositions,

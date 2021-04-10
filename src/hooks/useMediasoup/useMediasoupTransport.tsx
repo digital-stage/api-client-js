@@ -34,6 +34,7 @@ const useMediasoupTransport = (props: {
   ) => Promise<mediasoupClient.types.Producer>;
 } => {
   const { routerUrl } = props;
+
   // Connection to router
   const [ready, setReady] = useState<boolean>(false);
   const [routerConnection, setRouterConnection] = useState<ITeckosClient>();
@@ -67,15 +68,15 @@ const useMediasoupTransport = (props: {
       conn.on('connect_timeout', (error) => {
         err(error);
       });
-      conn.on('connect', () => {
+      conn.once('connect', () => {
         trace(`Connected to router ${routerUrl} via socket communication`);
         setRouterConnection(conn);
       });
-
       conn.connect();
 
       return () => {
         trace('Cleaning up router connection');
+        conn.disconnect();
         conn.close();
         setRouterConnection(undefined);
       };
@@ -84,8 +85,8 @@ const useMediasoupTransport = (props: {
   }, [routerUrl]);
 
   useEffect(() => {
-    trace('Fetching RTP capabilities');
     if (routerConnection) {
+      trace('Fetching RTP capabilities');
       routerConnection.emit(
         RouterRequests.GetRTPCapabilities,
         {},
@@ -109,8 +110,8 @@ const useMediasoupTransport = (props: {
   }, [routerConnection]);
 
   useEffect(() => {
-    trace('Creating mediasoup device');
     if (rtpCapabilities) {
+      trace('Creating mediasoup device');
       // Create mediasoup device
       const createdDevice = new MediasoupDevice();
       createdDevice
@@ -129,8 +130,8 @@ const useMediasoupTransport = (props: {
   }, [rtpCapabilities]);
 
   useEffect(() => {
-    trace('Creating send transport');
     if (routerConnection && mediasoupDevice) {
+      trace('Creating send transport');
       let createdTransport: mediasoupClient.types.Transport;
       // Create send transport
       createWebRTCTransport(routerConnection, mediasoupDevice, 'send')
@@ -143,17 +144,18 @@ const useMediasoupTransport = (props: {
 
       return () => {
         trace('Cleaning up send transport');
-        if (createdTransport) {
-          createdTransport.close();
-        }
+        setSendTransport((prev) => {
+          if (prev) prev.close();
+          return undefined;
+        });
       };
     }
     return undefined;
   }, [routerConnection, mediasoupDevice]);
 
   useEffect(() => {
-    trace('Creating receive transport');
     if (routerConnection && mediasoupDevice) {
+      trace('Creating receive transport');
       let createdTransport: mediasoupClient.types.Transport;
       // Create receive transport
       createWebRTCTransport(routerConnection, mediasoupDevice, 'receive')
@@ -165,7 +167,10 @@ const useMediasoupTransport = (props: {
 
       return () => {
         trace('Cleaning up receive transport');
-        if (createdTransport) createdTransport.close();
+        setReceiveTransport((prev) => {
+          if (prev) prev.close();
+          return undefined;
+        });
       };
     }
     return undefined;
@@ -173,8 +178,8 @@ const useMediasoupTransport = (props: {
 
   const consume = useCallback(
     (producerId: string): Promise<mediasoupClient.types.Consumer> => {
-      trace(`Consuming ${producerId}`);
       if (routerConnection && mediasoupDevice && receiveTransport) {
+        trace(`Consuming ${producerId}`);
         return createConsumer(
           routerConnection,
           mediasoupDevice,
@@ -253,14 +258,19 @@ const useMediasoupTransport = (props: {
   );
 
   useEffect(() => {
-    if (routerConnection && receiveTransport && sendTransport) {
+    if (
+      routerConnection &&
+      mediasoupDevice &&
+      receiveTransport &&
+      sendTransport
+    ) {
       setReady(true);
       return () => {
         setReady(false);
       };
     }
     return undefined;
-  }, [routerConnection, receiveTransport, sendTransport]);
+  }, [routerConnection, mediasoupDevice, receiveTransport, sendTransport]);
 
   return {
     ready,

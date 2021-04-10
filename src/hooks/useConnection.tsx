@@ -9,9 +9,6 @@ import { debug } from 'debug';
 import { useAuth } from './useAuth';
 import registerSocketHandler from '../redux/registerSocketHandler';
 import getInitialDevice from '../utils/getInitialDevice';
-import { ClientDeviceEvents, ServerDeviceEvents } from '../types';
-import ServerDevicePayloads from '../types/ServerDevicePayloads';
-import MediasoupDevice from '../types/model/mediasoup/MediasoupDevice';
 
 const d = debug('connection');
 const err = d.extend('error');
@@ -48,6 +45,7 @@ export const ApiConnectionProvider = (props: {
               device: initialDevice,
             }
           );
+          socket.setMaxListeners(100);
           registerSocketHandler(store, socket);
           socket.on('connect', () => d('Connected'));
           socket.on('disconnect', () => d('Disconnected'));
@@ -55,6 +53,7 @@ export const ApiConnectionProvider = (props: {
           d('Connecting...');
           socket.connect();
           setConnection(socket);
+          return undefined;
         })
         .catch((error) => err(error));
     }

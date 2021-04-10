@@ -1,15 +1,15 @@
-import { ChatMessages } from '../collections/ChatMessages';
+import ChatMessage from '../../types/model/ChatMessage';
 import ServerDeviceEvents from '../../types/ServerDeviceEvents';
 import ServerDevicePayloads from '../../types/ServerDevicePayloads';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function reduceChatMessage(
-  state: ChatMessages = [],
+  state: ChatMessage[] = [],
   action: {
     type: string;
     payload: unknown;
   }
-): ChatMessages {
+): ChatMessage[] {
   switch (action.type) {
     case ServerDeviceEvents.StageLeft:
     case AdditionalReducerTypes.RESET: {

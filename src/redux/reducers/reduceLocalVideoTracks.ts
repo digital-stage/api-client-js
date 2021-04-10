@@ -21,7 +21,7 @@ function reduceLocalVideoTracks(
       return {
         byId: {
           ...state.byId,
-          localVideoTrack,
+          [localVideoTrack._id]: localVideoTrack,
         },
         allIds: upsert<string>(state.allIds, localVideoTrack._id),
       };

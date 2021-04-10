@@ -37,25 +37,34 @@ const registerSocketHandler = (
       if (!device.inputVideoDeviceId && device.inputVideoDevices.length > 0) {
         update = {
           ...update,
-          inputVideoDeviceId:
-            device.inputVideoDevices.find((d) => d.id === 'default') ||
-            device.inputVideoDevices[0],
+          // Prefer default device
+          inputVideoDeviceId: device.inputVideoDevices.find(
+            (d) => d.id === 'default'
+          )
+            ? 'default'
+            : device.inputVideoDevices[0].id,
         };
       }
-      if (!device.inputAudioDeviceId && device.inputVideoDevices.length > 0) {
+      if (!device.inputAudioDeviceId && device.inputAudioDevices.length > 0) {
         update = {
           ...update,
-          inputAudioDeviceId:
-            device.inputAudioDevices.find((d) => d.id === 'default') ||
-            device.inputAudioDevices[0],
+          // Prefer default device
+          inputAudioDeviceId: device.inputAudioDevices.find(
+            (d) => d.id === 'default'
+          )
+            ? 'default'
+            : device.inputAudioDevices[0].id,
         };
       }
       if (!device.outputAudioDeviceId && device.outputAudioDevices.length > 0) {
         update = {
           ...update,
-          outputAudioDeviceId:
-            device.outputAudioDevices.find((d) => d.id === 'default') ||
-            device.outputAudioDevices[0],
+          // Prefer default device
+          outputAudioDeviceId: device.outputAudioDevices.find(
+            (d) => d.id === 'default'
+          )
+            ? 'default'
+            : device.outputAudioDevices[0].id,
         };
       }
       if (Object.keys(update).length > 0) {

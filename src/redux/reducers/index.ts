@@ -21,7 +21,6 @@ import reduceSoundCards from './reduceSoundCards';
 import reduceRouters from './reduceRouters';
 import reduceStageMembers from './reduceStageMembers';
 import reduceChatMessage from './reduceChatMessage';
-import { ChatMessages } from '../collections/ChatMessages';
 import reduceRemoteAudioTracks from './reduceRemoteAudioTracks';
 import reduceRemoteVideoTracks from './reduceRemoteVideoTracks';
 import Globals from '../collections/Globals';
@@ -33,16 +32,15 @@ import reduceCustomStageMemberVolumes from './reduceCustomStageMemberVolumes';
 import reduceCustomRemoteAudioTrackVolumes from './reduceCustomRemoteAudioTrackVolumes';
 import reduceCustomRemoteAudioTrackPositions from './reduceCustomRemoteAudioTrackPositions';
 import reduceCustomStageMemberPositions from './reduceCustomStageMemberPositions';
-import Mediasoup from '../collections/Mediasoup';
-import reduceMediasoup from './reduceMediasoup';
 import LocalAudioTracks from '../collections/LocalAudioTracks';
 import LocalVideoTracks from '../collections/LocalVideoTracks';
 import reduceLocalAudioTracks from './reduceLocalAudioTracks';
 import reduceLocalVideoTracks from './reduceLocalVideoTracks';
+import ChatMessage from '../../types/model/ChatMessage';
 
 export interface RootReducer {
   globals: Globals;
-  chatMessages: ChatMessages;
+  chatMessages: ChatMessage[];
   devices: Devices;
   soundCards: SoundCards;
   routers: Routers;
@@ -60,7 +58,6 @@ export interface RootReducer {
   customRemoteAudioTrackPositions: CustomRemoteAudioTrackPositions;
   localVideoTracks: LocalVideoTracks;
   localAudioTracks: LocalAudioTracks;
-  mediasoup: Mediasoup;
 }
 
 const reducer = combineReducers<RootReducer>({
@@ -83,6 +80,5 @@ const reducer = combineReducers<RootReducer>({
   customRemoteAudioTrackPositions: reduceCustomRemoteAudioTrackPositions,
   localVideoTracks: reduceLocalVideoTracks,
   localAudioTracks: reduceLocalAudioTracks,
-  mediasoup: reduceMediasoup,
 });
 export default reducer;
