@@ -4,25 +4,77 @@ import { Producer } from 'mediasoup-client/lib/Producer';
 import { Consumer } from 'mediasoup-client/lib/Consumer';
 import { shallowEqual } from 'react-redux';
 import omit from 'lodash/omit';
+import { ITeckosClient } from 'teckos-client';
 import useStageSelector from '../useStageSelector';
 import useMediasoupTransport from './useMediasoupTransport';
 import { MediasoupDevice } from '../../types/model/mediasoup';
 import useConnection from '../useConnection';
-import { ClientDeviceEvents, LocalVideoTrack } from '../../types';
+import {
+  ClientDeviceEvents,
+  LocalAudioTrack,
+  LocalVideoTrack,
+  MediasoupRemoteAudioTrack,
+} from '../../types';
 import MediasoupRemoteVideoTrack from '../../types/model/mediasoup/MediasoupRemoteVideoTrack';
+import { getAudioTracks, getVideoTracks } from './util';
 
 const report = debug('useMediasoup');
 
 const reportError = report.extend('error');
 
+/**
+ * Helper function to publish producer at the API server
+ * @param apiConnection
+ * @param producer
+ */
+const publishProducer = (apiConnection: ITeckosClient, producer: Producer) =>
+  new Promise<LocalVideoTrack | LocalAudioTrack>((resolve, reject) => {
+    apiConnection.emit(
+      producer.kind === 'video'
+        ? ClientDeviceEvents.CreateLocalVideoTrack
+        : ClientDeviceEvents.CreateLocalAudioTrack,
+      {
+        type: 'mediasoup',
+        producerId: producer.id,
+      },
+      (
+        error: string | null,
+        localTrack?: LocalVideoTrack | LocalAudioTrack
+      ) => {
+        if (error) {
+          return reject(error);
+        }
+        if (!localTrack) {
+          return reject(new Error('No local video track provided by server'));
+        }
+        if (producer.kind === 'audio') {
+          return resolve(localTrack as LocalAudioTrack);
+        }
+        return resolve(localTrack as LocalVideoTrack);
+      }
+    );
+  });
+
 export interface IMediasoupContext {
   videoConsumers: {
     [videoTrackId: string]: Consumer;
   };
+  audioConsumers: {
+    [videoTrackId: string]: Consumer;
+  };
+  videoProducers: {
+    [localVideoTrackId: string]: Producer;
+  };
+  audioProducers: {
+    [localAudioTrackId: string]: Producer;
+  };
 }
 
 const MediasoupContext = createContext<IMediasoupContext>({
+  videoProducers: {},
   videoConsumers: {},
+  audioProducers: {},
+  audioConsumers: {},
 });
 
 const MediasoupProvider = (props: {
@@ -55,33 +107,12 @@ const MediasoupProvider = (props: {
     routerUrl,
   });
 
-  /** *
+  /**
    * PRODUCING VIDEOS
    */
-  const [, setVideoProducers] = useState<{
+  const [videoProducers, setVideoProducers] = useState<{
     [localVideoTrackId: string]: Producer;
   }>({});
-
-  /*
-  const [videoStream, setVideoStream] = useState<MediaStream>();
-  useEffect(() => {
-    if (localDevice?.sendVideo && localDevice.inputVideoDeviceId) {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            deviceId: localDevice.inputVideoDeviceId,
-          },
-          audio: false,
-        })
-        .then((stream) => setVideoStream(stream))
-        .catch((err) => reportError(err));
-
-      return () => {
-        setVideoStream(undefined);
-      };
-    }
-    return undefined;
-  }, [localDevice?.sendVideo, localDevice?.inputVideoDeviceId]); */
   useEffect(() => {
     if (
       apiConnection &&
@@ -90,44 +121,18 @@ const MediasoupProvider = (props: {
       localDevice?.sendVideo &&
       localDevice?.inputVideoDeviceId
     ) {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            deviceId: localDevice.inputVideoDeviceId,
-          },
-          audio: false,
-        })
-        .then((stream) => stream.getVideoTracks())
-        .then((tracks) =>
-          tracks.map((track) =>
-            produce(track).then((producer) => {
-              return new Promise<LocalVideoTrack>((resolve, reject) => {
-                apiConnection.emit(
-                  ClientDeviceEvents.CreateLocalVideoTrack,
-                  {
-                    type: 'mediasoup',
-                    producerId: producer.id,
-                  },
-                  (error: string | null, localVideoTrack?: LocalVideoTrack) => {
-                    if (error) {
-                      return reject(error);
-                    }
-                    if (!localVideoTrack) {
-                      return reject(
-                        new Error('No local video track provided by server')
-                      );
-                    }
-                    return resolve(localVideoTrack);
-                  }
-                );
-              }).then((localVideoTrack) => {
-                console.log(`Added local video track ${localVideoTrack._id}`);
-                return setVideoProducers((prev) => ({
+      getVideoTracks(localDevice.inputVideoDeviceId)
+        .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
+        .then((producers) =>
+          Promise.all(
+            producers.map((producer) =>
+              publishProducer(apiConnection, producer).then((localVideoTrack) =>
+                setVideoProducers((prev) => ({
                   ...prev,
                   [localVideoTrack._id]: producer,
-                }));
-              });
-            })
+                }))
+              )
+            )
           )
         )
         .catch((err) => reportError(err));
@@ -135,7 +140,7 @@ const MediasoupProvider = (props: {
         setVideoProducers((prev) => {
           Object.keys(prev)
             .map((id) => {
-              console.log(`Removing local video track ${id}`);
+              report(`Removing local video track ${id}`);
               apiConnection.emit(ClientDeviceEvents.RemoveLocalVideoTrack, id);
               return prev[id];
             })
@@ -155,6 +160,71 @@ const MediasoupProvider = (props: {
     stopProducing,
     localDevice?.sendVideo,
     localDevice?.inputVideoDeviceId,
+  ]);
+
+  /**
+   * PRODUCING AUDIO
+   */
+  const [audioProducers, setAudioProducers] = useState<{
+    [localAudioTrackId: string]: Producer;
+  }>({});
+  useEffect(() => {
+    if (
+      apiConnection &&
+      ready &&
+      stage &&
+      localDevice?.sendAudio &&
+      localDevice?.inputAudioDeviceId
+    ) {
+      getAudioTracks({
+        inputAudioDeviceId: localDevice.inputAudioDeviceId,
+        autoGainControl: localDevice.autoGainControl,
+        echoCancellation: localDevice.echoCancellation,
+        noiseSuppression: localDevice.noiseSuppression,
+        sampleRate: localDevice.sampleRate,
+      })
+        .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
+        .then((producers) =>
+          Promise.all(
+            producers.map((producer) =>
+              publishProducer(apiConnection, producer).then((localAudioTrack) =>
+                setAudioProducers((prev) => ({
+                  ...prev,
+                  [localAudioTrack._id]: producer,
+                }))
+              )
+            )
+          )
+        )
+        .catch((err) => reportError(err));
+      return () => {
+        setAudioProducers((prev) => {
+          Object.keys(prev)
+            .map((id) => {
+              report(`Removing local audio track ${id}`);
+              apiConnection.emit(ClientDeviceEvents.RemoveLocalAudioTrack, id);
+              return prev[id];
+            })
+            .map((producer) =>
+              stopProducing(producer).catch((error) => reportError(error))
+            );
+          return {};
+        });
+      };
+    }
+    return undefined;
+  }, [
+    apiConnection,
+    ready,
+    stage,
+    produce,
+    stopProducing,
+    localDevice?.sendAudio,
+    localDevice?.inputAudioDeviceId,
+    localDevice?.sampleRate,
+    localDevice?.echoCancellation,
+    localDevice?.noiseSuppression,
+    localDevice?.autoGainControl,
   ]);
 
   /** *
@@ -227,6 +297,76 @@ const MediasoupProvider = (props: {
     remoteVideoTracks.length,
   ]);
 
+  /** *
+   * CONSUMING AUDIO
+   */
+  const remoteAudioTracks = useStageSelector(
+    (state) =>
+      state.remoteAudioTracks.allIds.map(
+        (id) => state.remoteAudioTracks.byId[id]
+      ),
+    shallowEqual
+  );
+  const [audioConsumers, setAudioConsumers] = useState<{
+    [remoteAudioTrackId: string]: Consumer;
+  }>({});
+  useEffect(() => {
+    if (ready && stage && localDevice?.receiveAudio) {
+      return () => {
+        // Stop consuming
+        report('Stop consuming all remote audio tracks');
+        setAudioConsumers((prev) => {
+          Object.keys(prev).map((id) =>
+            stopConsuming(prev[id]).catch((err) => reportError(err))
+          );
+          return {};
+        });
+      };
+    }
+    return undefined;
+  }, [ready, stage, stopConsuming, localDevice?.receiveAudio]);
+  useEffect(() => {
+    if (ready && stage && localDevice?.receiveAudio) {
+      const mediasoupTracks = remoteAudioTracks
+        .filter((track) => track.type === 'mediasoup')
+        .map((track) => track as MediasoupRemoteAudioTrack);
+      setAudioConsumers((prev) => {
+        const removedTrackIds = Object.keys(prev).filter(
+          (id) => !mediasoupTracks.find((track) => track._id === id)
+        );
+        // Consume new tracks (async, will be added when available)
+        mediasoupTracks
+          .filter((track) => !prev[track._id])
+          .map((track) => {
+            report(`Consuming new remote audio track ${track._id}`);
+            return consume(track.producerId)
+              .then((consumer) =>
+                setAudioConsumers((prev2) => ({
+                  ...prev2,
+                  [track._id]: consumer,
+                }))
+              )
+              .catch((err) => reportError(err));
+          });
+        // Stop removed tracks async
+        removedTrackIds.map((id) => {
+          report(`Stop consuming unavailable audio remote track ${id}`);
+          return stopConsuming(prev[id]).catch((err) => reportError(err));
+        });
+        // Omit removed tracks already
+        return omit(prev, removedTrackIds);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    ready,
+    stage,
+    localDevice?.receiveAudio,
+    consume,
+    stopConsuming,
+    remoteAudioTracks.length,
+  ]);
+
   useEffect(() => {
     if (
       stage &&
@@ -242,7 +382,14 @@ const MediasoupProvider = (props: {
   }, [stage]);
 
   return (
-    <MediasoupContext.Provider value={{ videoConsumers }}>
+    <MediasoupContext.Provider
+      value={{
+        videoConsumers,
+        videoProducers,
+        audioConsumers,
+        audioProducers,
+      }}
+    >
       {children}
     </MediasoupContext.Provider>
   );

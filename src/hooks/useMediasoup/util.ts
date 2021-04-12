@@ -80,8 +80,8 @@ export const getVideoTracks = (
     .then((stream) => stream.getVideoTracks());
 
 export const getAudioTracks = (options: {
-  sampleRate?: number;
   inputAudioDeviceId?: string;
+  sampleRate?: number;
   autoGainControl?: boolean;
   echoCancellation?: boolean;
   noiseSuppression?: boolean;
