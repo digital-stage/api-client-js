@@ -121,6 +121,7 @@ const MediasoupProvider = (props: {
       localDevice?.sendVideo &&
       localDevice?.inputVideoDeviceId
     ) {
+      report(`Fetch video and produce it`);
       getVideoTracks(localDevice.inputVideoDeviceId)
         .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
         .then((producers) =>
@@ -370,8 +371,8 @@ const MediasoupProvider = (props: {
   useEffect(() => {
     if (
       stage &&
-      (stage.videoType === 'mediasoup' ||
-        (stage.audioType === 'mediasoup' && stage.mediasoup))
+      (stage.videoType === 'mediasoup' || stage.audioType === 'mediasoup') &&
+      stage.mediasoup
     ) {
       setRouterUrl(`${stage.mediasoup.url}:${stage.mediasoup.port}`);
       return () => {
