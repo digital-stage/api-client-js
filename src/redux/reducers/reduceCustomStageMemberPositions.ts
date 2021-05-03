@@ -73,17 +73,17 @@ function reduceCustomStageMemberPositions(
       } = action.payload as ServerDevicePayloads.StageJoined;
       let updatedState = { ...state };
       if (customStageMemberPositions)
-        customStageMemberPositions.forEach((customGroup) => {
+        customStageMemberPositions.forEach((customStageMemberPosition) => {
           updatedState = addCustomStageMemberPosition(
             updatedState,
-            customGroup
+            customStageMemberPosition
           );
         });
       return updatedState;
     }
     case ServerDeviceEvents.CustomStageMemberPositionAdded: {
-      const customGroup = action.payload as ServerDevicePayloads.CustomStageMemberPositionAdded;
-      return addCustomStageMemberPosition(state, customGroup);
+      const customStageMemberPosition = action.payload as ServerDevicePayloads.CustomStageMemberPositionAdded;
+      return addCustomStageMemberPosition(state, customStageMemberPosition);
     }
     case ServerDeviceEvents.CustomStageMemberPositionChanged: {
       return {

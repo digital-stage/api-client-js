@@ -12,6 +12,8 @@ import CustomGroupVolumes from '../collections/CustomGroupVolumes';
 import CustomGroupPositions from '../collections/CustomGroupPositions';
 import CustomStageMemberVolumes from '../collections/CustomStageMemberVolumes';
 import CustomStageMemberPositions from '../collections/CustomStageMemberPositions';
+import CustomStageDeviceVolumes from '../collections/CustomStageDeviceVolumes';
+import CustomStageDevicePositions from '../collections/CustomStageDevicePositions';
 import CustomRemoteAudioTrackPositions from '../collections/CustomRemoteAudioTrackPositions';
 import CustomRemoteAudioTrackVolumes from '../collections/CustomRemoteAudioTrackVolumes';
 import reduceStages from './reduceStages';
@@ -37,6 +39,10 @@ import LocalVideoTracks from '../collections/LocalVideoTracks';
 import reduceLocalAudioTracks from './reduceLocalAudioTracks';
 import reduceLocalVideoTracks from './reduceLocalVideoTracks';
 import ChatMessage from '../../types/model/ChatMessage';
+import reduceStageDevices from './reduceStageDevices';
+import { StageDevices } from '../collections';
+import reduceCustomStageDeviceVolumes from './reduceCustomStageDeviceVolumes';
+import reduceCustomStageDevicePositions from './reduceCustomStageDevicePositions';
 
 export interface RootReducer {
   globals: Globals;
@@ -48,12 +54,15 @@ export interface RootReducer {
   stages: Stages;
   groups: Groups;
   stageMembers: StageMembers;
+  stageDevices: StageDevices;
   remoteVideoTracks: RemoteVideoTracks;
   remoteAudioTracks: RemoteAudioTracks;
   customGroupVolumes: CustomGroupVolumes;
   customGroupPositions: CustomGroupPositions;
   customStageMemberVolumes: CustomStageMemberVolumes;
   customStageMemberPositions: CustomStageMemberPositions;
+  customStageDeviceVolumes: CustomStageDeviceVolumes;
+  customStageDevicePositions: CustomStageDevicePositions;
   customRemoteAudioTrackVolumes: CustomRemoteAudioTrackVolumes;
   customRemoteAudioTrackPositions: CustomRemoteAudioTrackPositions;
   localVideoTracks: LocalVideoTracks;
@@ -70,12 +79,15 @@ const reducer = combineReducers<RootReducer>({
   stages: reduceStages,
   groups: reduceGroups,
   stageMembers: reduceStageMembers,
+  stageDevices: reduceStageDevices,
   remoteVideoTracks: reduceRemoteVideoTracks,
   remoteAudioTracks: reduceRemoteAudioTracks,
   customGroupVolumes: reduceCustomGroupVolumes,
   customGroupPositions: reduceCustomGroupPositions,
   customStageMemberVolumes: reduceCustomStageMemberVolumes,
   customStageMemberPositions: reduceCustomStageMemberPositions,
+  customStageDeviceVolumes: reduceCustomStageDeviceVolumes,
+  customStageDevicePositions: reduceCustomStageDevicePositions,
   customRemoteAudioTrackVolumes: reduceCustomRemoteAudioTrackVolumes,
   customRemoteAudioTrackPositions: reduceCustomRemoteAudioTrackPositions,
   localVideoTracks: reduceLocalVideoTracks,

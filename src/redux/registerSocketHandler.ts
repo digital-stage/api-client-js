@@ -302,6 +302,74 @@ const registerSocketHandler = (
   );
 
   socket.on(
+    ServerDeviceEvents.StageDeviceAdded,
+    (payload: ServerDevicePayloads.StageDeviceAdded) => {
+      store.dispatch(allActions.stageActions.server.addStageDevice(payload));
+    }
+  );
+  socket.on(
+    ServerDeviceEvents.StageDeviceChanged,
+    (payload: ServerDevicePayloads.StageDeviceChanged) => {
+      store.dispatch(allActions.stageActions.server.changeStageDevice(payload));
+    }
+  );
+  socket.on(
+    ServerDeviceEvents.StageDeviceRemoved,
+    (payload: ServerDevicePayloads.StageDeviceRemoved) => {
+      store.dispatch(allActions.stageActions.server.removeStageDevice(payload));
+    }
+  );
+
+  socket.on(
+    ServerDeviceEvents.CustomStageDeviceVolumeAdded,
+    (payload: ServerDevicePayloads.CustomStageDeviceVolumeAdded) => {
+      store.dispatch(
+        allActions.stageActions.server.addCustomStageDeviceVolume(payload)
+      );
+    }
+  );
+  socket.on(
+    ServerDeviceEvents.CustomStageDeviceVolumeChanged,
+    (payload: ServerDevicePayloads.CustomStageDeviceVolumeChanged) => {
+      store.dispatch(
+        allActions.stageActions.server.changeCustomStageDeviceVolume(payload)
+      );
+    }
+  );
+  socket.on(
+    ServerDeviceEvents.CustomStageDeviceVolumeRemoved,
+    (payload: ServerDevicePayloads.CustomStageDeviceVolumeRemoved) => {
+      store.dispatch(
+        allActions.stageActions.server.removeCustomStageDeviceVolume(payload)
+      );
+    }
+  );
+  socket.on(
+    ServerDeviceEvents.CustomStageDevicePositionAdded,
+    (payload: ServerDevicePayloads.CustomStageDevicePositionAdded) => {
+      store.dispatch(
+        allActions.stageActions.server.addCustomStageDevicePosition(payload)
+      );
+    }
+  );
+  socket.on(
+    ServerDeviceEvents.CustomStageDevicePositionChanged,
+    (payload: ServerDevicePayloads.CustomStageDevicePositionChanged) => {
+      store.dispatch(
+        allActions.stageActions.server.changeCustomStageDevicePosition(payload)
+      );
+    }
+  );
+  socket.on(
+    ServerDeviceEvents.CustomStageDevicePositionRemoved,
+    (payload: ServerDevicePayloads.CustomStageDevicePositionRemoved) => {
+      store.dispatch(
+        allActions.stageActions.server.removeCustomStageDevicePosition(payload)
+      );
+    }
+  );
+
+  socket.on(
     ServerDeviceEvents.RemoteAudioTrackAdded,
     (payload: ServerDevicePayloads.RemoteAudioTrackAdded) => {
       store.dispatch(

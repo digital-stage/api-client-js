@@ -73,14 +73,17 @@ function reduceCustomStageMemberVolumes(
       } = action.payload as ServerDevicePayloads.StageJoined;
       let updatedState = { ...state };
       if (customStageMemberVolumes)
-        customStageMemberVolumes.forEach((customGroup) => {
-          updatedState = addCustomStageMemberVolume(updatedState, customGroup);
+        customStageMemberVolumes.forEach((customStageMemberVolume) => {
+          updatedState = addCustomStageMemberVolume(
+            updatedState,
+            customStageMemberVolume
+          );
         });
       return updatedState;
     }
     case ServerDeviceEvents.CustomStageMemberVolumeAdded: {
-      const customGroup = action.payload as ServerDevicePayloads.CustomStageMemberVolumeAdded;
-      return addCustomStageMemberVolume(state, customGroup);
+      const customStageMemberVolume = action.payload as ServerDevicePayloads.CustomStageMemberVolumeAdded;
+      return addCustomStageMemberVolume(state, customStageMemberVolume);
     }
     case ServerDeviceEvents.CustomStageMemberVolumeChanged: {
       return {

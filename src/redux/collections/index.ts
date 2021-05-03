@@ -12,6 +12,7 @@ import RemoteUsers from './RemoteUsers';
 import RemoteVideoTracks from './RemoteVideoTracks';
 import Routers from './Routers';
 import SoundCards from './SoundCards';
+import StageDevices from './StageDevices';
 import StageMembers from './StageMembers';
 import Stages from './Stages';
 
@@ -31,5 +32,6 @@ export type {
   Routers,
   SoundCards,
   StageMembers,
+  StageDevices,
   Stages,
 };

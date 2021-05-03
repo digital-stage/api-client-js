@@ -137,6 +137,62 @@ const removeCustomStageMemberPosition = (
   payload: customStageMemberId,
 });
 
+const addStageDevice = (
+  stageDevice: ServerDevicePayloads.StageDeviceAdded
+) => ({
+  type: ServerDeviceEvents.StageDeviceAdded,
+  payload: stageDevice,
+});
+const changeStageDevice = (
+  stageDevice: ServerDevicePayloads.StageDeviceChanged
+) => ({
+  type: ServerDeviceEvents.StageDeviceChanged,
+  payload: stageDevice,
+});
+const removeStageDevice = (
+  stageDeviceId: ServerDevicePayloads.StageDeviceRemoved
+) => ({
+  type: ServerDeviceEvents.StageDeviceRemoved,
+  payload: stageDeviceId,
+});
+
+const addCustomStageDeviceVolume = (
+  stageDevice: ServerDevicePayloads.CustomStageDeviceVolumeAdded
+) => ({
+  type: ServerDeviceEvents.CustomStageDeviceVolumeAdded,
+  payload: stageDevice,
+});
+const changeCustomStageDeviceVolume = (
+  stageDevice: ServerDevicePayloads.CustomStageDeviceVolumeChanged
+) => ({
+  type: ServerDeviceEvents.CustomStageDeviceVolumeChanged,
+  payload: stageDevice,
+});
+const removeCustomStageDeviceVolume = (
+  customStageDeviceId: ServerDevicePayloads.CustomStageDeviceVolumeRemoved
+) => ({
+  type: ServerDeviceEvents.CustomStageDeviceVolumeRemoved,
+  payload: customStageDeviceId,
+});
+const addCustomStageDevicePosition = (
+  stageDevice: ServerDevicePayloads.CustomStageDevicePositionAdded
+) => ({
+  type: ServerDeviceEvents.CustomStageDevicePositionAdded,
+  payload: stageDevice,
+});
+const changeCustomStageDevicePosition = (
+  stageDevice: ServerDevicePayloads.CustomStageDevicePositionChanged
+) => ({
+  type: ServerDeviceEvents.CustomStageDevicePositionChanged,
+  payload: stageDevice,
+});
+const removeCustomStageDevicePosition = (
+  customStageDeviceId: ServerDevicePayloads.CustomStageDevicePositionRemoved
+) => ({
+  type: ServerDeviceEvents.CustomStageDevicePositionRemoved,
+  payload: customStageDeviceId,
+});
+
 const addRemoteVideoTrack = (
   remoteVideoTrack: ServerDevicePayloads.RemoteVideoTrackAdded
 ) => ({
@@ -275,6 +331,15 @@ const server = {
   addCustomStageMemberPosition,
   changeCustomStageMemberPosition,
   removeCustomStageMemberPosition,
+  addStageDevice,
+  changeStageDevice,
+  removeStageDevice,
+  addCustomStageDeviceVolume,
+  changeCustomStageDeviceVolume,
+  removeCustomStageDeviceVolume,
+  addCustomStageDevicePosition,
+  changeCustomStageDevicePosition,
+  removeCustomStageDevicePosition,
   addRemoteAudioTrack,
   changeRemoteAudioTrack,
   removeRemoteAudioTrack,
