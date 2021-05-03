@@ -4,8 +4,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
     "node": ">=10"
@@ -18,11 +17,6 @@
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why"
-  },
-  "peerDependencies": {
-    "react": ">=17",
-    "react-dom": ">=17",
-    "react-redux": ">=17"
   },
   "husky": {
     "hooks": {
@@ -66,12 +60,21 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^6.0.0",
     "prettier": "^2.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "size-limit": "^4.10.2",
     "tsdx": "^0.14.1",
-    "tslib": "^2.2.0",
-    "typescript": "^4.2.4"
+    "tslib": "^2.2.0"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17",
+    "react-redux": ">=17",
+    "redux": "^4.0.0",
+    "typescript": "^4.2"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   },
   "dependencies": {
     "bufferutil": "^4.0.3",
@@ -84,7 +87,6 @@
     "lodash-es": "^4.17.21",
     "mediasoup-client": "^3.6.29",
     "react-redux": "^7.2.3",
-    "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
     "teckos-client": "^0.1.3",
