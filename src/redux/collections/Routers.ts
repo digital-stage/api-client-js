@@ -1,4 +1,4 @@
-import Router from '../../types/model/Router'
+import Router from '@digitalstage/api-types'
 
 interface Routers {
     byId: {

@@ -1,7 +1,6 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
+import { ServerDeviceEvents, ServerDevicePayloads } from '@digitalstage/api-types'
 import LocalVideoTracks from '../collections/LocalVideoTracks'
 import upsert from '../utils/upsert'
 

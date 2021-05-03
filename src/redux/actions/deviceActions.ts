@@ -1,5 +1,4 @@
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import Device from '../../types/model/Device'
+import { ServerDeviceEvents, Device } from '@digitalstage/api-types'
 
 const handleLocalDeviceReady = (device: Device) => ({
     type: ServerDeviceEvents.LocalDeviceReady,

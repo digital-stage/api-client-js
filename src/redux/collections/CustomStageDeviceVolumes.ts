@@ -1,4 +1,4 @@
-import CustomStageDeviceVolume from '../../types/model/CustomStageDeviceVolume'
+import CustomStageDeviceVolume from '@digitalstage/api-types'
 
 interface CustomStageDeviceVolumes {
     byId: {

@@ -5,17 +5,17 @@ import { Consumer } from 'mediasoup-client/lib/Consumer'
 import { shallowEqual } from 'react-redux'
 import omit from 'lodash/omit'
 import { ITeckosClient } from 'teckos-client'
-import useStageSelector from '../useStageSelector'
-import useMediasoupTransport from './useMediasoupTransport'
-import { MediasoupDevice } from '../../types/model/mediasoup'
-import useConnection from '../useConnection'
 import {
     ClientDeviceEvents,
     LocalAudioTrack,
     LocalVideoTrack,
+    MediasoupDevice,
     MediasoupRemoteAudioTrack,
-} from '../../types'
-import MediasoupRemoteVideoTrack from '../../types/model/mediasoup/MediasoupRemoteVideoTrack'
+    MediasoupRemoteVideoTrack,
+} from '@digitalstage/api-types'
+import useStageSelector from '../useStageSelector'
+import useMediasoupTransport from './useMediasoupTransport'
+import useConnection from '../useConnection'
 import { getAudioTracks, getVideoTracks } from './util'
 
 const report = debug('useMediasoup')

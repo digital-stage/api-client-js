@@ -1,5 +1,4 @@
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
+import { ServerDeviceEvents, ServerDevicePayloads } from '@digitalstage/api-types'
 
 const messageSent = (message: ServerDevicePayloads.ChatMessageSend) => ({
     type: ServerDeviceEvents.ChatMessageSend,

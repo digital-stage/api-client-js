@@ -1,6 +1,4 @@
-import ChatMessage from '../../types/model/ChatMessage'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
+import { ChatMessage, ServerDeviceEvents, ServerDevicePayloads } from '@digitalstage/api-types'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
 
 function reduceChatMessage(

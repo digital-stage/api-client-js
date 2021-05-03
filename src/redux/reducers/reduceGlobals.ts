@@ -1,9 +1,7 @@
 import Cookie from 'js-cookie'
-import Globals from '../collections/Globals'
+import { ServerDeviceEvents, ServerDevicePayloads, MediasoupDevice } from '@digitalstage/api-types'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
-import MediasoupDevice from '../../types/model/mediasoup/MediasoupDevice'
+import Globals from '../collections/Globals'
 
 function reduceGlobals(
     state: Globals = {

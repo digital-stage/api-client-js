@@ -1,5 +1,5 @@
 import Cookie from 'js-cookie'
-import MediasoupDevice, { WebMediaDevice } from '../types/model/mediasoup/MediasoupDevice'
+import MediasoupDevice, { WebMediaDevice } from '@digitalstage/api-types'
 
 const getInitialDevice = async (): Promise<Partial<Omit<MediasoupDevice, '_id'>>> => {
     const uuid = Cookie.get('device')

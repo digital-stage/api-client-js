@@ -1,4 +1,4 @@
-import Stage from '../../types/model/Stage'
+import Stage from '@digitalstage/api-types'
 
 interface Stages {
     byId: {

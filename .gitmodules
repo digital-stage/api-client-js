@@ -1,3 +1,0 @@
-[submodule "types"]
-	path = src/types
-	url = https://github.com/digital-stage/api-types-js.git

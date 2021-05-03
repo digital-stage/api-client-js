@@ -1,11 +1,13 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
+import {
+    CustomGroupVolume,
+    ServerDevicePayloads,
+    ServerDeviceEvents,
+} from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
 import CustomGroupVolumes from '../collections/CustomGroupVolumes'
-import CustomGroupVolume from '../../types/model/CustomGroupVolume'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
 
 const addCustomGroupVolume = (
     state: CustomGroupVolumes,

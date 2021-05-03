@@ -1,11 +1,13 @@
 import { Store } from 'redux'
 import { TeckosClient } from 'teckos-client'
 import Cookie from 'js-cookie'
-import ServerDeviceEvents from '../types/ServerDeviceEvents'
+import {
+    ClientDeviceEvents,
+    MediasoupDevice,
+    ServerDeviceEvents,
+    ServerDevicePayloads,
+} from '@digitalstage/api-tykes'
 import allActions from './actions'
-import ServerDevicePayloads from '../types/ServerDevicePayloads'
-import { ClientDeviceEvents } from '../types'
-import MediasoupDevice from '../types/model/mediasoup/MediasoupDevice'
 
 const registerSocketHandler = (store: Store, socket: TeckosClient): TeckosClient => {
     // socket.setMaxListeners(70);

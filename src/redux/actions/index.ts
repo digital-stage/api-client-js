@@ -1,11 +1,9 @@
 import { Action, AnyAction } from 'redux'
+import { ServerDeviceEvents, ServerDevicePayloads, User } from '@digitalstage/api-types'
 import stageActions from './stageActions'
 import deviceActions from './deviceActions'
 import AdditionalReducerTypes from './AdditionalReducerTypes'
-import User from '../../types/model/User'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
 import mediasoupActions from './mediasoup'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
 
 export interface ReducerAction extends AnyAction {
     type: string | AdditionalReducerTypes

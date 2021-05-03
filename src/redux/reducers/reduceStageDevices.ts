@@ -1,12 +1,10 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
 import debug from 'debug'
+import { ServerDeviceEvents, ServerDevicePayloads, StageDevice } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
 import StageDevices from '../collections/StageDevices'
-import StageDevice from '../../types/model/StageDevice'
 
 const d = debug('reduceStageDevices')
 const err = d.extend('error')

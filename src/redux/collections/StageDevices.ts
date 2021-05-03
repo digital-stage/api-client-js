@@ -1,4 +1,4 @@
-import StageDevice from '../../types/model/StageDevice'
+import StageDevice from '@digitalstage/api-types'
 
 interface StageDevices {
     byId: {

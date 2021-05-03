@@ -1,10 +1,9 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
+import { ServerDeviceEvents, ServerDevicePayloads } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
 import Devices from '../collections/Devices'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
 
 function reduceDevices(
     state: Devices = {

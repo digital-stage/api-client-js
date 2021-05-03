@@ -1,11 +1,9 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
+import { User, ServerDeviceEvents, ServerDevicePayloads } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
-import User from '../../types/model/User'
 import RemoteUsers from '../collections/RemoteUsers'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
 
 const addUser = (state: RemoteUsers, user: User): RemoteUsers => ({
     ...state,

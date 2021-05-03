@@ -1,4 +1,4 @@
-import CustomStageDevicePosition from '../../types/model/CustomStageDevicePosition'
+import CustomStageDevicePosition from '@digitalstage/api-types'
 
 interface CustomStageDevicePositions {
     byId: {

@@ -1,4 +1,4 @@
-import Device from '../../types/model/Device'
+import Device from '@digitalstage/api-types'
 
 interface Devices {
     byId: {

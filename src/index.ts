@@ -9,7 +9,7 @@ import useConnection from './hooks/useConnection'
 import useStageSelector from './hooks/useStageSelector'
 import useMediasoup from './hooks/useMediasoup'
 
-export * from './types'
+export * from '@digitalstage/api-types'
 
 export type { RootReducer, ReducerAction, AuthUser }
 

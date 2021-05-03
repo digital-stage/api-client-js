@@ -1,4 +1,4 @@
-import CustomStageMemberVolume from '../../types/model/CustomStageMemberVolume'
+import CustomStageMemberVolume from '@digitalstage/api-types'
 
 interface CustomStageMemberVolumes {
     byId: {

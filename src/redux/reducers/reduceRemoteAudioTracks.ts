@@ -1,11 +1,9 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
+import { ServerDeviceEvents, ServerDevicePayloads, RemoteAudioTrack } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
 import RemoteAudioTracks from '../collections/RemoteAudioTracks'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
-import RemoteAudioTrack from '../../types/model/RemoteAudioTrack'
 
 const addRemoteAudioTrack = (
     state: RemoteAudioTracks,

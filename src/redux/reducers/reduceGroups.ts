@@ -1,11 +1,9 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
+import { ServerDeviceEvents, ServerDevicePayloads, Group } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
 import Groups from '../collections/Groups'
-import Group from '../../types/model/Group'
 
 const addGroup = (state: Groups, group: Group): Groups => ({
     ...state,

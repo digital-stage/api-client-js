@@ -1,11 +1,13 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
+import {
+    ServerDevicePayloads,
+    CustomStageDevicePosition,
+    ServerDeviceEvents,
+} from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
 import CustomStageDevicePositions from '../collections/CustomStageDevicePositions'
-import CustomStageDevicePosition from '../../types/model/CustomStageDevicePosition'
 
 const addCustomStageDevicePosition = (
     state: CustomStageDevicePositions,

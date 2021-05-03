@@ -1,4 +1,4 @@
-import User from '../../types/model/User'
+import { User } from '@digitalstage/api-types'
 
 interface Globals {
     stageId?: string

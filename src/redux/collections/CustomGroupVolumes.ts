@@ -1,4 +1,4 @@
-import CustomGroupVolume from '../../types/model/CustomGroupVolume'
+import { CustomGroupVolume } from '@digitalstage/api-types'
 
 interface CustomGroupVolumes {
     byId: {

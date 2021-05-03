@@ -1,10 +1,8 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
-import Stage from '../../types/model/Stage'
+import { ServerDeviceEvents, ServerDevicePayloads, Stage } from '@digitalstage/api-types'
 import Stages from '../collections/Stages'
 import upsert from '../utils/upsert'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
 
 const addStage = (state: Stages, stage: Stage): Stages => ({

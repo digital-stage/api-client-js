@@ -1,11 +1,9 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
+import { ServerDeviceEvents, ServerDevicePayloads, RemoteVideoTrack } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
 import RemoteVideoTracks from '../collections/RemoteVideoTracks'
-import ServerDeviceEvents from '../../types/ServerDeviceEvents'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
-import ServerDevicePayloads from '../../types/ServerDevicePayloads'
-import RemoteVideoTrack from '../../types/model/RemoteVideoTrack'
 
 const addRemoteVideoTrack = (
     state: RemoteVideoTracks,
