@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import ChatMessage from '@digitalstage/api-types'
+import { ChatMessage } from '@digitalstage/api-types'
 import Stages from '../collections/Stages'
 import Groups from '../collections/Groups'
 import StageMembers from '../collections/StageMembers'

@@ -1,4 +1,4 @@
-import CustomRemoteAudioTrackVolume from '@digitalstage/api-types'
+import { CustomRemoteAudioTrackVolume } from '@digitalstage/api-types'
 
 interface CustomRemoteAudioTrackVolumes {
     byId: {

@@ -1,4 +1,4 @@
-import Group from '@digitalstage/api-types'
+import { Group } from '@digitalstage/api-types'
 
 interface Groups {
     byId: {

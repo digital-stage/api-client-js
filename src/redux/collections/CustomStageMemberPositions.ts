@@ -1,4 +1,4 @@
-import CustomStageMemberPosition from '@digitalstage/api-types'
+import { CustomStageMemberPosition } from '@digitalstage/api-types'
 
 interface CustomStageMemberPositions {
     byId: {

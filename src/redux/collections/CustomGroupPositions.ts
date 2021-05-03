@@ -1,4 +1,4 @@
-import CustomGroupPosition from '@digitalstage/api-types'
+import { CustomGroupPosition } from '@digitalstage/api-types'
 
 interface CustomGroupPositions {
     byId: {

@@ -1,4 +1,4 @@
-import RemoteVideoTrack from '@digitalstage/api-types'
+import { RemoteVideoTrack } from '@digitalstage/api-types'
 
 interface RemoteVideoTracks {
     byId: {

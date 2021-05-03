@@ -6,7 +6,7 @@ import {
     MediasoupDevice,
     ServerDeviceEvents,
     ServerDevicePayloads,
-} from '@digitalstage/api-tykes'
+} from '@digitalstage/api-types'
 import allActions from './actions'
 
 const registerSocketHandler = (store: Store, socket: TeckosClient): TeckosClient => {

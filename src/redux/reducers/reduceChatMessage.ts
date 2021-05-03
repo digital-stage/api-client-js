@@ -2,20 +2,20 @@ import { ChatMessage, ServerDeviceEvents, ServerDevicePayloads } from '@digitals
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
 
 function reduceChatMessage(
-    state: ChatMessage[] = [],
+    state: Array<ChatMessage> = [],
     action: {
         type: string
         payload: unknown
     }
-): ChatMessage[] {
+): Array<ChatMessage> {
     switch (action.type) {
         case ServerDeviceEvents.StageLeft:
         case AdditionalReducerTypes.RESET: {
             return []
         }
         case ServerDeviceEvents.ChatMessageSend: {
-            const chatMessage = action.payload as ServerDevicePayloads.ChatMessageSend
-            return [...state, chatMessage]
+            const msg = action.payload as ServerDevicePayloads.ChatMessageSend
+            return [...state, msg]
         }
         default:
             return state

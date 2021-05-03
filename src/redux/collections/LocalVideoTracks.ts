@@ -1,4 +1,4 @@
-import LocalVideoTrack from '@digitalstage/api-types'
+import { LocalVideoTrack } from '@digitalstage/api-types'
 
 interface LocalVideoTracks {
     byId: {

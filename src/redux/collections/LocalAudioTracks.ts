@@ -1,4 +1,4 @@
-import LocalAudioTrack from '@digitalstage/api-types'
+import { LocalAudioTrack } from '@digitalstage/api-types'
 
 interface LocalAudioTracks {
     byId: {

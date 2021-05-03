@@ -1,4 +1,4 @@
-import RemoteAudioTrack from '@digitalstage/api-types'
+import { RemoteAudioTrack } from '@digitalstage/api-types'
 
 interface RemoteAudioTracks {
     byId: {

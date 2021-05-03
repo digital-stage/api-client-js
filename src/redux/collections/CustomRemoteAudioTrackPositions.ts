@@ -1,4 +1,4 @@
-import CustomRemoteAudioTrackPosition from '@digitalstage/api-types'
+import { CustomRemoteAudioTrackPosition } from '@digitalstage/api-types'
 
 interface CustomRemoteAudioTrackPositions {
     byId: {

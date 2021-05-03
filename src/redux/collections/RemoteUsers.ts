@@ -1,4 +1,4 @@
-import User from '@digitalstage/api-types'
+import { User } from '@digitalstage/api-types'
 
 interface RemoteUsers {
     byId: {

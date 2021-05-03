@@ -1,4 +1,4 @@
-import SoundCard from '@digitalstage/api-types'
+import { SoundCard } from '@digitalstage/api-types'
 
 interface SoundCards {
     byId: {
