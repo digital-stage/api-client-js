@@ -1,10 +1,10 @@
-import Device from '../../types/model/Device';
+import Device from '../../types/model/Device'
 
 interface Devices {
-  byId: {
-    [id: string]: Device;
-  };
-  allIds: string[];
+    byId: {
+        [id: string]: Device
+    }
+    allIds: string[]
 }
 
-export default Devices;
+export default Devices

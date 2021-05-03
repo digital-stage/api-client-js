@@ -1,133 +1,120 @@
-import omit from 'lodash/omit';
-import without from 'lodash/without';
-import upsert from '../utils/upsert';
-import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import ServerDevicePayloads from '../../types/ServerDevicePayloads';
-import ServerDeviceEvents from '../../types/ServerDeviceEvents';
-import CustomStageDeviceVolumes from '../collections/CustomStageDeviceVolumes';
-import CustomStageDeviceVolume from '../../types/model/CustomStageDeviceVolume';
+import omit from 'lodash/omit'
+import without from 'lodash/without'
+import upsert from '../utils/upsert'
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
+import ServerDevicePayloads from '../../types/ServerDevicePayloads'
+import ServerDeviceEvents from '../../types/ServerDeviceEvents'
+import CustomStageDeviceVolumes from '../collections/CustomStageDeviceVolumes'
+import CustomStageDeviceVolume from '../../types/model/CustomStageDeviceVolume'
 
 const addCustomStageDeviceVolume = (
-  state: CustomStageDeviceVolumes,
-  customStageDevice: CustomStageDeviceVolume
+    state: CustomStageDeviceVolumes,
+    customStageDevice: CustomStageDeviceVolume
 ): CustomStageDeviceVolumes => ({
-  ...state,
-  byId: {
-    ...state.byId,
-    [customStageDevice._id]: customStageDevice,
-  },
-  byStageDevice: {
-    ...state.byStageDevice,
-    [customStageDevice.stageDeviceId]: state.byStageDevice[
-      customStageDevice.stageDeviceId
-    ]
-      ? [
-          ...state.byStageDevice[customStageDevice.stageDeviceId],
-          customStageDevice._id,
-        ]
-      : [customStageDevice._id],
-  },
-  byDevice: {
-    ...state.byDevice,
-    [customStageDevice.deviceId]: state.byDevice[customStageDevice.deviceId]
-      ? [...state.byDevice[customStageDevice.deviceId], customStageDevice._id]
-      : [customStageDevice._id],
-  },
-  byDeviceAndStageDevice: {
-    ...state.byDeviceAndStageDevice,
-    [customStageDevice.deviceId]: {
-      ...state.byDeviceAndStageDevice[customStageDevice.deviceId],
-      [customStageDevice.stageDeviceId]: customStageDevice._id,
+    ...state,
+    byId: {
+        ...state.byId,
+        [customStageDevice._id]: customStageDevice,
     },
-  },
-  allIds: upsert<string>(state.allIds, customStageDevice._id),
-});
+    byStageDevice: {
+        ...state.byStageDevice,
+        [customStageDevice.stageDeviceId]: state.byStageDevice[customStageDevice.stageDeviceId]
+            ? [...state.byStageDevice[customStageDevice.stageDeviceId], customStageDevice._id]
+            : [customStageDevice._id],
+    },
+    byDevice: {
+        ...state.byDevice,
+        [customStageDevice.deviceId]: state.byDevice[customStageDevice.deviceId]
+            ? [...state.byDevice[customStageDevice.deviceId], customStageDevice._id]
+            : [customStageDevice._id],
+    },
+    byDeviceAndStageDevice: {
+        ...state.byDeviceAndStageDevice,
+        [customStageDevice.deviceId]: {
+            ...state.byDeviceAndStageDevice[customStageDevice.deviceId],
+            [customStageDevice.stageDeviceId]: customStageDevice._id,
+        },
+    },
+    allIds: upsert<string>(state.allIds, customStageDevice._id),
+})
 
 function reduceCustomStageDeviceVolumes(
-  state: CustomStageDeviceVolumes = {
-    byId: {},
-    byDevice: {},
-    byStageDevice: {},
-    byDeviceAndStageDevice: {},
-    allIds: [],
-  },
-  action: {
-    type: string;
-    payload: any;
-  }
-): CustomStageDeviceVolumes {
-  switch (action.type) {
-    case ServerDeviceEvents.StageLeft:
-    case AdditionalReducerTypes.RESET: {
-      return {
+    state: CustomStageDeviceVolumes = {
         byId: {},
         byDevice: {},
         byStageDevice: {},
         byDeviceAndStageDevice: {},
         allIds: [],
-      };
+    },
+    action: {
+        type: string
+        payload: any
     }
-    case ServerDeviceEvents.StageJoined: {
-      const {
-        customStageDeviceVolumes,
-      } = action.payload as ServerDevicePayloads.StageJoined;
-      let updatedState = { ...state };
-      if (customStageDeviceVolumes)
-        customStageDeviceVolumes.forEach((customStageDeviceVolume) => {
-          updatedState = addCustomStageDeviceVolume(
-            updatedState,
-            customStageDeviceVolume
-          );
-        });
-      return updatedState;
+): CustomStageDeviceVolumes {
+    switch (action.type) {
+        case ServerDeviceEvents.StageLeft:
+        case AdditionalReducerTypes.RESET: {
+            return {
+                byId: {},
+                byDevice: {},
+                byStageDevice: {},
+                byDeviceAndStageDevice: {},
+                allIds: [],
+            }
+        }
+        case ServerDeviceEvents.StageJoined: {
+            const { customStageDeviceVolumes } = action.payload as ServerDevicePayloads.StageJoined
+            let updatedState = { ...state }
+            if (customStageDeviceVolumes)
+                customStageDeviceVolumes.forEach((customStageDeviceVolume) => {
+                    updatedState = addCustomStageDeviceVolume(updatedState, customStageDeviceVolume)
+                })
+            return updatedState
+        }
+        case ServerDeviceEvents.CustomStageDeviceVolumeAdded: {
+            const customStageDeviceVolume = action.payload as ServerDevicePayloads.CustomStageDeviceVolumeAdded
+            return addCustomStageDeviceVolume(state, customStageDeviceVolume)
+        }
+        case ServerDeviceEvents.CustomStageDeviceVolumeChanged: {
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [action.payload._id]: {
+                        ...state.byId[action.payload._id],
+                        ...action.payload,
+                    },
+                },
+            }
+        }
+        case ServerDeviceEvents.CustomStageDeviceVolumeRemoved: {
+            const id = action.payload as string
+            if (state.byId[id]) {
+                // TODO: Why is the line above necessary?
+                const { stageDeviceId, deviceId } = state.byId[id]
+                return {
+                    ...state,
+                    byId: omit(state.byId, id),
+                    byStageDevice: {
+                        ...state.byStageDevice,
+                        [stageDeviceId]: without(state.byStageDevice[stageDeviceId], id),
+                    },
+                    byDevice: {
+                        ...state.byDevice,
+                        [deviceId]: without(state.byDevice[deviceId], id),
+                    },
+                    byDeviceAndStageDevice: {
+                        ...state.byDeviceAndStageDevice,
+                        [deviceId]: omit(state.byDeviceAndStageDevice[deviceId], stageDeviceId),
+                    },
+                    allIds: without<string>(state.allIds, id),
+                }
+            }
+            return state
+        }
+        default:
+            return state
     }
-    case ServerDeviceEvents.CustomStageDeviceVolumeAdded: {
-      const customStageDeviceVolume = action.payload as ServerDevicePayloads.CustomStageDeviceVolumeAdded;
-      return addCustomStageDeviceVolume(state, customStageDeviceVolume);
-    }
-    case ServerDeviceEvents.CustomStageDeviceVolumeChanged: {
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.payload._id]: {
-            ...state.byId[action.payload._id],
-            ...action.payload,
-          },
-        },
-      };
-    }
-    case ServerDeviceEvents.CustomStageDeviceVolumeRemoved: {
-      const id = action.payload as string;
-      if (state.byId[id]) {
-        // TODO: Why is the line above necessary?
-        const { stageDeviceId, deviceId } = state.byId[id];
-        return {
-          ...state,
-          byId: omit(state.byId, id),
-          byStageDevice: {
-            ...state.byStageDevice,
-            [stageDeviceId]: without(state.byStageDevice[stageDeviceId], id),
-          },
-          byDevice: {
-            ...state.byDevice,
-            [deviceId]: without(state.byDevice[deviceId], id),
-          },
-          byDeviceAndStageDevice: {
-            ...state.byDeviceAndStageDevice,
-            [deviceId]: omit(
-              state.byDeviceAndStageDevice[deviceId],
-              stageDeviceId
-            ),
-          },
-          allIds: without<string>(state.allIds, id),
-        };
-      }
-      return state;
-    }
-    default:
-      return state;
-  }
 }
 
-export default reduceCustomStageDeviceVolumes;
+export default reduceCustomStageDeviceVolumes

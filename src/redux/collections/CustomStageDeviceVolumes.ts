@@ -1,21 +1,21 @@
-import CustomStageDeviceVolume from '../../types/model/CustomStageDeviceVolume';
+import CustomStageDeviceVolume from '../../types/model/CustomStageDeviceVolume'
 
 interface CustomStageDeviceVolumes {
-  byId: {
-    [id: string]: CustomStageDeviceVolume;
-  };
-  byDevice: {
-    [deviceId: string]: string[];
-  };
-  byStageDevice: {
-    [stageDeviceId: string]: string[];
-  };
-  byDeviceAndStageDevice: {
-    [deviceId: string]: {
-      [stageDeviceId: string]: string;
-    };
-  };
-  allIds: string[];
+    byId: {
+        [id: string]: CustomStageDeviceVolume
+    }
+    byDevice: {
+        [deviceId: string]: string[]
+    }
+    byStageDevice: {
+        [stageDeviceId: string]: string[]
+    }
+    byDeviceAndStageDevice: {
+        [deviceId: string]: {
+            [stageDeviceId: string]: string
+        }
+    }
+    allIds: string[]
 }
 
-export default CustomStageDeviceVolumes;
+export default CustomStageDeviceVolumes

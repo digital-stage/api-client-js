@@ -1,10 +1,10 @@
-import LocalAudioTrack from '../../types/model/LocalAudioTrack';
+import LocalAudioTrack from '../../types/model/LocalAudioTrack'
 
 interface LocalAudioTracks {
-  byId: {
-    [id: string]: LocalAudioTrack;
-  };
-  allIds: string[];
+    byId: {
+        [id: string]: LocalAudioTrack
+    }
+    allIds: string[]
 }
 
-export default LocalAudioTracks;
+export default LocalAudioTracks

@@ -1,10 +1,10 @@
-import SoundCard from '../../types/model/SoundCard';
+import SoundCard from '../../types/model/SoundCard'
 
 interface SoundCards {
-  byId: {
-    [id: string]: SoundCard;
-  };
-  allIds: string[];
+    byId: {
+        [id: string]: SoundCard
+    }
+    allIds: string[]
 }
 
-export default SoundCards;
+export default SoundCards

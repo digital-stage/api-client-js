@@ -1,10 +1,10 @@
-import Stage from '../../types/model/Stage';
+import Stage from '../../types/model/Stage'
 
 interface Stages {
-  byId: {
-    [id: string]: Stage;
-  };
-  allIds: string[];
+    byId: {
+        [id: string]: Stage
+    }
+    allIds: string[]
 }
 
-export default Stages;
+export default Stages

@@ -1,10 +1,10 @@
-import User from '../../types/model/User';
+import User from '../../types/model/User'
 
 interface RemoteUsers {
-  byId: {
-    [id: string]: User;
-  };
-  allIds: string[];
+    byId: {
+        [id: string]: User
+    }
+    allIds: string[]
 }
 
-export default RemoteUsers;
+export default RemoteUsers

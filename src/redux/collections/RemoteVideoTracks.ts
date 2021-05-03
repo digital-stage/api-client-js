@@ -1,19 +1,22 @@
-import RemoteVideoTrack from '../../types/model/RemoteVideoTrack';
+import RemoteVideoTrack from '../../types/model/RemoteVideoTrack'
 
 interface RemoteVideoTracks {
-  byId: {
-    [id: string]: RemoteVideoTrack;
-  };
-  byStage: {
-    [stageId: string]: string[];
-  };
-  byStageMember: {
-    [stageMemberId: string]: string[];
-  };
-  byUser: {
-    [userId: string]: string[];
-  };
-  allIds: string[];
+    byId: {
+        [id: string]: RemoteVideoTrack
+    }
+    byStage: {
+        [stageId: string]: string[]
+    }
+    byStageMember: {
+        [stageMemberId: string]: string[]
+    }
+    byStageDevice: {
+        [stageDeviceId: string]: string[]
+    }
+    byUser: {
+        [userId: string]: string[]
+    }
+    allIds: string[]
 }
 
-export default RemoteVideoTracks;
+export default RemoteVideoTracks

@@ -1,365 +1,325 @@
-import ServerDeviceEvents from '../../types/ServerDeviceEvents';
-import ServerDevicePayloads from '../../types/ServerDevicePayloads';
+import ServerDeviceEvents from '../../types/ServerDeviceEvents'
+import ServerDevicePayloads from '../../types/ServerDevicePayloads'
 
 const messageSent = (message: ServerDevicePayloads.ChatMessageSend) => ({
-  type: ServerDeviceEvents.ChatMessageSend,
-  payload: message,
-});
+    type: ServerDeviceEvents.ChatMessageSend,
+    payload: message,
+})
 
 const addRemoteUser = (user: ServerDevicePayloads.RemoteUserAdded) => ({
-  type: ServerDeviceEvents.RemoteUserAdded,
-  payload: user,
-});
+    type: ServerDeviceEvents.RemoteUserAdded,
+    payload: user,
+})
 const changeRemoteUser = (user: ServerDevicePayloads.RemoteUserChanged) => ({
-  type: ServerDeviceEvents.RemoteUserChanged,
-  payload: user,
-});
+    type: ServerDeviceEvents.RemoteUserChanged,
+    payload: user,
+})
 const removeRemoteUser = (userId: ServerDevicePayloads.RemoteUserRemoved) => ({
-  type: ServerDeviceEvents.RemoteUserRemoved,
-  payload: userId,
-});
+    type: ServerDeviceEvents.RemoteUserRemoved,
+    payload: userId,
+})
 const addStage = (stage: ServerDevicePayloads.StageAdded) => ({
-  type: ServerDeviceEvents.StageAdded,
-  payload: stage,
-});
+    type: ServerDeviceEvents.StageAdded,
+    payload: stage,
+})
 const changeStage = (stage: ServerDevicePayloads.StageChanged) => ({
-  type: ServerDeviceEvents.StageChanged,
-  payload: stage,
-});
+    type: ServerDeviceEvents.StageChanged,
+    payload: stage,
+})
 const removeStage = (stageId: ServerDevicePayloads.StageRemoved) => ({
-  type: ServerDeviceEvents.StageRemoved,
-  payload: stageId,
-});
+    type: ServerDeviceEvents.StageRemoved,
+    payload: stageId,
+})
 
 const addGroup = (group: ServerDevicePayloads.GroupAdded) => ({
-  type: ServerDeviceEvents.GroupAdded,
-  payload: group,
-});
+    type: ServerDeviceEvents.GroupAdded,
+    payload: group,
+})
 const changeGroup = (group: ServerDevicePayloads.GroupChanged) => ({
-  type: ServerDeviceEvents.GroupChanged,
-  payload: group,
-});
+    type: ServerDeviceEvents.GroupChanged,
+    payload: group,
+})
 const removeGroup = (groupId: ServerDevicePayloads.GroupRemoved) => ({
-  type: ServerDeviceEvents.GroupRemoved,
-  payload: groupId,
-});
+    type: ServerDeviceEvents.GroupRemoved,
+    payload: groupId,
+})
 
-const addCustomGroupVolume = (
-  group: ServerDevicePayloads.CustomGroupVolumeAdded
-) => ({
-  type: ServerDeviceEvents.CustomGroupVolumeAdded,
-  payload: group,
-});
-const changeCustomGroupVolume = (
-  group: ServerDevicePayloads.CustomGroupVolumeChanged
-) => ({
-  type: ServerDeviceEvents.CustomGroupVolumeChanged,
-  payload: group,
-});
-const removeCustomGroupVolume = (
-  groupId: ServerDevicePayloads.CustomGroupVolumeRemoved
-) => ({
-  type: ServerDeviceEvents.CustomGroupVolumeRemoved,
-  payload: groupId,
-});
-const addCustomGroupPosition = (
-  group: ServerDevicePayloads.CustomGroupPositionAdded
-) => ({
-  type: ServerDeviceEvents.CustomGroupPositionAdded,
-  payload: group,
-});
-const changeCustomGroupPosition = (
-  group: ServerDevicePayloads.CustomGroupPositionChanged
-) => ({
-  type: ServerDeviceEvents.CustomGroupPositionChanged,
-  payload: group,
-});
-const removeCustomGroupPosition = (
-  groupId: ServerDevicePayloads.CustomGroupPositionRemoved
-) => ({
-  type: ServerDeviceEvents.CustomGroupPositionRemoved,
-  payload: groupId,
-});
+const addCustomGroupVolume = (group: ServerDevicePayloads.CustomGroupVolumeAdded) => ({
+    type: ServerDeviceEvents.CustomGroupVolumeAdded,
+    payload: group,
+})
+const changeCustomGroupVolume = (group: ServerDevicePayloads.CustomGroupVolumeChanged) => ({
+    type: ServerDeviceEvents.CustomGroupVolumeChanged,
+    payload: group,
+})
+const removeCustomGroupVolume = (groupId: ServerDevicePayloads.CustomGroupVolumeRemoved) => ({
+    type: ServerDeviceEvents.CustomGroupVolumeRemoved,
+    payload: groupId,
+})
+const addCustomGroupPosition = (group: ServerDevicePayloads.CustomGroupPositionAdded) => ({
+    type: ServerDeviceEvents.CustomGroupPositionAdded,
+    payload: group,
+})
+const changeCustomGroupPosition = (group: ServerDevicePayloads.CustomGroupPositionChanged) => ({
+    type: ServerDeviceEvents.CustomGroupPositionChanged,
+    payload: group,
+})
+const removeCustomGroupPosition = (groupId: ServerDevicePayloads.CustomGroupPositionRemoved) => ({
+    type: ServerDeviceEvents.CustomGroupPositionRemoved,
+    payload: groupId,
+})
 
-const addStageMember = (
-  stageMember: ServerDevicePayloads.StageMemberAdded
-) => ({
-  type: ServerDeviceEvents.StageMemberAdded,
-  payload: stageMember,
-});
-const changeStageMember = (
-  stageMember: ServerDevicePayloads.StageMemberChanged
-) => ({
-  type: ServerDeviceEvents.StageMemberChanged,
-  payload: stageMember,
-});
-const removeStageMember = (
-  stageMemberId: ServerDevicePayloads.StageMemberRemoved
-) => ({
-  type: ServerDeviceEvents.StageMemberRemoved,
-  payload: stageMemberId,
-});
+const addStageMember = (stageMember: ServerDevicePayloads.StageMemberAdded) => ({
+    type: ServerDeviceEvents.StageMemberAdded,
+    payload: stageMember,
+})
+const changeStageMember = (stageMember: ServerDevicePayloads.StageMemberChanged) => ({
+    type: ServerDeviceEvents.StageMemberChanged,
+    payload: stageMember,
+})
+const removeStageMember = (stageMemberId: ServerDevicePayloads.StageMemberRemoved) => ({
+    type: ServerDeviceEvents.StageMemberRemoved,
+    payload: stageMemberId,
+})
 
 const addCustomStageMemberVolume = (
-  stageMember: ServerDevicePayloads.CustomStageMemberVolumeAdded
+    stageMember: ServerDevicePayloads.CustomStageMemberVolumeAdded
 ) => ({
-  type: ServerDeviceEvents.CustomStageMemberVolumeAdded,
-  payload: stageMember,
-});
+    type: ServerDeviceEvents.CustomStageMemberVolumeAdded,
+    payload: stageMember,
+})
 const changeCustomStageMemberVolume = (
-  stageMember: ServerDevicePayloads.CustomStageMemberVolumeChanged
+    stageMember: ServerDevicePayloads.CustomStageMemberVolumeChanged
 ) => ({
-  type: ServerDeviceEvents.CustomStageMemberVolumeChanged,
-  payload: stageMember,
-});
+    type: ServerDeviceEvents.CustomStageMemberVolumeChanged,
+    payload: stageMember,
+})
 const removeCustomStageMemberVolume = (
-  customStageMemberId: ServerDevicePayloads.CustomStageMemberVolumeRemoved
+    customStageMemberId: ServerDevicePayloads.CustomStageMemberVolumeRemoved
 ) => ({
-  type: ServerDeviceEvents.CustomStageMemberVolumeRemoved,
-  payload: customStageMemberId,
-});
+    type: ServerDeviceEvents.CustomStageMemberVolumeRemoved,
+    payload: customStageMemberId,
+})
 const addCustomStageMemberPosition = (
-  stageMember: ServerDevicePayloads.CustomStageMemberPositionAdded
+    stageMember: ServerDevicePayloads.CustomStageMemberPositionAdded
 ) => ({
-  type: ServerDeviceEvents.CustomStageMemberPositionAdded,
-  payload: stageMember,
-});
+    type: ServerDeviceEvents.CustomStageMemberPositionAdded,
+    payload: stageMember,
+})
 const changeCustomStageMemberPosition = (
-  stageMember: ServerDevicePayloads.CustomStageMemberPositionChanged
+    stageMember: ServerDevicePayloads.CustomStageMemberPositionChanged
 ) => ({
-  type: ServerDeviceEvents.CustomStageMemberPositionChanged,
-  payload: stageMember,
-});
+    type: ServerDeviceEvents.CustomStageMemberPositionChanged,
+    payload: stageMember,
+})
 const removeCustomStageMemberPosition = (
-  customStageMemberId: ServerDevicePayloads.CustomStageMemberPositionRemoved
+    customStageMemberId: ServerDevicePayloads.CustomStageMemberPositionRemoved
 ) => ({
-  type: ServerDeviceEvents.CustomStageMemberPositionRemoved,
-  payload: customStageMemberId,
-});
+    type: ServerDeviceEvents.CustomStageMemberPositionRemoved,
+    payload: customStageMemberId,
+})
 
-const addStageDevice = (
-  stageDevice: ServerDevicePayloads.StageDeviceAdded
-) => ({
-  type: ServerDeviceEvents.StageDeviceAdded,
-  payload: stageDevice,
-});
-const changeStageDevice = (
-  stageDevice: ServerDevicePayloads.StageDeviceChanged
-) => ({
-  type: ServerDeviceEvents.StageDeviceChanged,
-  payload: stageDevice,
-});
-const removeStageDevice = (
-  stageDeviceId: ServerDevicePayloads.StageDeviceRemoved
-) => ({
-  type: ServerDeviceEvents.StageDeviceRemoved,
-  payload: stageDeviceId,
-});
+const addStageDevice = (stageDevice: ServerDevicePayloads.StageDeviceAdded) => ({
+    type: ServerDeviceEvents.StageDeviceAdded,
+    payload: stageDevice,
+})
+const changeStageDevice = (stageDevice: ServerDevicePayloads.StageDeviceChanged) => ({
+    type: ServerDeviceEvents.StageDeviceChanged,
+    payload: stageDevice,
+})
+const removeStageDevice = (stageDeviceId: ServerDevicePayloads.StageDeviceRemoved) => ({
+    type: ServerDeviceEvents.StageDeviceRemoved,
+    payload: stageDeviceId,
+})
 
 const addCustomStageDeviceVolume = (
-  stageDevice: ServerDevicePayloads.CustomStageDeviceVolumeAdded
+    stageDevice: ServerDevicePayloads.CustomStageDeviceVolumeAdded
 ) => ({
-  type: ServerDeviceEvents.CustomStageDeviceVolumeAdded,
-  payload: stageDevice,
-});
+    type: ServerDeviceEvents.CustomStageDeviceVolumeAdded,
+    payload: stageDevice,
+})
 const changeCustomStageDeviceVolume = (
-  stageDevice: ServerDevicePayloads.CustomStageDeviceVolumeChanged
+    stageDevice: ServerDevicePayloads.CustomStageDeviceVolumeChanged
 ) => ({
-  type: ServerDeviceEvents.CustomStageDeviceVolumeChanged,
-  payload: stageDevice,
-});
+    type: ServerDeviceEvents.CustomStageDeviceVolumeChanged,
+    payload: stageDevice,
+})
 const removeCustomStageDeviceVolume = (
-  customStageDeviceId: ServerDevicePayloads.CustomStageDeviceVolumeRemoved
+    customStageDeviceId: ServerDevicePayloads.CustomStageDeviceVolumeRemoved
 ) => ({
-  type: ServerDeviceEvents.CustomStageDeviceVolumeRemoved,
-  payload: customStageDeviceId,
-});
+    type: ServerDeviceEvents.CustomStageDeviceVolumeRemoved,
+    payload: customStageDeviceId,
+})
 const addCustomStageDevicePosition = (
-  stageDevice: ServerDevicePayloads.CustomStageDevicePositionAdded
+    stageDevice: ServerDevicePayloads.CustomStageDevicePositionAdded
 ) => ({
-  type: ServerDeviceEvents.CustomStageDevicePositionAdded,
-  payload: stageDevice,
-});
+    type: ServerDeviceEvents.CustomStageDevicePositionAdded,
+    payload: stageDevice,
+})
 const changeCustomStageDevicePosition = (
-  stageDevice: ServerDevicePayloads.CustomStageDevicePositionChanged
+    stageDevice: ServerDevicePayloads.CustomStageDevicePositionChanged
 ) => ({
-  type: ServerDeviceEvents.CustomStageDevicePositionChanged,
-  payload: stageDevice,
-});
+    type: ServerDeviceEvents.CustomStageDevicePositionChanged,
+    payload: stageDevice,
+})
 const removeCustomStageDevicePosition = (
-  customStageDeviceId: ServerDevicePayloads.CustomStageDevicePositionRemoved
+    customStageDeviceId: ServerDevicePayloads.CustomStageDevicePositionRemoved
 ) => ({
-  type: ServerDeviceEvents.CustomStageDevicePositionRemoved,
-  payload: customStageDeviceId,
-});
+    type: ServerDeviceEvents.CustomStageDevicePositionRemoved,
+    payload: customStageDeviceId,
+})
 
-const addRemoteVideoTrack = (
-  remoteVideoTrack: ServerDevicePayloads.RemoteVideoTrackAdded
-) => ({
-  type: ServerDeviceEvents.RemoteVideoTrackAdded,
-  payload: remoteVideoTrack,
-});
+const addRemoteVideoTrack = (remoteVideoTrack: ServerDevicePayloads.RemoteVideoTrackAdded) => ({
+    type: ServerDeviceEvents.RemoteVideoTrackAdded,
+    payload: remoteVideoTrack,
+})
 const changeRemoteVideoTrack = (
-  remoteVideoTrack: ServerDevicePayloads.RemoteVideoTrackChanged
+    remoteVideoTrack: ServerDevicePayloads.RemoteVideoTrackChanged
 ) => ({
-  type: ServerDeviceEvents.RemoteVideoTrackChanged,
-  payload: remoteVideoTrack,
-});
+    type: ServerDeviceEvents.RemoteVideoTrackChanged,
+    payload: remoteVideoTrack,
+})
 const removeRemoteVideoTrack = (
-  remoteVideoTrackId: ServerDevicePayloads.RemoteVideoTrackRemoved
+    remoteVideoTrackId: ServerDevicePayloads.RemoteVideoTrackRemoved
 ) => ({
-  type: ServerDeviceEvents.RemoteVideoTrackRemoved,
-  payload: remoteVideoTrackId,
-});
+    type: ServerDeviceEvents.RemoteVideoTrackRemoved,
+    payload: remoteVideoTrackId,
+})
 
-const addRemoteAudioTrack = (
-  remoteAudioTrack: ServerDevicePayloads.RemoteAudioTrackAdded
-) => ({
-  type: ServerDeviceEvents.RemoteAudioTrackAdded,
-  payload: remoteAudioTrack,
-});
+const addRemoteAudioTrack = (remoteAudioTrack: ServerDevicePayloads.RemoteAudioTrackAdded) => ({
+    type: ServerDeviceEvents.RemoteAudioTrackAdded,
+    payload: remoteAudioTrack,
+})
 const changeRemoteAudioTrack = (
-  remoteAudioTrack: ServerDevicePayloads.RemoteAudioTrackChanged
+    remoteAudioTrack: ServerDevicePayloads.RemoteAudioTrackChanged
 ) => ({
-  type: ServerDeviceEvents.RemoteAudioTrackChanged,
-  payload: remoteAudioTrack,
-});
+    type: ServerDeviceEvents.RemoteAudioTrackChanged,
+    payload: remoteAudioTrack,
+})
 const removeRemoteAudioTrack = (
-  remoteAudioTrackId: ServerDevicePayloads.RemoteAudioTrackRemoved
+    remoteAudioTrackId: ServerDevicePayloads.RemoteAudioTrackRemoved
 ) => ({
-  type: ServerDeviceEvents.RemoteAudioTrackRemoved,
-  payload: remoteAudioTrackId,
-});
+    type: ServerDeviceEvents.RemoteAudioTrackRemoved,
+    payload: remoteAudioTrackId,
+})
 
 const addCustomRemoteAudioTrackVolume = (
-  customRemoteAudioTrackVolume: ServerDevicePayloads.CustomRemoteAudioTrackVolumeAdded
+    customRemoteAudioTrackVolume: ServerDevicePayloads.CustomRemoteAudioTrackVolumeAdded
 ) => ({
-  type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeAdded,
-  payload: customRemoteAudioTrackVolume,
-});
+    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeAdded,
+    payload: customRemoteAudioTrackVolume,
+})
 const changeCustomRemoteAudioTrackVolume = (
-  customRemoteAudioTrackVolume: ServerDevicePayloads.CustomRemoteAudioTrackVolumeChanged
+    customRemoteAudioTrackVolume: ServerDevicePayloads.CustomRemoteAudioTrackVolumeChanged
 ) => ({
-  type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeChanged,
-  payload: customRemoteAudioTrackVolume,
-});
+    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeChanged,
+    payload: customRemoteAudioTrackVolume,
+})
 const removeCustomRemoteAudioTrackVolume = (
-  customRemoteAudioTrackVolumeId: ServerDevicePayloads.CustomRemoteAudioTrackVolumeRemoved
+    customRemoteAudioTrackVolumeId: ServerDevicePayloads.CustomRemoteAudioTrackVolumeRemoved
 ) => ({
-  type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeRemoved,
-  payload: customRemoteAudioTrackVolumeId,
-});
+    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeRemoved,
+    payload: customRemoteAudioTrackVolumeId,
+})
 const addCustomRemoteAudioTrackPosition = (
-  customRemoteAudioTrackPosition: ServerDevicePayloads.CustomRemoteAudioTrackPositionAdded
+    customRemoteAudioTrackPosition: ServerDevicePayloads.CustomRemoteAudioTrackPositionAdded
 ) => ({
-  type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeAdded,
-  payload: customRemoteAudioTrackPosition,
-});
+    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeAdded,
+    payload: customRemoteAudioTrackPosition,
+})
 const changeCustomRemoteAudioTrackPosition = (
-  customRemoteAudioTrackPosition: ServerDevicePayloads.CustomRemoteAudioTrackPositionChanged
+    customRemoteAudioTrackPosition: ServerDevicePayloads.CustomRemoteAudioTrackPositionChanged
 ) => ({
-  type: ServerDeviceEvents.CustomRemoteAudioTrackPositionChanged,
-  payload: customRemoteAudioTrackPosition,
-});
+    type: ServerDeviceEvents.CustomRemoteAudioTrackPositionChanged,
+    payload: customRemoteAudioTrackPosition,
+})
 const removeCustomRemoteAudioTrackPosition = (
-  customRemoteAudioTrackPositionId: ServerDevicePayloads.CustomRemoteAudioTrackPositionRemoved
+    customRemoteAudioTrackPositionId: ServerDevicePayloads.CustomRemoteAudioTrackPositionRemoved
 ) => ({
-  type: ServerDeviceEvents.CustomRemoteAudioTrackPositionRemoved,
-  payload: customRemoteAudioTrackPositionId,
-});
+    type: ServerDeviceEvents.CustomRemoteAudioTrackPositionRemoved,
+    payload: customRemoteAudioTrackPositionId,
+})
 
-const addLocalAudioTrack = (
-  localAudioTrack: ServerDevicePayloads.LocalAudioTrackAdded
-) => ({
-  type: ServerDeviceEvents.LocalAudioTrackAdded,
-  payload: localAudioTrack,
-});
-const changeLocalAudioTrack = (
-  localAudioTrack: ServerDevicePayloads.LocalAudioTrackChanged
-) => ({
-  type: ServerDeviceEvents.LocalAudioTrackChanged,
-  payload: localAudioTrack,
-});
-const removeLocalAudioTrack = (
-  localAudioTrackId: ServerDevicePayloads.LocalAudioTrackRemoved
-) => ({
-  type: ServerDeviceEvents.LocalAudioTrackRemoved,
-  payload: localAudioTrackId,
-});
-const addLocalVideoTrack = (
-  localVideoTrack: ServerDevicePayloads.LocalVideoTrackAdded
-) => ({
-  type: ServerDeviceEvents.LocalVideoTrackAdded,
-  payload: localVideoTrack,
-});
-const changeLocalVideoTrack = (
-  localVideoTrack: ServerDevicePayloads.LocalVideoTrackChanged
-) => ({
-  type: ServerDeviceEvents.LocalVideoTrackChanged,
-  payload: localVideoTrack,
-});
-const removeLocalVideoTrack = (
-  localVideoTrackId: ServerDevicePayloads.LocalVideoTrackRemoved
-) => ({
-  type: ServerDeviceEvents.LocalVideoTrackRemoved,
-  payload: localVideoTrackId,
-});
+const addLocalAudioTrack = (localAudioTrack: ServerDevicePayloads.LocalAudioTrackAdded) => ({
+    type: ServerDeviceEvents.LocalAudioTrackAdded,
+    payload: localAudioTrack,
+})
+const changeLocalAudioTrack = (localAudioTrack: ServerDevicePayloads.LocalAudioTrackChanged) => ({
+    type: ServerDeviceEvents.LocalAudioTrackChanged,
+    payload: localAudioTrack,
+})
+const removeLocalAudioTrack = (localAudioTrackId: ServerDevicePayloads.LocalAudioTrackRemoved) => ({
+    type: ServerDeviceEvents.LocalAudioTrackRemoved,
+    payload: localAudioTrackId,
+})
+const addLocalVideoTrack = (localVideoTrack: ServerDevicePayloads.LocalVideoTrackAdded) => ({
+    type: ServerDeviceEvents.LocalVideoTrackAdded,
+    payload: localVideoTrack,
+})
+const changeLocalVideoTrack = (localVideoTrack: ServerDevicePayloads.LocalVideoTrackChanged) => ({
+    type: ServerDeviceEvents.LocalVideoTrackChanged,
+    payload: localVideoTrack,
+})
+const removeLocalVideoTrack = (localVideoTrackId: ServerDevicePayloads.LocalVideoTrackRemoved) => ({
+    type: ServerDeviceEvents.LocalVideoTrackRemoved,
+    payload: localVideoTrackId,
+})
 
 const server = {
-  messageSent,
-  addRemoteUser,
-  changeRemoteUser,
-  removeRemoteUser,
-  addStage,
-  changeStage,
-  removeStage,
-  addGroup,
-  changeGroup,
-  removeGroup,
-  addCustomGroupVolume,
-  changeCustomGroupVolume,
-  removeCustomGroupVolume,
-  addCustomGroupPosition,
-  changeCustomGroupPosition,
-  removeCustomGroupPosition,
-  addStageMember,
-  changeStageMember,
-  removeStageMember,
-  addCustomStageMemberVolume,
-  changeCustomStageMemberVolume,
-  removeCustomStageMemberVolume,
-  addCustomStageMemberPosition,
-  changeCustomStageMemberPosition,
-  removeCustomStageMemberPosition,
-  addStageDevice,
-  changeStageDevice,
-  removeStageDevice,
-  addCustomStageDeviceVolume,
-  changeCustomStageDeviceVolume,
-  removeCustomStageDeviceVolume,
-  addCustomStageDevicePosition,
-  changeCustomStageDevicePosition,
-  removeCustomStageDevicePosition,
-  addRemoteAudioTrack,
-  changeRemoteAudioTrack,
-  removeRemoteAudioTrack,
-  addRemoteVideoTrack,
-  changeRemoteVideoTrack,
-  removeRemoteVideoTrack,
-  addCustomRemoteAudioTrackPosition,
-  changeCustomRemoteAudioTrackPosition,
-  removeCustomRemoteAudioTrackPosition,
-  addCustomRemoteAudioTrackVolume,
-  changeCustomRemoteAudioTrackVolume,
-  removeCustomRemoteAudioTrackVolume,
-  addLocalAudioTrack,
-  changeLocalAudioTrack,
-  removeLocalAudioTrack,
-  addLocalVideoTrack,
-  changeLocalVideoTrack,
-  removeLocalVideoTrack,
-};
+    messageSent,
+    addRemoteUser,
+    changeRemoteUser,
+    removeRemoteUser,
+    addStage,
+    changeStage,
+    removeStage,
+    addGroup,
+    changeGroup,
+    removeGroup,
+    addCustomGroupVolume,
+    changeCustomGroupVolume,
+    removeCustomGroupVolume,
+    addCustomGroupPosition,
+    changeCustomGroupPosition,
+    removeCustomGroupPosition,
+    addStageMember,
+    changeStageMember,
+    removeStageMember,
+    addCustomStageMemberVolume,
+    changeCustomStageMemberVolume,
+    removeCustomStageMemberVolume,
+    addCustomStageMemberPosition,
+    changeCustomStageMemberPosition,
+    removeCustomStageMemberPosition,
+    addStageDevice,
+    changeStageDevice,
+    removeStageDevice,
+    addCustomStageDeviceVolume,
+    changeCustomStageDeviceVolume,
+    removeCustomStageDeviceVolume,
+    addCustomStageDevicePosition,
+    changeCustomStageDevicePosition,
+    removeCustomStageDevicePosition,
+    addRemoteAudioTrack,
+    changeRemoteAudioTrack,
+    removeRemoteAudioTrack,
+    addRemoteVideoTrack,
+    changeRemoteVideoTrack,
+    removeRemoteVideoTrack,
+    addCustomRemoteAudioTrackPosition,
+    changeCustomRemoteAudioTrackPosition,
+    removeCustomRemoteAudioTrackPosition,
+    addCustomRemoteAudioTrackVolume,
+    changeCustomRemoteAudioTrackVolume,
+    removeCustomRemoteAudioTrackVolume,
+    addLocalAudioTrack,
+    changeLocalAudioTrack,
+    removeLocalAudioTrack,
+    addLocalVideoTrack,
+    changeLocalVideoTrack,
+    removeLocalVideoTrack,
+}
 const stageActions = {
-  server,
-};
-export default stageActions;
+    server,
+}
+export default stageActions
