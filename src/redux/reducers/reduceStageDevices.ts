@@ -21,7 +21,7 @@ const addStageDevice = (prev: StageDevices, stageDevice: StageDevice): StageDevi
     },
     byStageMember: {
         ...prev.byStageMember,
-        [stageDevice.stageId]: upsert<string>(
+        [stageDevice.stageMemberId]: upsert<string>(
             prev.byStageMember[stageDevice.stageMemberId],
             stageDevice._id
         ),
@@ -96,7 +96,7 @@ function reduceStageDevices(
                 },
             }
         }
-        case ServerDeviceEvents.StageMemberRemoved: {
+        case ServerDeviceEvents.StageDeviceRemoved: {
             const id = action.payload as string
             const { stageId, groupId, userId, stageMemberId } = prev.byId[id]
             return {

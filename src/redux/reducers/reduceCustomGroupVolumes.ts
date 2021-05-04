@@ -20,15 +20,14 @@ const addCustomGroupVolume = (
     },
     byGroup: {
         ...state.byGroup,
-        [customGroup.groupId]: state.byGroup[customGroup.groupId]
-            ? [...state.byGroup[customGroup.groupId], customGroup._id]
-            : [customGroup._id],
+        [customGroup.groupId]: upsert<string>(state.byGroup[customGroup.groupId], customGroup._id),
     },
     byDevice: {
         ...state.byDevice,
-        [customGroup.deviceId]: state.byDevice[customGroup.deviceId]
-            ? [...state.byDevice[customGroup.deviceId], customGroup._id]
-            : [customGroup._id],
+        [customGroup.deviceId]: upsert<string>(
+            state.byDevice[customGroup.deviceId],
+            customGroup._id
+        ),
     },
     byDeviceAndGroup: {
         ...state.byDeviceAndGroup,

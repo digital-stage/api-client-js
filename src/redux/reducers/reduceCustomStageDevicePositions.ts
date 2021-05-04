@@ -20,20 +20,17 @@ const addCustomStageDevicePosition = (
     },
     byStageDevice: {
         ...state.byStageDevice,
-        [customStageDevicePosition.stageDeviceId]: state.byStageDevice[
-            customStageDevicePosition.stageDeviceId
-        ]
-            ? [
-                  ...state.byStageDevice[customStageDevicePosition.stageDeviceId],
-                  customStageDevicePosition._id,
-              ]
-            : [customStageDevicePosition._id],
+        [customStageDevicePosition.stageDeviceId]: upsert<string>(
+            state.byStageDevice[customStageDevicePosition.stageDeviceId],
+            customStageDevicePosition._id
+        ),
     },
     byDevice: {
         ...state.byDevice,
-        [customStageDevicePosition.deviceId]: state.byDevice[customStageDevicePosition.deviceId]
-            ? [...state.byDevice[customStageDevicePosition.deviceId], customStageDevicePosition._id]
-            : [customStageDevicePosition._id],
+        [customStageDevicePosition.deviceId]: upsert<string>(
+            state.byDevice[customStageDevicePosition.deviceId],
+            customStageDevicePosition._id
+        ),
     },
     byDeviceAndStageDevice: {
         ...state.byDeviceAndStageDevice,
@@ -83,11 +80,11 @@ function reduceCustomStageDevicePositions(
                 })
             return updatedState
         }
-        case ServerDeviceEvents.CustomStageMemberPositionAdded: {
+        case ServerDeviceEvents.CustomStageDevicePositionAdded: {
             const customStageDevicePosition = action.payload as ServerDevicePayloads.CustomStageDevicePositionAdded
             return addCustomStageDevicePosition(state, customStageDevicePosition)
         }
-        case ServerDeviceEvents.CustomStageMemberPositionChanged: {
+        case ServerDeviceEvents.CustomStageDevicePositionChanged: {
             return {
                 ...state,
                 byId: {
@@ -99,7 +96,7 @@ function reduceCustomStageDevicePositions(
                 },
             }
         }
-        case ServerDeviceEvents.CustomStageMemberPositionRemoved: {
+        case ServerDeviceEvents.CustomStageDevicePositionRemoved: {
             const id = action.payload as string
             if (state.byId[id]) {
                 // TODO: Why is the line above necessary?

@@ -16,27 +16,31 @@ const addRemoteVideoTrack = (
     },
     byStageMember: {
         ...state.byStageMember,
-        [remoteVideoTrack.stageMemberId]: state.byStageMember[remoteVideoTrack.stageMemberId]
-            ? [...state.byStageMember[remoteVideoTrack.stageMemberId], remoteVideoTrack._id]
-            : [remoteVideoTrack._id],
+        [remoteVideoTrack.stageMemberId]: upsert<string>(
+            state.byStageMember[remoteVideoTrack.stageMemberId],
+            remoteVideoTrack._id
+        ),
     },
     byStageDevice: {
         ...state.byStageDevice,
-        [remoteVideoTrack.stageDeviceId]: state.byStageDevice[remoteVideoTrack.stageDeviceId]
-            ? [...state.byStageDevice[remoteVideoTrack.stageDeviceId], remoteVideoTrack._id]
-            : [remoteVideoTrack._id],
+        [remoteVideoTrack.stageDeviceId]: upsert<string>(
+            state.byStageDevice[remoteVideoTrack.stageDeviceId],
+            remoteVideoTrack._id
+        ),
     },
     byUser: {
         ...state.byUser,
-        [remoteVideoTrack.userId]: state.byUser[remoteVideoTrack.userId]
-            ? [...state.byUser[remoteVideoTrack.userId], remoteVideoTrack._id]
-            : [remoteVideoTrack._id],
+        [remoteVideoTrack.userId]: upsert<string>(
+            state.byUser[remoteVideoTrack.userId],
+            remoteVideoTrack._id
+        ),
     },
     byStage: {
         ...state.byStage,
-        [remoteVideoTrack.stageId]: state.byStage[remoteVideoTrack.stageId]
-            ? [...state.byStage[remoteVideoTrack.stageId], remoteVideoTrack._id]
-            : [remoteVideoTrack._id],
+        [remoteVideoTrack.stageId]: upsert<string>(
+            state.byStage[remoteVideoTrack.stageId],
+            remoteVideoTrack._id
+        ),
     },
     allIds: upsert<string>(state.allIds, remoteVideoTrack._id),
 })

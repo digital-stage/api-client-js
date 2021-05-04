@@ -16,27 +16,31 @@ const addRemoteAudioTrack = (
     },
     byStageMember: {
         ...state.byStageMember,
-        [remoteAudioTrack.stageMemberId]: state.byStageMember[remoteAudioTrack.stageMemberId]
-            ? [...state.byStageMember[remoteAudioTrack.stageMemberId], remoteAudioTrack._id]
-            : [remoteAudioTrack._id],
+        [remoteAudioTrack.stageMemberId]: upsert<string>(
+            state.byStageMember[remoteAudioTrack.stageMemberId],
+            remoteAudioTrack._id
+        ),
     },
     byStageDevice: {
         ...state.byStageDevice,
-        [remoteAudioTrack.stageDeviceId]: state.byStageMember[remoteAudioTrack.stageDeviceId]
-            ? [...state.byStageDevice[remoteAudioTrack.stageDeviceId], remoteAudioTrack._id]
-            : [remoteAudioTrack._id],
+        [remoteAudioTrack.stageDeviceId]: upsert<string>(
+            state.byStageDevice[remoteAudioTrack.stageDeviceId],
+            remoteAudioTrack._id
+        ),
     },
     byUser: {
         ...state.byUser,
-        [remoteAudioTrack.userId]: state.byUser[remoteAudioTrack.userId]
-            ? [...state.byUser[remoteAudioTrack.userId], remoteAudioTrack._id]
-            : [remoteAudioTrack._id],
+        [remoteAudioTrack.userId]: upsert<string>(
+            state.byUser[remoteAudioTrack.userId],
+            remoteAudioTrack._id
+        ),
     },
     byStage: {
         ...state.byStage,
-        [remoteAudioTrack.stageId]: state.byStage[remoteAudioTrack.stageId]
-            ? [...state.byStage[remoteAudioTrack.stageId], remoteAudioTrack._id]
-            : [remoteAudioTrack._id],
+        [remoteAudioTrack.stageId]: upsert<string>(
+            state.byStage[remoteAudioTrack.stageId],
+            remoteAudioTrack._id
+        ),
     },
     allIds: upsert<string>(state.allIds, remoteAudioTrack._id),
 })

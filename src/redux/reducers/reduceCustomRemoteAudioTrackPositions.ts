@@ -20,20 +20,17 @@ const addCustomRemoteAudioTrackPosition = (
     },
     byRemoteAudioTrack: {
         ...state.byRemoteAudioTrack,
-        [customRemoteAudioTrack.remoteAudioTrackId]: state.byRemoteAudioTrack[
-            customRemoteAudioTrack.remoteAudioTrackId
-        ]
-            ? [
-                  ...state.byRemoteAudioTrack[customRemoteAudioTrack.remoteAudioTrackId],
-                  customRemoteAudioTrack._id,
-              ]
-            : [customRemoteAudioTrack._id],
+        [customRemoteAudioTrack.remoteAudioTrackId]: upsert<string>(
+            state.byRemoteAudioTrack[customRemoteAudioTrack.remoteAudioTrackId],
+            customRemoteAudioTrack._id
+        ),
     },
     byDevice: {
         ...state.byDevice,
-        [customRemoteAudioTrack.deviceId]: state.byDevice[customRemoteAudioTrack.deviceId]
-            ? [...state.byDevice[customRemoteAudioTrack.deviceId], customRemoteAudioTrack._id]
-            : [customRemoteAudioTrack._id],
+        [customRemoteAudioTrack.deviceId]: upsert<string>(
+            state.byDevice[customRemoteAudioTrack.deviceId],
+            customRemoteAudioTrack._id
+        ),
     },
     byDeviceAndRemoteAudioTrack: {
         ...state.byDeviceAndRemoteAudioTrack,

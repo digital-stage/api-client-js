@@ -20,15 +20,17 @@ const addCustomStageDeviceVolume = (
     },
     byStageDevice: {
         ...state.byStageDevice,
-        [customStageDevice.stageDeviceId]: state.byStageDevice[customStageDevice.stageDeviceId]
-            ? [...state.byStageDevice[customStageDevice.stageDeviceId], customStageDevice._id]
-            : [customStageDevice._id],
+        [customStageDevice.stageDeviceId]: upsert<string>(
+            state.byStageDevice[customStageDevice.stageDeviceId],
+            customStageDevice._id
+        ),
     },
     byDevice: {
         ...state.byDevice,
-        [customStageDevice.deviceId]: state.byDevice[customStageDevice.deviceId]
-            ? [...state.byDevice[customStageDevice.deviceId], customStageDevice._id]
-            : [customStageDevice._id],
+        [customStageDevice.deviceId]: upsert<string>(
+            state.byDevice[customStageDevice.deviceId],
+            customStageDevice._id
+        ),
     },
     byDeviceAndStageDevice: {
         ...state.byDeviceAndStageDevice,
