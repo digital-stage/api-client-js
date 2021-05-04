@@ -28,7 +28,7 @@ const addStageDevice = (prev: StageDevices, stageDevice: StageDevice): StageDevi
     },
     byUser: {
         ...prev.byUser,
-        [stageDevice.userId]: without<string>(prev.byUser[stageDevice.userId], stageDevice._id),
+        [stageDevice.userId]: upsert<string>(prev.byUser[stageDevice.userId], stageDevice._id),
     },
     byGroup: {
         ...prev.byGroup,

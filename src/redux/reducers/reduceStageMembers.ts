@@ -21,7 +21,7 @@ const addStageMember = (prev: StageMembers, stageMember: StageMember): StageMemb
     },
     byUser: {
         ...prev.byUser,
-        [stageMember.userId]: without<string>(prev.byUser[stageMember.userId], stageMember._id),
+        [stageMember.userId]: upsert<string>(prev.byUser[stageMember.userId], stageMember._id),
     },
     byGroup: {
         ...prev.byGroup,
