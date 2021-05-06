@@ -1,52 +1,43 @@
 import omit from 'lodash/omit'
 import without from 'lodash/without'
-import { ServerDeviceEvents, ServerDevicePayloads, RemoteAudioTrack } from '@digitalstage/api-types'
+import { ServerDeviceEvents, ServerDevicePayloads, VideoTrack } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
-import RemoteAudioTracks from '../collections/RemoteAudioTracks'
+import VideoTracks from '../collections/VideoTracks'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
 
-const addRemoteAudioTrack = (
-    state: RemoteAudioTracks,
-    remoteAudioTrack: RemoteAudioTrack
-): RemoteAudioTracks => ({
+const addVideoTrack = (state: VideoTracks, videoTrack: VideoTrack): VideoTracks => ({
     ...state,
     byId: {
         ...state.byId,
-        [remoteAudioTrack._id]: remoteAudioTrack,
+        [videoTrack._id]: videoTrack,
     },
     byStageMember: {
         ...state.byStageMember,
-        [remoteAudioTrack.stageMemberId]: upsert<string>(
-            state.byStageMember[remoteAudioTrack.stageMemberId],
-            remoteAudioTrack._id
+        [videoTrack.stageMemberId]: upsert<string>(
+            state.byStageMember[videoTrack.stageMemberId],
+            videoTrack._id
         ),
     },
     byStageDevice: {
         ...state.byStageDevice,
-        [remoteAudioTrack.stageDeviceId]: upsert<string>(
-            state.byStageDevice[remoteAudioTrack.stageDeviceId],
-            remoteAudioTrack._id
+        [videoTrack.stageDeviceId]: upsert<string>(
+            state.byStageDevice[videoTrack.stageDeviceId],
+            videoTrack._id
         ),
     },
     byUser: {
         ...state.byUser,
-        [remoteAudioTrack.userId]: upsert<string>(
-            state.byUser[remoteAudioTrack.userId],
-            remoteAudioTrack._id
-        ),
+        [videoTrack.userId]: upsert<string>(state.byUser[videoTrack.userId], videoTrack._id),
     },
     byStage: {
         ...state.byStage,
-        [remoteAudioTrack.stageId]: upsert<string>(
-            state.byStage[remoteAudioTrack.stageId],
-            remoteAudioTrack._id
-        ),
+        [videoTrack.stageId]: upsert<string>(state.byStage[videoTrack.stageId], videoTrack._id),
     },
-    allIds: upsert<string>(state.allIds, remoteAudioTrack._id),
+    allIds: upsert<string>(state.allIds, videoTrack._id),
 })
 
-function reduceRemoteAudioTracks(
-    state: RemoteAudioTracks = {
+function reduceVideoTracks(
+    state: VideoTracks = {
         byId: {},
         byStageMember: {},
         byStageDevice: {},
@@ -58,7 +49,7 @@ function reduceRemoteAudioTracks(
         type: string
         payload: any
     }
-): RemoteAudioTracks {
+): VideoTracks {
     switch (action.type) {
         case ServerDeviceEvents.StageLeft:
         case AdditionalReducerTypes.RESET: {
@@ -72,20 +63,20 @@ function reduceRemoteAudioTracks(
             }
         }
         case ServerDeviceEvents.StageJoined: {
-            const { remoteAudioTracks } = action.payload as ServerDevicePayloads.StageJoined
+            const { videoTracks } = action.payload as ServerDevicePayloads.StageJoined
             let updatedState = { ...state }
-            if (remoteAudioTracks)
-                remoteAudioTracks.forEach((remoteAudioTrack) => {
-                    updatedState = addRemoteAudioTrack(updatedState, remoteAudioTrack)
+            if (videoTracks)
+                videoTracks.forEach((videoTrack: VideoTrack) => {
+                    updatedState = addVideoTrack(updatedState, videoTrack)
                 })
             return updatedState
         }
-        case ServerDeviceEvents.RemoteAudioTrackAdded: {
-            const remoteAudioTrack = action.payload as ServerDevicePayloads.RemoteAudioTrackAdded
-            return addRemoteAudioTrack(state, remoteAudioTrack)
+        case ServerDeviceEvents.VideoTrackAdded: {
+            const videoTrack = action.payload as ServerDevicePayloads.VideoTrackAdded
+            return addVideoTrack(state, videoTrack)
         }
-        case ServerDeviceEvents.RemoteAudioTrackChanged: {
-            const update = action.payload as ServerDevicePayloads.RemoteAudioTrackChanged
+        case ServerDeviceEvents.VideoTrackChanged: {
+            const update = action.payload as ServerDevicePayloads.VideoTrackChanged
             return {
                 ...state,
                 byId: {
@@ -97,8 +88,8 @@ function reduceRemoteAudioTracks(
                 },
             }
         }
-        case ServerDeviceEvents.RemoteAudioTrackRemoved: {
-            const id = action.payload as ServerDevicePayloads.RemoteAudioTrackRemoved
+        case ServerDeviceEvents.VideoTrackRemoved: {
+            const id = action.payload as ServerDevicePayloads.VideoTrackRemoved
             if (!state.byId[id]) {
                 return state
             }
@@ -126,4 +117,4 @@ function reduceRemoteAudioTracks(
     }
 }
 
-export default reduceRemoteAudioTracks
+export default reduceVideoTracks

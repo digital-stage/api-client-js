@@ -7,16 +7,14 @@ import Devices from '../collections/Devices'
 import SoundCards from '../collections/SoundCards'
 import Routers from '../collections/Routers'
 import RemoteUsers from '../collections/RemoteUsers'
-import RemoteVideoTracks from '../collections/RemoteVideoTracks'
-import RemoteAudioTracks from '../collections/RemoteAudioTracks'
 import CustomGroupVolumes from '../collections/CustomGroupVolumes'
 import CustomGroupPositions from '../collections/CustomGroupPositions'
 import CustomStageMemberVolumes from '../collections/CustomStageMemberVolumes'
 import CustomStageMemberPositions from '../collections/CustomStageMemberPositions'
 import CustomStageDeviceVolumes from '../collections/CustomStageDeviceVolumes'
 import CustomStageDevicePositions from '../collections/CustomStageDevicePositions'
-import CustomRemoteAudioTrackPositions from '../collections/CustomRemoteAudioTrackPositions'
-import CustomRemoteAudioTrackVolumes from '../collections/CustomRemoteAudioTrackVolumes'
+import CustomAudioTrackPositions from '../collections/CustomAudioTrackPositions'
+import CustomAudioTrackVolumes from '../collections/CustomAudioTrackVolumes'
 import reduceStages from './reduceStages'
 import reduceGroups from './reduceGroups'
 import reduceDevices from './reduceDevices'
@@ -24,23 +22,19 @@ import reduceSoundCards from './reduceSoundCards'
 import reduceRouters from './reduceRouters'
 import reduceStageMembers from './reduceStageMembers'
 import reduceChatMessage from './reduceChatMessage'
-import reduceRemoteAudioTracks from './reduceRemoteAudioTracks'
-import reduceRemoteVideoTracks from './reduceRemoteVideoTracks'
+import reduceAudioTracks from './reduceAudioTracks'
+import reduceVideoTracks from './reduceVideoTracks'
 import Globals from '../collections/Globals'
 import reduceGlobals from './reduceGlobals'
 import reduceRemoteUsers from './reduceRemoteUsers'
 import reduceCustomGroupVolumes from './reduceCustomGroupVolumes'
 import reduceCustomGroupPositions from './reduceCustomGroupPositions'
 import reduceCustomStageMemberVolumes from './reduceCustomStageMemberVolumes'
-import reduceCustomRemoteAudioTrackVolumes from './reduceCustomRemoteAudioTrackVolumes'
-import reduceCustomRemoteAudioTrackPositions from './reduceCustomRemoteAudioTrackPositions'
+import reduceCustomAudioTrackVolumes from './reduceCustomAudioTrackVolumes'
+import reduceCustomAudioTrackPositions from './reduceCustomAudioTrackPositions'
 import reduceCustomStageMemberPositions from './reduceCustomStageMemberPositions'
-import LocalAudioTracks from '../collections/LocalAudioTracks'
-import LocalVideoTracks from '../collections/LocalVideoTracks'
-import reduceLocalAudioTracks from './reduceLocalAudioTracks'
-import reduceLocalVideoTracks from './reduceLocalVideoTracks'
 import reduceStageDevices from './reduceStageDevices'
-import { StageDevices } from '../collections'
+import { AudioTracks, StageDevices, VideoTracks } from '../collections'
 import reduceCustomStageDeviceVolumes from './reduceCustomStageDeviceVolumes'
 import reduceCustomStageDevicePositions from './reduceCustomStageDevicePositions'
 
@@ -55,18 +49,16 @@ export interface RootReducer {
     groups: Groups
     stageMembers: StageMembers
     stageDevices: StageDevices
-    remoteVideoTracks: RemoteVideoTracks
-    remoteAudioTracks: RemoteAudioTracks
+    videoTracks: VideoTracks
+    audioTracks: AudioTracks
     customGroupVolumes: CustomGroupVolumes
     customGroupPositions: CustomGroupPositions
     customStageMemberVolumes: CustomStageMemberVolumes
     customStageMemberPositions: CustomStageMemberPositions
     customStageDeviceVolumes: CustomStageDeviceVolumes
     customStageDevicePositions: CustomStageDevicePositions
-    customRemoteAudioTrackVolumes: CustomRemoteAudioTrackVolumes
-    customRemoteAudioTrackPositions: CustomRemoteAudioTrackPositions
-    localVideoTracks: LocalVideoTracks
-    localAudioTracks: LocalAudioTracks
+    customAudioTrackVolumes: CustomAudioTrackVolumes
+    customAudioTrackPositions: CustomAudioTrackPositions
 }
 
 const reducer = combineReducers<RootReducer>({
@@ -80,17 +72,15 @@ const reducer = combineReducers<RootReducer>({
     groups: reduceGroups,
     stageMembers: reduceStageMembers,
     stageDevices: reduceStageDevices,
-    remoteVideoTracks: reduceRemoteVideoTracks,
-    remoteAudioTracks: reduceRemoteAudioTracks,
+    videoTracks: reduceVideoTracks,
+    audioTracks: reduceAudioTracks,
     customGroupVolumes: reduceCustomGroupVolumes,
     customGroupPositions: reduceCustomGroupPositions,
     customStageMemberVolumes: reduceCustomStageMemberVolumes,
     customStageMemberPositions: reduceCustomStageMemberPositions,
     customStageDeviceVolumes: reduceCustomStageDeviceVolumes,
     customStageDevicePositions: reduceCustomStageDevicePositions,
-    customRemoteAudioTrackVolumes: reduceCustomRemoteAudioTrackVolumes,
-    customRemoteAudioTrackPositions: reduceCustomRemoteAudioTrackPositions,
-    localVideoTracks: reduceLocalVideoTracks,
-    localAudioTracks: reduceLocalAudioTracks,
+    customAudioTrackVolumes: reduceCustomAudioTrackVolumes,
+    customAudioTrackPositions: reduceCustomAudioTrackPositions,
 })
 export default reducer

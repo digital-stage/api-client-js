@@ -289,125 +289,58 @@ const registerSocketHandler = (store: Store, socket: TeckosClient): TeckosClient
     )
 
     socket.on(
-        ServerDeviceEvents.RemoteAudioTrackAdded,
-        (payload: ServerDevicePayloads.RemoteAudioTrackAdded) => {
-            store.dispatch(allActions.stageActions.server.addRemoteAudioTrack(payload))
+        ServerDeviceEvents.AudioTrackAdded,
+        (payload: ServerDevicePayloads.AudioTrackAdded) => {
+            store.dispatch(allActions.stageActions.server.addAudioTrack(payload))
         }
     )
     socket.on(
-        ServerDeviceEvents.RemoteAudioTrackChanged,
-        (payload: ServerDevicePayloads.RemoteAudioTrackChanged) => {
-            store.dispatch(allActions.stageActions.server.changeRemoteAudioTrack(payload))
+        ServerDeviceEvents.AudioTrackChanged,
+        (payload: ServerDevicePayloads.AudioTrackChanged) => {
+            store.dispatch(allActions.stageActions.server.changeAudioTrack(payload))
         }
     )
     socket.on(
-        ServerDeviceEvents.RemoteAudioTrackRemoved,
-        (payload: ServerDevicePayloads.RemoteAudioTrackRemoved) => {
-            store.dispatch(allActions.stageActions.server.removeRemoteAudioTrack(payload))
-        }
-    )
-
-    socket.on(
-        ServerDeviceEvents.RemoteVideoTrackAdded,
-        (payload: ServerDevicePayloads.RemoteVideoTrackAdded) => {
-            store.dispatch(allActions.stageActions.server.addRemoteVideoTrack(payload))
-        }
-    )
-    socket.on(
-        ServerDeviceEvents.RemoteVideoTrackChanged,
-        (payload: ServerDevicePayloads.RemoteVideoTrackChanged) => {
-            store.dispatch(allActions.stageActions.server.changeRemoteVideoTrack(payload))
-        }
-    )
-    socket.on(
-        ServerDeviceEvents.RemoteVideoTrackRemoved,
-        (payload: ServerDevicePayloads.RemoteVideoTrackRemoved) => {
-            store.dispatch(allActions.stageActions.server.removeRemoteVideoTrack(payload))
+        ServerDeviceEvents.AudioTrackRemoved,
+        (payload: ServerDevicePayloads.AudioTrackRemoved) => {
+            store.dispatch(allActions.stageActions.server.removeAudioTrack(payload))
         }
     )
 
     socket.on(
-        ServerDeviceEvents.CustomRemoteAudioTrackVolumeAdded,
-        (payload: ServerDevicePayloads.CustomRemoteAudioTrackVolumeAdded) => {
-            store.dispatch(allActions.stageActions.server.addCustomRemoteAudioTrackVolume(payload))
+        ServerDeviceEvents.CustomAudioTrackVolumeAdded,
+        (payload: ServerDevicePayloads.CustomAudioTrackVolumeAdded) => {
+            store.dispatch(allActions.stageActions.server.addCustomAudioTrackVolume(payload))
         }
     )
     socket.on(
-        ServerDeviceEvents.CustomRemoteAudioTrackVolumeChanged,
-        (payload: ServerDevicePayloads.CustomRemoteAudioTrackVolumeChanged) => {
-            store.dispatch(
-                allActions.stageActions.server.changeCustomRemoteAudioTrackVolume(payload)
-            )
+        ServerDeviceEvents.CustomAudioTrackVolumeChanged,
+        (payload: ServerDevicePayloads.CustomAudioTrackVolumeChanged) => {
+            store.dispatch(allActions.stageActions.server.changeCustomAudioTrackVolume(payload))
         }
     )
     socket.on(
-        ServerDeviceEvents.CustomRemoteAudioTrackVolumeRemoved,
-        (payload: ServerDevicePayloads.CustomRemoteAudioTrackVolumeRemoved) => {
-            store.dispatch(
-                allActions.stageActions.server.removeCustomRemoteAudioTrackVolume(payload)
-            )
+        ServerDeviceEvents.CustomAudioTrackVolumeRemoved,
+        (payload: ServerDevicePayloads.CustomAudioTrackVolumeRemoved) => {
+            store.dispatch(allActions.stageActions.server.removeCustomAudioTrackVolume(payload))
         }
     )
     socket.on(
-        ServerDeviceEvents.CustomRemoteAudioTrackPositionAdded,
-        (payload: ServerDevicePayloads.CustomRemoteAudioTrackPositionAdded) => {
-            store.dispatch(
-                allActions.stageActions.server.addCustomRemoteAudioTrackPosition(payload)
-            )
+        ServerDeviceEvents.CustomAudioTrackPositionAdded,
+        (payload: ServerDevicePayloads.CustomAudioTrackPositionAdded) => {
+            store.dispatch(allActions.stageActions.server.addCustomAudioTrackPosition(payload))
         }
     )
     socket.on(
-        ServerDeviceEvents.CustomRemoteAudioTrackPositionChanged,
-        (payload: ServerDevicePayloads.CustomRemoteAudioTrackPositionChanged) => {
-            store.dispatch(
-                allActions.stageActions.server.changeCustomRemoteAudioTrackPosition(payload)
-            )
+        ServerDeviceEvents.CustomAudioTrackPositionChanged,
+        (payload: ServerDevicePayloads.CustomAudioTrackPositionChanged) => {
+            store.dispatch(allActions.stageActions.server.changeCustomAudioTrackPosition(payload))
         }
     )
     socket.on(
-        ServerDeviceEvents.CustomRemoteAudioTrackPositionRemoved,
-        (payload: ServerDevicePayloads.CustomRemoteAudioTrackPositionRemoved) => {
-            store.dispatch(
-                allActions.stageActions.server.removeCustomRemoteAudioTrackPosition(payload)
-            )
-        }
-    )
-
-    socket.on(
-        ServerDeviceEvents.LocalAudioTrackAdded,
-        (payload: ServerDevicePayloads.LocalAudioTrackAdded) => {
-            store.dispatch(allActions.stageActions.server.addLocalAudioTrack(payload))
-        }
-    )
-    socket.on(
-        ServerDeviceEvents.LocalAudioTrackChanged,
-        (payload: ServerDevicePayloads.LocalAudioTrackChanged) => {
-            store.dispatch(allActions.stageActions.server.changeLocalAudioTrack(payload))
-        }
-    )
-    socket.on(
-        ServerDeviceEvents.LocalAudioTrackRemoved,
-        (payload: ServerDevicePayloads.LocalAudioTrackRemoved) => {
-            store.dispatch(allActions.stageActions.server.removeLocalAudioTrack(payload))
-        }
-    )
-
-    socket.on(
-        ServerDeviceEvents.LocalVideoTrackAdded,
-        (payload: ServerDevicePayloads.LocalVideoTrackAdded) => {
-            store.dispatch(allActions.stageActions.server.addLocalVideoTrack(payload))
-        }
-    )
-    socket.on(
-        ServerDeviceEvents.LocalVideoTrackChanged,
-        (payload: ServerDevicePayloads.LocalVideoTrackChanged) => {
-            store.dispatch(allActions.stageActions.server.changeLocalVideoTrack(payload))
-        }
-    )
-    socket.on(
-        ServerDeviceEvents.LocalVideoTrackRemoved,
-        (payload: ServerDevicePayloads.LocalVideoTrackRemoved) => {
-            store.dispatch(allActions.stageActions.server.removeLocalVideoTrack(payload))
+        ServerDeviceEvents.CustomAudioTrackPositionRemoved,
+        (payload: ServerDevicePayloads.CustomAudioTrackPositionRemoved) => {
+            store.dispatch(allActions.stageActions.server.removeCustomAudioTrackPosition(payload))
         }
     )
 
