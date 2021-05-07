@@ -28,7 +28,7 @@ const reportError = report.extend('error')
  * @param apiConnection
  * @param producer
  */
-const publishProducer = (apiConnection: ITeckosClient, producer: Producer) =>
+const publishProducer = (apiConnection: ITeckosClient, stageId: string, producer: Producer) =>
     new Promise<MediasoupVideoTrack | MediasoupAudioTrack>((resolve, reject) => {
         apiConnection.emit(
             producer.kind === 'video'
@@ -36,6 +36,7 @@ const publishProducer = (apiConnection: ITeckosClient, producer: Producer) =>
                 : ClientDeviceEvents.CreateAudioTrack,
             {
                 type: 'mediasoup',
+                stageId,
                 producerId: producer.id,
             } as ClientDevicePayloads.CreateVideoTrack,
             (error: string | null, localTrack?: VideoTrack | AudioTrack) => {
@@ -117,11 +118,12 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                 .then((producers) =>
                     Promise.all(
                         producers.map((producer) =>
-                            publishProducer(apiConnection, producer).then((localVideoTrack) =>
-                                setVideoProducers((prev) => ({
-                                    ...prev,
-                                    [localVideoTrack._id]: producer,
-                                }))
+                            publishProducer(apiConnection, stage._id, producer).then(
+                                (localVideoTrack) =>
+                                    setVideoProducers((prev) => ({
+                                        ...prev,
+                                        [localVideoTrack._id]: producer,
+                                    }))
                             )
                         )
                     )
@@ -178,11 +180,12 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                 .then((producers) =>
                     Promise.all(
                         producers.map((producer) =>
-                            publishProducer(apiConnection, producer).then((localAudioTrack) =>
-                                setAudioProducers((prev) => ({
-                                    ...prev,
-                                    [localAudioTrack._id]: producer,
-                                }))
+                            publishProducer(apiConnection, stage._id, producer).then(
+                                (localAudioTrack) =>
+                                    setAudioProducers((prev) => ({
+                                        ...prev,
+                                        [localAudioTrack._id]: producer,
+                                    }))
                             )
                         )
                     )
