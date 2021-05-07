@@ -252,7 +252,6 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
             const mediasoupTracks = videoTracks
                 .filter((track) => track.type === 'mediasoup')
                 .map((track) => track as MediasoupVideoTrack)
-            console.log(`Consumgin ${mediasoupTracks.length} tracks`)
             setVideoConsumers((prev) => {
                 const removedTrackIds = Object.keys(prev).filter(
                     (id) => !mediasoupTracks.find((track) => track._id === id)
