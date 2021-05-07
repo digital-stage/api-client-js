@@ -289,6 +289,25 @@ const registerSocketHandler = (store: Store, socket: TeckosClient): TeckosClient
     )
 
     socket.on(
+        ServerDeviceEvents.VideoTrackAdded,
+        (payload: ServerDevicePayloads.VideoTrackAdded) => {
+            store.dispatch(allActions.stageActions.server.addVideoTrack(payload))
+        }
+    )
+    socket.on(
+        ServerDeviceEvents.VideoTrackChanged,
+        (payload: ServerDevicePayloads.VideoTrackChanged) => {
+            store.dispatch(allActions.stageActions.server.changeVideoTrack(payload))
+        }
+    )
+    socket.on(
+        ServerDeviceEvents.VideoTrackRemoved,
+        (payload: ServerDevicePayloads.VideoTrackRemoved) => {
+            store.dispatch(allActions.stageActions.server.removeVideoTrack(payload))
+        }
+    )
+
+    socket.on(
         ServerDeviceEvents.AudioTrackAdded,
         (payload: ServerDevicePayloads.AudioTrackAdded) => {
             store.dispatch(allActions.stageActions.server.addAudioTrack(payload))

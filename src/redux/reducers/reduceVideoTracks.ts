@@ -50,6 +50,8 @@ function reduceVideoTracks(
         payload: any
     }
 ): VideoTracks {
+    console.log(action.type)
+    console.log(ServerDeviceEvents.VideoTrackAdded)
     switch (action.type) {
         case ServerDeviceEvents.StageLeft:
         case AdditionalReducerTypes.RESET: {
@@ -73,7 +75,10 @@ function reduceVideoTracks(
         }
         case ServerDeviceEvents.VideoTrackAdded: {
             const videoTrack = action.payload as ServerDevicePayloads.VideoTrackAdded
-            return addVideoTrack(state, videoTrack)
+            console.log(`Input: ${JSON.stringify(videoTrack)}`)
+            const output = addVideoTrack(state, videoTrack)
+            console.log(`OUTPUT: ${JSON.stringify(output)}`)
+            return output
         }
         case ServerDeviceEvents.VideoTrackChanged: {
             const update = action.payload as ServerDevicePayloads.VideoTrackChanged

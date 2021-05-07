@@ -26,6 +26,7 @@ const reportError = report.extend('error')
 /**
  * Helper function to publish producer at the API server
  * @param apiConnection
+ * @param stageId
  * @param producer
  */
 const publishProducer = (apiConnection: ITeckosClient, stageId: string, producer: Producer) =>
@@ -39,17 +40,17 @@ const publishProducer = (apiConnection: ITeckosClient, stageId: string, producer
                 stageId,
                 producerId: producer.id,
             } as ClientDevicePayloads.CreateVideoTrack,
-            (error: string | null, localTrack?: VideoTrack | AudioTrack) => {
+            (error: string | null, track?: VideoTrack | AudioTrack) => {
                 if (error) {
                     return reject(error)
                 }
-                if (!localTrack) {
-                    return reject(new Error('No local video track provided by server'))
+                if (!track) {
+                    return reject(new Error('No video track provided by server'))
                 }
                 if (producer.kind === 'audio') {
-                    return resolve(localTrack as MediasoupAudioTrack)
+                    return resolve(track as MediasoupAudioTrack)
                 }
-                return resolve(localTrack as MediasoupVideoTrack)
+                return resolve(track as MediasoupVideoTrack)
             }
         )
     })
@@ -229,7 +230,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
         shallowEqual
     )
     const [videoConsumers, setVideoConsumers] = useState<{
-        [remoteVideoTrackId: string]: Consumer
+        [videoTrackId: string]: Consumer
     }>({})
     useEffect(() => {
         if (ready && stage && localDevice?.receiveVideo) {
@@ -251,6 +252,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
             const mediasoupTracks = videoTracks
                 .filter((track) => track.type === 'mediasoup')
                 .map((track) => track as MediasoupVideoTrack)
+            console.log(`Consumgin ${mediasoupTracks.length} tracks`)
             setVideoConsumers((prev) => {
                 const removedTrackIds = Object.keys(prev).filter(
                     (id) => !mediasoupTracks.find((track) => track._id === id)
@@ -289,7 +291,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
         shallowEqual
     )
     const [audioConsumers, setAudioConsumers] = useState<{
-        [remoteAudioTrackId: string]: Consumer
+        [audioTrackId: string]: Consumer
     }>({})
     useEffect(() => {
         if (ready && stage && localDevice?.receiveAudio) {

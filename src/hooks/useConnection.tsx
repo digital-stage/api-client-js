@@ -32,6 +32,7 @@ export const ApiConnectionProvider = (props: { children: React.ReactNode; apiUrl
                         {
                             reconnection: true,
                             timeout: 1000,
+                            debug: true,
                         },
                         token,
                         {
