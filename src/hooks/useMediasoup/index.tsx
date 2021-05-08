@@ -17,7 +17,7 @@ import {
 import useStageSelector from '../useStageSelector'
 import useMediasoupTransport from './useMediasoupTransport'
 import useConnection from '../useConnection'
-import { getAudioTracks, getVideoTracks } from './util'
+import { getAudioTracks, getVideoTracks, refreshMediaDevices } from './util'
 
 const report = debug('useMediasoup')
 
@@ -98,6 +98,13 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
     const { ready, consume, produce, stopProducing, stopConsuming } = useMediasoupTransport({
         routerUrl,
     })
+    /*
+    useEffect(() => {
+        if (localDevice && apiConnection) {
+            report('Syncing media devices')
+            refreshMediaDevices(localDevice, apiConnection).catch((err) => reportError(err))
+        }
+    }, [localDevice, apiConnection]) */
 
     /**
      * PRODUCING VIDEOS
@@ -111,9 +118,9 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
             ready &&
             stage &&
             localDevice?.sendVideo &&
-            localDevice?.inputVideoDeviceId
+            stage.videoType === 'mediasoup'
         ) {
-            report(`Fetch video and produce it`)
+            report(`Fetch video and produce it for stage ${stage._id}`)
             getVideoTracks(localDevice.inputVideoDeviceId)
                 .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
                 .then((producers) =>
@@ -129,6 +136,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                         )
                     )
                 )
+                .then(() => refreshMediaDevices(localDevice, apiConnection))
                 .catch((err) => reportError(err))
             return () => {
                 setVideoProducers((prev) => {
@@ -168,7 +176,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
             ready &&
             stage &&
             localDevice?.sendAudio &&
-            localDevice?.inputAudioDeviceId
+            stage.audioType === 'mediasoup'
         ) {
             getAudioTracks({
                 inputAudioDeviceId: localDevice.inputAudioDeviceId,
@@ -191,6 +199,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                         )
                     )
                 )
+                .then(() => refreshMediaDevices(localDevice, apiConnection))
                 .catch((err) => reportError(err))
             return () => {
                 setAudioProducers((prev) => {
