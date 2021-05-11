@@ -25,7 +25,7 @@ export const ApiConnectionProvider = (props: { children: React.ReactNode; apiUrl
     useEffect(() => {
         d('useEffect')
         if (store && token) {
-            getInitialDevice()
+            getInitialDevice(false)
                 .then((initialDevice) => {
                     const socket = new TeckosClientWithJWT(
                         apiUrl,
