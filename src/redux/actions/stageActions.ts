@@ -168,100 +168,67 @@ const removeCustomStageDevicePosition = (
     payload: customStageDeviceId,
 })
 
-const addRemoteVideoTrack = (remoteVideoTrack: ServerDevicePayloads.RemoteVideoTrackAdded) => ({
-    type: ServerDeviceEvents.RemoteVideoTrackAdded,
-    payload: remoteVideoTrack,
+const addVideoTrack = (videoTrack: ServerDevicePayloads.VideoTrackAdded) => ({
+    type: ServerDeviceEvents.VideoTrackAdded,
+    payload: videoTrack,
 })
-const changeRemoteVideoTrack = (
-    remoteVideoTrack: ServerDevicePayloads.RemoteVideoTrackChanged
-) => ({
-    type: ServerDeviceEvents.RemoteVideoTrackChanged,
-    payload: remoteVideoTrack,
+const changeVideoTrack = (videoTrack: ServerDevicePayloads.VideoTrackChanged) => ({
+    type: ServerDeviceEvents.VideoTrackChanged,
+    payload: videoTrack,
 })
-const removeRemoteVideoTrack = (
-    remoteVideoTrackId: ServerDevicePayloads.RemoteVideoTrackRemoved
-) => ({
-    type: ServerDeviceEvents.RemoteVideoTrackRemoved,
-    payload: remoteVideoTrackId,
+const removeVideoTrack = (videoTrackId: ServerDevicePayloads.VideoTrackRemoved) => ({
+    type: ServerDeviceEvents.VideoTrackRemoved,
+    payload: videoTrackId,
 })
 
-const addRemoteAudioTrack = (remoteAudioTrack: ServerDevicePayloads.RemoteAudioTrackAdded) => ({
-    type: ServerDeviceEvents.RemoteAudioTrackAdded,
-    payload: remoteAudioTrack,
+const addAudioTrack = (audioTrack: ServerDevicePayloads.AudioTrackAdded) => ({
+    type: ServerDeviceEvents.AudioTrackAdded,
+    payload: audioTrack,
 })
-const changeRemoteAudioTrack = (
-    remoteAudioTrack: ServerDevicePayloads.RemoteAudioTrackChanged
-) => ({
-    type: ServerDeviceEvents.RemoteAudioTrackChanged,
-    payload: remoteAudioTrack,
+const changeAudioTrack = (audioTrack: ServerDevicePayloads.AudioTrackChanged) => ({
+    type: ServerDeviceEvents.AudioTrackChanged,
+    payload: audioTrack,
 })
-const removeRemoteAudioTrack = (
-    remoteAudioTrackId: ServerDevicePayloads.RemoteAudioTrackRemoved
-) => ({
-    type: ServerDeviceEvents.RemoteAudioTrackRemoved,
-    payload: remoteAudioTrackId,
+const removeAudioTrack = (audioTrackId: ServerDevicePayloads.AudioTrackRemoved) => ({
+    type: ServerDeviceEvents.AudioTrackRemoved,
+    payload: audioTrackId,
 })
 
-const addCustomRemoteAudioTrackVolume = (
-    customRemoteAudioTrackVolume: ServerDevicePayloads.CustomRemoteAudioTrackVolumeAdded
+const addCustomAudioTrackVolume = (
+    customAudioTrackVolume: ServerDevicePayloads.CustomAudioTrackVolumeAdded
 ) => ({
-    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeAdded,
-    payload: customRemoteAudioTrackVolume,
+    type: ServerDeviceEvents.CustomAudioTrackVolumeAdded,
+    payload: customAudioTrackVolume,
 })
-const changeCustomRemoteAudioTrackVolume = (
-    customRemoteAudioTrackVolume: ServerDevicePayloads.CustomRemoteAudioTrackVolumeChanged
+const changeCustomAudioTrackVolume = (
+    customAudioTrackVolume: ServerDevicePayloads.CustomAudioTrackVolumeChanged
 ) => ({
-    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeChanged,
-    payload: customRemoteAudioTrackVolume,
+    type: ServerDeviceEvents.CustomAudioTrackVolumeChanged,
+    payload: customAudioTrackVolume,
 })
-const removeCustomRemoteAudioTrackVolume = (
-    customRemoteAudioTrackVolumeId: ServerDevicePayloads.CustomRemoteAudioTrackVolumeRemoved
+const removeCustomAudioTrackVolume = (
+    customAudioTrackVolumeId: ServerDevicePayloads.CustomAudioTrackVolumeRemoved
 ) => ({
-    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeRemoved,
-    payload: customRemoteAudioTrackVolumeId,
+    type: ServerDeviceEvents.CustomAudioTrackVolumeRemoved,
+    payload: customAudioTrackVolumeId,
 })
-const addCustomRemoteAudioTrackPosition = (
-    customRemoteAudioTrackPosition: ServerDevicePayloads.CustomRemoteAudioTrackPositionAdded
+const addCustomAudioTrackPosition = (
+    customAudioTrackPosition: ServerDevicePayloads.CustomAudioTrackPositionAdded
 ) => ({
-    type: ServerDeviceEvents.CustomRemoteAudioTrackVolumeAdded,
-    payload: customRemoteAudioTrackPosition,
+    type: ServerDeviceEvents.CustomAudioTrackVolumeAdded,
+    payload: customAudioTrackPosition,
 })
-const changeCustomRemoteAudioTrackPosition = (
-    customRemoteAudioTrackPosition: ServerDevicePayloads.CustomRemoteAudioTrackPositionChanged
+const changeCustomAudioTrackPosition = (
+    customAudioTrackPosition: ServerDevicePayloads.CustomAudioTrackPositionChanged
 ) => ({
-    type: ServerDeviceEvents.CustomRemoteAudioTrackPositionChanged,
-    payload: customRemoteAudioTrackPosition,
+    type: ServerDeviceEvents.CustomAudioTrackPositionChanged,
+    payload: customAudioTrackPosition,
 })
-const removeCustomRemoteAudioTrackPosition = (
-    customRemoteAudioTrackPositionId: ServerDevicePayloads.CustomRemoteAudioTrackPositionRemoved
+const removeCustomAudioTrackPosition = (
+    customAudioTrackPositionId: ServerDevicePayloads.CustomAudioTrackPositionRemoved
 ) => ({
-    type: ServerDeviceEvents.CustomRemoteAudioTrackPositionRemoved,
-    payload: customRemoteAudioTrackPositionId,
-})
-
-const addLocalAudioTrack = (localAudioTrack: ServerDevicePayloads.LocalAudioTrackAdded) => ({
-    type: ServerDeviceEvents.LocalAudioTrackAdded,
-    payload: localAudioTrack,
-})
-const changeLocalAudioTrack = (localAudioTrack: ServerDevicePayloads.LocalAudioTrackChanged) => ({
-    type: ServerDeviceEvents.LocalAudioTrackChanged,
-    payload: localAudioTrack,
-})
-const removeLocalAudioTrack = (localAudioTrackId: ServerDevicePayloads.LocalAudioTrackRemoved) => ({
-    type: ServerDeviceEvents.LocalAudioTrackRemoved,
-    payload: localAudioTrackId,
-})
-const addLocalVideoTrack = (localVideoTrack: ServerDevicePayloads.LocalVideoTrackAdded) => ({
-    type: ServerDeviceEvents.LocalVideoTrackAdded,
-    payload: localVideoTrack,
-})
-const changeLocalVideoTrack = (localVideoTrack: ServerDevicePayloads.LocalVideoTrackChanged) => ({
-    type: ServerDeviceEvents.LocalVideoTrackChanged,
-    payload: localVideoTrack,
-})
-const removeLocalVideoTrack = (localVideoTrackId: ServerDevicePayloads.LocalVideoTrackRemoved) => ({
-    type: ServerDeviceEvents.LocalVideoTrackRemoved,
-    payload: localVideoTrackId,
+    type: ServerDeviceEvents.CustomAudioTrackPositionRemoved,
+    payload: customAudioTrackPositionId,
 })
 
 const server = {
@@ -299,24 +266,18 @@ const server = {
     addCustomStageDevicePosition,
     changeCustomStageDevicePosition,
     removeCustomStageDevicePosition,
-    addRemoteAudioTrack,
-    changeRemoteAudioTrack,
-    removeRemoteAudioTrack,
-    addRemoteVideoTrack,
-    changeRemoteVideoTrack,
-    removeRemoteVideoTrack,
-    addCustomRemoteAudioTrackPosition,
-    changeCustomRemoteAudioTrackPosition,
-    removeCustomRemoteAudioTrackPosition,
-    addCustomRemoteAudioTrackVolume,
-    changeCustomRemoteAudioTrackVolume,
-    removeCustomRemoteAudioTrackVolume,
-    addLocalAudioTrack,
-    changeLocalAudioTrack,
-    removeLocalAudioTrack,
-    addLocalVideoTrack,
-    changeLocalVideoTrack,
-    removeLocalVideoTrack,
+    addCustomAudioTrackPosition,
+    changeCustomAudioTrackPosition,
+    removeCustomAudioTrackPosition,
+    addCustomAudioTrackVolume,
+    changeCustomAudioTrackVolume,
+    removeCustomAudioTrackVolume,
+    addAudioTrack,
+    changeAudioTrack,
+    removeAudioTrack,
+    addVideoTrack,
+    changeVideoTrack,
+    removeVideoTrack,
 }
 const stageActions = {
     server,

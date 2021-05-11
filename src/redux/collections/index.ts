@@ -1,15 +1,15 @@
 import CustomGroupPositions from './CustomGroupPositions'
 import CustomGroupVolumes from './CustomGroupVolumes'
-import CustomRemoteAudioTrackPositions from './CustomRemoteAudioTrackPositions'
-import CustomRemoteAudioTrackVolumes from './CustomRemoteAudioTrackVolumes'
+import CustomAudioTrackPositions from './CustomAudioTrackPositions'
+import CustomAudioTrackVolumes from './CustomAudioTrackVolumes'
 import CustomStageMemberPositions from './CustomStageMemberPositions'
 import CustomStageMemberVolumes from './CustomStageMemberVolumes'
 import Devices from './Devices'
 import Globals from './Globals'
 import Groups from './Groups'
-import RemoteAudioTracks from './RemoteAudioTracks'
+import AudioTracks from './AudioTracks'
 import RemoteUsers from './RemoteUsers'
-import RemoteVideoTracks from './RemoteVideoTracks'
+import VideoTracks from './VideoTracks'
 import Routers from './Routers'
 import SoundCards from './SoundCards'
 import StageDevices from './StageDevices'
@@ -19,16 +19,16 @@ import Stages from './Stages'
 export type {
     CustomGroupPositions,
     CustomGroupVolumes,
-    CustomRemoteAudioTrackPositions,
-    CustomRemoteAudioTrackVolumes,
+    CustomAudioTrackPositions,
+    CustomAudioTrackVolumes,
     CustomStageMemberPositions,
     CustomStageMemberVolumes,
     Devices,
     Globals,
     Groups,
-    RemoteAudioTracks,
+    AudioTracks,
     RemoteUsers,
-    RemoteVideoTracks,
+    VideoTracks,
     Routers,
     SoundCards,
     StageMembers,

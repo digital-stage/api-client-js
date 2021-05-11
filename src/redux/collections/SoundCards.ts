@@ -4,6 +4,14 @@ interface SoundCards {
     byId: {
         [id: string]: SoundCard
     }
+    byDevice: {
+        [deviceId: string]: string[]
+    }
+    byDeviceAndUUID: {
+        [deviceId: string]: {
+            [uuid: string]: string
+        }
+    }
     allIds: string[]
 }
 

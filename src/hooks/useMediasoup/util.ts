@@ -1,6 +1,12 @@
 import mediasoupClient from 'mediasoup-client'
 import { ITeckosClient } from 'teckos-client'
 import debug from 'debug'
+import {
+    ClientDeviceEvents,
+    ClientDevicePayloads,
+    MediasoupDevice,
+    WebMediaDevice,
+} from '@digitalstage/api-types'
 
 const report = debug('useMediasoup:utils')
 const reportError = report.extend('error')
@@ -324,3 +330,90 @@ export const closeConsumer = (
             return resolve(consumer)
         })
     )
+
+export const enumerateDevices = (): Promise<{
+    inputAudioDevices: WebMediaDevice[]
+    inputVideoDevices: WebMediaDevice[]
+    outputAudioDevices: WebMediaDevice[]
+}> =>
+    new Promise<{
+        inputAudioDevices: WebMediaDevice[]
+        inputVideoDevices: WebMediaDevice[]
+        outputAudioDevices: WebMediaDevice[]
+    }>((resolve) => {
+        if (!navigator) {
+            return resolve({
+                inputAudioDevices: [],
+                inputVideoDevices: [],
+                outputAudioDevices: [],
+            })
+        }
+        return navigator.mediaDevices.enumerateDevices().then((devices) => {
+            const inputVideoDevices: WebMediaDevice[] = []
+            const inputAudioDevices: WebMediaDevice[] = []
+            const outputAudioDevices: WebMediaDevice[] = []
+            devices.forEach((device, index) => {
+                switch (device.kind) {
+                    case 'videoinput':
+                        inputVideoDevices.push({
+                            id:
+                                device.deviceId ||
+                                (inputVideoDevices.length === 1 ? 'default' : index.toString()),
+                            label: device.label ? device.label : 'Standard',
+                        })
+                        break
+                    case 'audioinput':
+                        inputAudioDevices.push({
+                            id:
+                                device.deviceId ||
+                                (inputAudioDevices.length === 1 ? 'default' : index.toString()),
+                            label: device.label || 'Standard',
+                        })
+                        break
+                    default:
+                        outputAudioDevices.push({
+                            id:
+                                device.deviceId ||
+                                (outputAudioDevices.length === 1 ? 'default' : index.toString()),
+                            label: device.label || 'Standard',
+                        })
+                        break
+                }
+            })
+            return resolve({
+                inputAudioDevices,
+                inputVideoDevices,
+                outputAudioDevices,
+            })
+        })
+    })
+
+export const refreshMediaDevices = (
+    currentDevice: MediasoupDevice,
+    socket: ITeckosClient
+): Promise<boolean> => {
+    if (currentDevice && socket) {
+        return enumerateDevices().then((devices) => {
+            // Sync and update if necessary
+            let shouldUpdate: boolean = false
+            const update: ClientDevicePayloads.ChangeDevice = { _id: currentDevice._id }
+            if (currentDevice.inputAudioDevices !== devices.inputAudioDevices) {
+                shouldUpdate = true
+                update.inputAudioDevices = devices.inputAudioDevices
+            }
+            if (currentDevice.inputVideoDevices !== devices.inputVideoDevices) {
+                shouldUpdate = true
+                update.inputVideoDevices = devices.inputVideoDevices
+            }
+            if (currentDevice.outputAudioDevices !== devices.outputAudioDevices) {
+                shouldUpdate = true
+                update.outputAudioDevices = devices.outputAudioDevices
+            }
+            if (shouldUpdate) {
+                return socket.emit(ClientDeviceEvents.ChangeDevice, update)
+            }
+            return false
+        })
+    }
+    return Promise.resolve(false)
+}

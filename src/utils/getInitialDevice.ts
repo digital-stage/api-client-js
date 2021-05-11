@@ -1,7 +1,7 @@
 import Cookie from 'js-cookie'
 import { MediasoupDevice, WebMediaDevice } from '@digitalstage/api-types'
 
-const getInitialDevice = async (): Promise<Partial<Omit<MediasoupDevice, '_id'>>> => {
+const getInitialDevice = async (permanent: boolean): Promise<Partial<Omit<MediasoupDevice, '_id'>>> => {
     const uuid = Cookie.get('device')
     if (navigator !== undefined) {
         const inputAudioDevices: WebMediaDevice[] = []
@@ -49,7 +49,7 @@ const getInitialDevice = async (): Promise<Partial<Omit<MediasoupDevice, '_id'>>
     return {
         type: 'node',
         uuid,
-        requestSession: !uuid,
+        requestSession: permanent && !uuid,
     }
 }
 export default getInitialDevice

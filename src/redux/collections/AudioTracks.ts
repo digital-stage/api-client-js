@@ -1,8 +1,8 @@
-import { RemoteVideoTrack } from '@digitalstage/api-types'
+import { AudioTrack } from '@digitalstage/api-types'
 
-interface RemoteVideoTracks {
+interface AudioTracks {
     byId: {
-        [id: string]: RemoteVideoTrack
+        [id: string]: AudioTrack
     }
     byStage: {
         [stageId: string]: string[]
@@ -19,4 +19,4 @@ interface RemoteVideoTracks {
     allIds: string[]
 }
 
-export default RemoteVideoTracks
+export default AudioTracks
