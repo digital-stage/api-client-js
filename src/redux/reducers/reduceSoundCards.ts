@@ -1,11 +1,14 @@
 import omit from 'lodash/omit'
 import { SoundCard, ServerDevicePayloads, ServerDeviceEvents } from '@digitalstage/api-types'
+import without from 'lodash/without'
 import SoundCards from '../collections/SoundCards'
 import upsert from '../utils/upsert'
 
 function reduceSoundCards(
     state: SoundCards = {
         byId: {},
+        byDevice: {},
+        byDeviceAndUUID: {},
         allIds: [],
     },
     action: {
@@ -20,6 +23,20 @@ function reduceSoundCards(
                 byId: {
                     ...state.byId,
                     [soundCard._id]: soundCard,
+                },
+                byDevice: {
+                    ...state.byDevice,
+                    [soundCard.deviceId]: upsert<string>(
+                        state.byDevice[soundCard.deviceId],
+                        soundCard._id
+                    ),
+                },
+                byDeviceAndUUID: {
+                    ...state.byDeviceAndUUID,
+                    [soundCard.deviceId]: {
+                        ...state.byDeviceAndUUID[soundCard.deviceId],
+                        [soundCard.uuid]: soundCard._id,
+                    },
                 },
                 allIds: upsert<string>(state.allIds, soundCard._id),
             }
@@ -40,9 +57,18 @@ function reduceSoundCards(
         }
         case ServerDeviceEvents.SoundCardRemoved: {
             const removedId: string = action.payload as ServerDevicePayloads.SoundCardRemoved
+            const { deviceId, uuid } = state.byId[removedId]
             return {
                 ...state,
                 byId: omit(state.byId, removedId),
+                byDevice: {
+                    ...state.byDevice,
+                    [deviceId]: without(state.byDevice[deviceId], removedId),
+                },
+                byDeviceAndUUID: {
+                    ...state.byDeviceAndUUID,
+                    [deviceId]: omit(state.byDeviceAndUUID[deviceId], uuid),
+                },
                 allIds: state.allIds.filter((id) => id !== removedId),
             }
         }
