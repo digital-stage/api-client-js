@@ -4,7 +4,7 @@ import store from './redux/store'
 import getInitialDevice from './utils/getInitialDevice'
 import { ReducerAction } from './redux/actions'
 import { RootReducer } from './redux/reducers'
-import { AuthUser, useAuth } from './hooks/useAuth'
+import {AuthError, AuthUser, ErrorCodes, useAuth} from './hooks/useAuth'
 import useConnection from './hooks/useConnection'
 import useStageSelector from './hooks/useStageSelector'
 import useMediasoup from './hooks/useMediasoup'
@@ -20,6 +20,8 @@ export {
     useConnection,
     useMediasoup,
     useAuth,
+    ErrorCodes,
+    AuthError,
     useStageSelector,
     // Redux specific
     registerSocketHandler,
