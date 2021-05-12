@@ -1,5 +1,5 @@
 {
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -92,7 +92,7 @@
     }
   },
   "dependencies": {
-    "@digitalstage/api-types": "^0.0.10",
+    "@digitalstage/api-types": "^0.0.11",
     "bufferutil": "^4.0.3",
     "debug": "^4.3.1",
     "encoding": "^0.1.13",
