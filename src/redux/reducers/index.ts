@@ -38,7 +38,7 @@ import { AudioTracks, StageDevices, VideoTracks } from '../collections'
 import reduceCustomStageDeviceVolumes from './reduceCustomStageDeviceVolumes'
 import reduceCustomStageDevicePositions from './reduceCustomStageDevicePositions'
 
-export interface RootReducer {
+interface RootReducer {
     globals: Globals
     chatMessages: ChatMessage[]
     devices: Devices
@@ -59,6 +59,30 @@ export interface RootReducer {
     customStageDevicePositions: CustomStageDevicePositions
     customAudioTrackVolumes: CustomAudioTrackVolumes
     customAudioTrackPositions: CustomAudioTrackPositions
+}
+
+export type {
+    RootReducer,
+    Globals,
+    ChatMessage,
+    Devices,
+    SoundCards,
+    Routers,
+    RemoteUsers,
+    Stages,
+    Groups,
+    StageMembers,
+    StageDevices,
+    VideoTracks,
+    AudioTracks,
+    CustomGroupVolumes,
+    CustomGroupPositions,
+    CustomStageMemberVolumes,
+    CustomStageMemberPositions,
+    CustomStageDeviceVolumes,
+    CustomStageDevicePositions,
+    CustomAudioTrackVolumes,
+    CustomAudioTrackPositions,
 }
 
 const reducer = combineReducers<RootReducer>({

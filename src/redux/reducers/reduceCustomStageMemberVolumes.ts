@@ -76,7 +76,8 @@ function reduceCustomStageMemberVolumes(
             return updatedState
         }
         case ServerDeviceEvents.CustomStageMemberVolumeAdded: {
-            const customStageMemberVolume = action.payload as ServerDevicePayloads.CustomStageMemberVolumeAdded
+            const customStageMemberVolume =
+                action.payload as ServerDevicePayloads.CustomStageMemberVolumeAdded
             return addCustomStageMemberVolume(state, customStageMemberVolume)
         }
         case ServerDeviceEvents.CustomStageMemberVolumeChanged: {

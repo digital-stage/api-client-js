@@ -65,7 +65,8 @@ function reduceGlobals(
             }
         case ServerDeviceEvents.LocalDeviceReady: {
             // Store cookie of uuid
-            const payload = (action.payload as ServerDevicePayloads.LocalDeviceReady) as MediasoupDevice
+            const payload =
+                action.payload as ServerDevicePayloads.LocalDeviceReady as MediasoupDevice
             if (payload.uuid) {
                 Cookie.set('device', payload.uuid)
             }
