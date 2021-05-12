@@ -1,5 +1,5 @@
 {
-  "version": "0.0.14",
+  "version": "0.0.16",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -32,6 +32,13 @@
   },
   "name": "@digitalstage/api-client-react",
   "author": "Tobias Hegemann <tobias.hegemann@googlemail.com>",
+  "keywords": [
+    "frontend",
+    "typescript",
+    "react",
+    "hooks",
+    "digitalstage"
+  ],
   "module": "dist/api-client-js.esm.js",
   "size-limit": [
     {
@@ -47,7 +54,7 @@
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/debug": "^4.1.5",
     "@types/js-cookie": "^2.2.6",
-    "@types/lodash": "^4.14.168",
+    "@types/lodash": "^4.14.169",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.4",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
@@ -85,7 +92,7 @@
     }
   },
   "dependencies": {
-    "@digitalstage/api-types": "^0.0.9",
+    "@digitalstage/api-types": "^0.0.10",
     "bufferutil": "^4.0.3",
     "debug": "^4.3.1",
     "encoding": "^0.1.13",
