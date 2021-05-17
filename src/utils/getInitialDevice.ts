@@ -39,7 +39,7 @@ const getInitialDevice = async (
         })
         return {
             uuid,
-            requestSession: !uuid,
+            requestSession: permanent && !uuid,
             type: 'mediasoup',
             inputAudioDevices,
             outputAudioDevices,
