@@ -1,5 +1,5 @@
 {
-  "version": "0.0.17",
+  "version": "0.0.18",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -51,6 +51,7 @@
     }
   ],
   "devDependencies": {
+    "@digitalstage/api-types": "latest",
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/debug": "^4.1.5",
     "@types/js-cookie": "^2.2.6",
@@ -80,6 +81,7 @@
     "typescript": "^4.2.4"
   },
   "peerDependencies": {
+    "@digitalstage/api-types": ">=0",
     "react": ">=17",
     "react-dom": ">=17",
     "react-redux": ">=7",
@@ -92,7 +94,6 @@
     }
   },
   "dependencies": {
-    "@digitalstage/api-types": "^0.0.11",
     "bufferutil": "^4.0.3",
     "debug": "^4.3.1",
     "encoding": "^0.1.13",
