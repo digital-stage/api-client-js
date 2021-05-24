@@ -11,7 +11,7 @@ export interface ReducerAction extends AnyAction {
 }
 
 const changeUser = (user: Partial<User>): ReducerAction => ({
-    type: ServerDeviceEvents.UserAdded,
+    type: ServerDeviceEvents.UserChanged,
     payload: user,
 })
 const handleUserReady = (user: ServerDevicePayloads.UserReady): ReducerAction => ({
