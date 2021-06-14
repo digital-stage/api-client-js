@@ -126,6 +126,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                 .then((producers) =>
                     Promise.all(
                         producers.map((producer) =>
+                            // eslint-disable-next-line promise/no-nesting
                             publishProducer(apiConnection, stage._id, producer).then(
                                 (localVideoTrack) =>
                                     setVideoProducers((prev) => ({
@@ -136,7 +137,15 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                         )
                     )
                 )
-                .then(() => refreshMediaDevices(localDevice, apiConnection))
+                .then(() =>
+                    refreshMediaDevices(
+                        localDevice._id,
+                        localDevice.inputAudioDevices,
+                        localDevice.inputVideoDevices,
+                        localDevice.outputAudioDevices,
+                        apiConnection
+                    )
+                )
                 .catch((err) => reportError(err))
             return () => {
                 setVideoProducers((prev) => {
@@ -162,6 +171,10 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
         stopProducing,
         localDevice?.sendVideo,
         localDevice?.inputVideoDeviceId,
+        localDevice?._id,
+        localDevice?.inputAudioDevices,
+        localDevice?.inputVideoDevices,
+        localDevice?.outputAudioDevices,
     ])
 
     /**
@@ -189,6 +202,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                 .then((producers) =>
                     Promise.all(
                         producers.map((producer) =>
+                            // eslint-disable-next-line promise/no-nesting
                             publishProducer(apiConnection, stage._id, producer).then(
                                 (localAudioTrack) =>
                                     setAudioProducers((prev) => ({
@@ -199,7 +213,15 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                         )
                     )
                 )
-                .then(() => refreshMediaDevices(localDevice, apiConnection))
+                .then(() =>
+                    refreshMediaDevices(
+                        localDevice._id,
+                        localDevice.inputAudioDevices,
+                        localDevice.inputVideoDevices,
+                        localDevice.outputAudioDevices,
+                        apiConnection
+                    )
+                )
                 .catch((err) => reportError(err))
             return () => {
                 setAudioProducers((prev) => {
@@ -229,6 +251,10 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
         localDevice?.echoCancellation,
         localDevice?.noiseSuppression,
         localDevice?.autoGainControl,
+        localDevice?._id,
+        localDevice?.inputAudioDevices,
+        localDevice?.inputVideoDevices,
+        localDevice?.outputAudioDevices,
     ])
 
     /** *

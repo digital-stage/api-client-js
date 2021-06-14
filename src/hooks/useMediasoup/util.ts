@@ -1,12 +1,7 @@
 import mediasoupClient from 'mediasoup-client'
 import { ITeckosClient } from 'teckos-client'
 import debug from 'debug'
-import {
-    ClientDeviceEvents,
-    ClientDevicePayloads,
-    MediasoupDevice,
-    WebMediaDevice,
-} from '@digitalstage/api-types'
+import { ClientDeviceEvents, ClientDevicePayloads, WebMediaDevice } from '@digitalstage/api-types'
 
 const report = debug('useMediasoup:utils')
 const reportError = report.extend('error')
@@ -389,23 +384,26 @@ export const enumerateDevices = (): Promise<{
     })
 
 export const refreshMediaDevices = (
-    currentDevice: MediasoupDevice,
+    _id: string,
+    inputAudioDevices: WebMediaDevice[],
+    inputVideoDevices: WebMediaDevice[],
+    outputAudioDevices: WebMediaDevice[],
     socket: ITeckosClient
 ): Promise<boolean> => {
-    if (currentDevice && socket) {
+    if (socket) {
         return enumerateDevices().then((devices) => {
             // Sync and update if necessary
             let shouldUpdate: boolean = false
-            const update: ClientDevicePayloads.ChangeDevice = { _id: currentDevice._id }
-            if (currentDevice.inputAudioDevices !== devices.inputAudioDevices) {
+            const update: ClientDevicePayloads.ChangeDevice = { _id }
+            if (inputAudioDevices !== devices.inputAudioDevices) {
                 shouldUpdate = true
                 update.inputAudioDevices = devices.inputAudioDevices
             }
-            if (currentDevice.inputVideoDevices !== devices.inputVideoDevices) {
+            if (inputVideoDevices !== devices.inputVideoDevices) {
                 shouldUpdate = true
                 update.inputVideoDevices = devices.inputVideoDevices
             }
-            if (currentDevice.outputAudioDevices !== devices.outputAudioDevices) {
+            if (outputAudioDevices !== devices.outputAudioDevices) {
                 shouldUpdate = true
                 update.outputAudioDevices = devices.outputAudioDevices
             }
