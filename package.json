@@ -105,6 +105,7 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "redux-devtools-extension": "^2.13.9"
+    "redux-devtools-extension": "^2.13.9",
+    "standardized-audio-context": "^25.2.7"
   }
 }

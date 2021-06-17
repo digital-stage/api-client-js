@@ -7,6 +7,8 @@ import { AuthError, AuthUser, ErrorCodes, useAuth } from './hooks/useAuth'
 import useConnection from './hooks/useConnection'
 import useStageSelector from './hooks/useStageSelector'
 import useMediasoup from './hooks/useMediasoup'
+import useAudioContext, { AudioContextProvider } from './hooks/useAudioContext'
+import useAudioRenderer, { AudioRenderProvider } from './hooks/useAudioRenderer'
 
 export * from '@digitalstage/api-types'
 export * from './redux/reducers'
@@ -19,6 +21,10 @@ export {
     useDigitalStage,
     useConnection,
     useMediasoup,
+    AudioContextProvider,
+    useAudioContext,
+    AudioRenderProvider,
+    useAudioRenderer,
     useAuth,
     ErrorCodes,
     AuthError,

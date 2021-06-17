@@ -148,6 +148,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
             }
         }
         return undefined
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         apiConnection,
         ready,
@@ -212,6 +213,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
             }
         }
         return undefined
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         apiConnection,
         ready,
