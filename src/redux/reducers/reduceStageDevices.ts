@@ -34,6 +34,13 @@ const addStageDevice = (prev: StageDevices, stageDevice: StageDevice): StageDevi
         ...prev.byGroup,
         [stageDevice.groupId]: upsert<string>(prev.byGroup[stageDevice.groupId], stageDevice._id),
     },
+    byStageAndDevice: {
+        ...prev.byStageAndDevice,
+        [stageDevice.stageId]: {
+            ...prev.byStageAndDevice[stageDevice.stageId],
+            [stageDevice.deviceId]: stageDevice._id,
+        },
+    },
     allIds: upsert<string>(prev.allIds, stageDevice._id),
 })
 
@@ -44,6 +51,7 @@ function reduceStageDevices(
         byGroup: {},
         byStageMember: {},
         byUser: {},
+        byStageAndDevice: {},
         allIds: [],
     },
     action: {
@@ -60,6 +68,7 @@ function reduceStageDevices(
                 byStageMember: {},
                 byGroup: {},
                 byUser: {},
+                byStageAndDevice: {},
                 allIds: [],
             }
         }
@@ -98,7 +107,7 @@ function reduceStageDevices(
         }
         case ServerDeviceEvents.StageDeviceRemoved: {
             const id = action.payload as string
-            const { stageId, groupId, userId, stageMemberId } = prev.byId[id]
+            const { stageId, groupId, userId, stageMemberId, deviceId } = prev.byId[id]
             return {
                 ...prev,
                 byId: omit(prev.byId, id),
@@ -120,6 +129,10 @@ function reduceStageDevices(
                 byUser: {
                     ...prev.byUser,
                     [userId]: without<string>(prev.byUser[userId], action.payload),
+                },
+                byStageAndDevice: {
+                    ...prev.byStageAndDevice,
+                    [stageId]: omit(prev.byStageAndDevice[stageId], deviceId),
                 },
                 allIds: without<string>(prev.allIds, id),
             }

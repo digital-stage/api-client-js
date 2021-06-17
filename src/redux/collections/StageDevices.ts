@@ -16,6 +16,11 @@ interface StageDevices {
     byUser: {
         [userId: string]: string[]
     }
+    byStageAndDevice: {
+        [stageId: string]: {
+            [deviceId: string]: string
+        }
+    }
     allIds: string[]
 }
 

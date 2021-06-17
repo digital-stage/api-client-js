@@ -98,13 +98,6 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
     const { ready, consume, produce, stopProducing, stopConsuming } = useMediasoupTransport({
         routerUrl,
     })
-    /*
-    useEffect(() => {
-        if (localDevice && apiConnection) {
-            report('Syncing media devices')
-            refreshMediaDevices(localDevice, apiConnection).catch((err) => reportError(err))
-        }
-    }, [localDevice, apiConnection]) */
 
     /**
      * PRODUCING VIDEOS
@@ -137,15 +130,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                         )
                     )
                 )
-                .then(() =>
-                    refreshMediaDevices(
-                        localDevice._id,
-                        localDevice.inputAudioDevices,
-                        localDevice.inputVideoDevices,
-                        localDevice.outputAudioDevices,
-                        apiConnection
-                    )
-                )
+                .then(() => refreshMediaDevices(localDevice, apiConnection))
                 .catch((err) => reportError(err))
             return () => {
                 setVideoProducers((prev) => {
@@ -171,10 +156,6 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
         stopProducing,
         localDevice?.sendVideo,
         localDevice?.inputVideoDeviceId,
-        localDevice?._id,
-        localDevice?.inputAudioDevices,
-        localDevice?.inputVideoDevices,
-        localDevice?.outputAudioDevices,
     ])
 
     /**
@@ -213,15 +194,7 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
                         )
                     )
                 )
-                .then(() =>
-                    refreshMediaDevices(
-                        localDevice._id,
-                        localDevice.inputAudioDevices,
-                        localDevice.inputVideoDevices,
-                        localDevice.outputAudioDevices,
-                        apiConnection
-                    )
-                )
+                .then(() => refreshMediaDevices(localDevice, apiConnection))
                 .catch((err) => reportError(err))
             return () => {
                 setAudioProducers((prev) => {
@@ -251,10 +224,6 @@ const MediasoupProvider = (props: { children: React.ReactNode }): JSX.Element =>
         localDevice?.echoCancellation,
         localDevice?.noiseSuppression,
         localDevice?.autoGainControl,
-        localDevice?._id,
-        localDevice?.inputAudioDevices,
-        localDevice?.inputVideoDevices,
-        localDevice?.outputAudioDevices,
     ])
 
     /** *

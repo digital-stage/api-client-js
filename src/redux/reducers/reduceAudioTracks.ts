@@ -93,13 +93,17 @@ function reduceAudioTracks(
             if (!state.byId[id]) {
                 return state
             }
-            const { stageId, stageMemberId, userId } = state.byId[id]
+            const { stageId, stageMemberId, stageDeviceId, userId } = state.byId[id]
             return {
                 ...state,
                 byId: omit(state.byId, id),
                 byStageMember: {
                     ...state.byStageMember,
                     [stageMemberId]: without(state.byStageMember[stageMemberId], id),
+                },
+                byStageDevice: {
+                    ...state.byStageDevice,
+                    [stageDeviceId]: without(state.byStageDevice[stageDeviceId], id),
                 },
                 byStage: {
                     ...state.byStage,
