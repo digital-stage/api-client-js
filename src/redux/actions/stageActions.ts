@@ -215,7 +215,7 @@ const removeCustomAudioTrackVolume = (
 const addCustomAudioTrackPosition = (
     customAudioTrackPosition: ServerDevicePayloads.CustomAudioTrackPositionAdded
 ) => ({
-    type: ServerDeviceEvents.CustomAudioTrackVolumeAdded,
+    type: ServerDeviceEvents.CustomAudioTrackPositionAdded,
     payload: customAudioTrackPosition,
 })
 const changeCustomAudioTrackPosition = (
