@@ -9,7 +9,7 @@ function reduceGlobals(
         stageId: undefined,
         groupId: undefined,
         localDeviceId: undefined,
-        localUser: undefined,
+        localUserId: undefined,
     },
     action: {
         type: string
@@ -21,9 +21,11 @@ function reduceGlobals(
             return {
                 ready: false,
                 stageId: undefined,
+                stageMemberId: undefined,
                 groupId: undefined,
                 localDeviceId: undefined,
-                localUser: undefined,
+                localStageDeviceId: undefined,
+                localUserId: undefined,
             }
         }
         case ServerDeviceEvents.Ready:
@@ -32,7 +34,22 @@ function reduceGlobals(
                 ready: true,
             }
         case ServerDeviceEvents.StageJoined: {
-            const { stageId, groupId } = action.payload as ServerDevicePayloads.StageJoined
+            const { stageId, groupId, stageMemberId, stageDevices } =
+                action.payload as ServerDevicePayloads.StageJoined
+            if (state.localDeviceId) {
+                const localStageDevice = stageDevices.find(
+                    (stageDevice) => stageDevice.deviceId === state.localDeviceId
+                )
+                if (localStageDevice) {
+                    return {
+                        ...state,
+                        stageId,
+                        groupId,
+                        stageMemberId,
+                        localStageDeviceId: localStageDevice._id,
+                    }
+                }
+            }
             return {
                 ...state,
                 stageId,
@@ -44,25 +61,24 @@ function reduceGlobals(
                 ...state,
                 stageId: undefined,
                 groupId: undefined,
+                stageMemberId: undefined,
+                localStageDeviceId: undefined,
             }
         case ServerDeviceEvents.UserReady:
             return {
                 ...state,
-                localUser: action.payload,
-            }
-        case ServerDeviceEvents.UserChanged:
-            return {
-                ...state,
-                localUser: {
-                    ...state.localUser,
-                    ...action.payload,
-                },
+                localUserId: action.payload._id,
             }
         case ServerDeviceEvents.UserRemoved:
-            return {
-                ...state,
-                localUser: undefined,
-            }
+            if (
+                state.localUserId &&
+                state.localUserId === (action.payload as ServerDevicePayloads.UserRemoved)
+            )
+                return {
+                    ...state,
+                    localUserId: undefined,
+                }
+            return state
         case ServerDeviceEvents.LocalDeviceReady: {
             // Store cookie of uuid
             const payload =
@@ -74,6 +90,18 @@ function reduceGlobals(
                 ...state,
                 localDeviceId: action.payload._id,
             }
+        }
+        case ServerDeviceEvents.StageDeviceAdded: {
+            if (state.localDeviceId) {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                const { _id, deviceId } = action.payload as ServerDevicePayloads.StageDeviceAdded
+                if (state.localDeviceId === deviceId)
+                    return {
+                        ...state,
+                        localStageDeviceId: _id,
+                    }
+            }
+            return state
         }
         default: {
             return state

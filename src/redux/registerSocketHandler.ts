@@ -85,26 +85,17 @@ const registerSocketHandler = (store: Store, socket: TeckosClient): TeckosClient
         store.dispatch(allActions.deviceActions.server.removeDevice(payload))
     })
 
-    socket.on(
-        ServerDeviceEvents.RemoteUserAdded,
-        (payload: ServerDevicePayloads.RemoteUserAdded) => {
-            store.dispatch(allActions.stageActions.server.addRemoteUser(payload))
-        }
-    )
+    socket.on(ServerDeviceEvents.UserAdded, (payload: ServerDevicePayloads.UserAdded) => {
+        store.dispatch(allActions.stageActions.server.addUser(payload))
+    })
 
-    socket.on(
-        ServerDeviceEvents.RemoteUserChanged,
-        (payload: ServerDevicePayloads.RemoteUserChanged) => {
-            store.dispatch(allActions.stageActions.server.changeRemoteUser(payload))
-        }
-    )
+    socket.on(ServerDeviceEvents.UserChanged, (payload: ServerDevicePayloads.UserChanged) => {
+        store.dispatch(allActions.stageActions.server.changeUser(payload))
+    })
 
-    socket.on(
-        ServerDeviceEvents.RemoteUserRemoved,
-        (payload: ServerDevicePayloads.RemoteUserRemoved) => {
-            store.dispatch(allActions.stageActions.server.removeRemoteUser(payload))
-        }
-    )
+    socket.on(ServerDeviceEvents.UserRemoved, (payload: ServerDevicePayloads.UserRemoved) => {
+        store.dispatch(allActions.stageActions.server.removeUser(payload))
+    })
 
     socket.on(
         ServerDeviceEvents.ChatMessageSend,

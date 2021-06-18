@@ -6,7 +6,7 @@ import StageMembers from '../collections/StageMembers'
 import Devices from '../collections/Devices'
 import SoundCards from '../collections/SoundCards'
 import Routers from '../collections/Routers'
-import RemoteUsers from '../collections/RemoteUsers'
+import Users from '../collections/Users'
 import CustomGroupVolumes from '../collections/CustomGroupVolumes'
 import CustomGroupPositions from '../collections/CustomGroupPositions'
 import CustomStageMemberVolumes from '../collections/CustomStageMemberVolumes'
@@ -26,7 +26,7 @@ import reduceAudioTracks from './reduceAudioTracks'
 import reduceVideoTracks from './reduceVideoTracks'
 import Globals from '../collections/Globals'
 import reduceGlobals from './reduceGlobals'
-import reduceRemoteUsers from './reduceRemoteUsers'
+import reduceUsers from './reduceUsers'
 import reduceCustomGroupVolumes from './reduceCustomGroupVolumes'
 import reduceCustomGroupPositions from './reduceCustomGroupPositions'
 import reduceCustomStageMemberVolumes from './reduceCustomStageMemberVolumes'
@@ -44,7 +44,7 @@ interface RootReducer {
     devices: Devices
     soundCards: SoundCards
     routers: Routers
-    remoteUsers: RemoteUsers
+    users: Users
     stages: Stages
     groups: Groups
     stageMembers: StageMembers
@@ -68,7 +68,7 @@ export type {
     Devices,
     SoundCards,
     Routers,
-    RemoteUsers,
+    Users,
     Stages,
     Groups,
     StageMembers,
@@ -91,7 +91,7 @@ const reducer = combineReducers<RootReducer>({
     devices: reduceDevices,
     soundCards: reduceSoundCards,
     routers: reduceRouters,
-    remoteUsers: reduceRemoteUsers,
+    users: reduceUsers,
     stages: reduceStages,
     groups: reduceGroups,
     stageMembers: reduceStageMembers,

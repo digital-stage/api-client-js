@@ -1,11 +1,12 @@
-import { User } from '@digitalstage/api-types'
-
 interface Globals {
-    stageId?: string
-    groupId?: string
-    localDeviceId?: string
-    localUser?: User
     ready: boolean
+    localDeviceId?: string
+    localUserId?: string
+    // Stage related
+    stageId?: string
+    stageMemberId?: string
+    groupId?: string
+    localStageDeviceId?: string
 }
 
 export default Globals

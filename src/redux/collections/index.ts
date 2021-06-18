@@ -8,7 +8,7 @@ import Devices from './Devices'
 import Globals from './Globals'
 import Groups from './Groups'
 import AudioTracks from './AudioTracks'
-import RemoteUsers from './RemoteUsers'
+import Users from './Users'
 import VideoTracks from './VideoTracks'
 import Routers from './Routers'
 import SoundCards from './SoundCards'
@@ -27,7 +27,7 @@ export type {
     Globals,
     Groups,
     AudioTracks,
-    RemoteUsers,
+    Users,
     VideoTracks,
     Routers,
     SoundCards,

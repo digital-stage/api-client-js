@@ -3,6 +3,7 @@ import {
     IAnalyserNode,
     IAudioContext,
     IAudioNode,
+    IConvolverNode,
     IGainNode,
     IMediaStreamAudioSourceNode,
     IOscillatorNode,
@@ -18,11 +19,28 @@ import {
     StageDevice,
     StageMember,
 } from '@digitalstage/api-types'
+import debug from 'debug'
 import useStageDevicePosition from './useStageDevicePosition'
 import useStageSelector from '../useStageSelector'
 import useMediasoup from '../useMediasoup'
 import useAudioContext from '../useAudioContext'
 import useAudioTrackPosition from './useAudioTrackPosition'
+import useAnimationFrame from '../useAnimationFrame'
+import useLevel, { LevelProvider } from '../useLevel'
+
+const reportError = debug('useAudioRenderer').extend('error')
+
+const yRotationToVector = (degrees: number): [number, number, number] => {
+    // convert degrees to radians and offset the angle so 0 points towards the listener
+    const radians = (degrees - 90) * (Math.PI / 180)
+    // using cosine and sine here ensures the output values are always normalized
+    // i.e. they range between -1 and 1
+    const x = Math.cos(radians)
+    const z = Math.sin(radians)
+
+    // we hard-code the Y component to 0, as Y is the axis of rotation
+    return [x, 0, z]
+}
 
 interface AudioRenderContext {
     analyser: {
@@ -37,6 +55,36 @@ const Context = createContext<AudioRenderContext>({
         throw new Error('Please wrap your DOM tree inside an AudioRenderProvider')
     },
 })
+
+const useLevelPublishing = (
+    id: string,
+    audioContext: IAudioContext,
+    audioNode?: IAudioNode<IAudioContext>
+) => {
+    const [analyserNode] = useState<IAnalyserNode<IAudioContext>>(audioContext.createAnalyser())
+    const [array] = useState<Uint8Array>(new Uint8Array(analyserNode.frequencyBinCount))
+    const { registerLevel } = useLevel()
+    useEffect(() => {
+        if (id && registerLevel && array) {
+            registerLevel(id, array.buffer)
+        }
+    }, [id, registerLevel, array])
+    useEffect(() => {
+        if (audioNode && analyserNode) {
+            audioNode.connect(analyserNode)
+            return () => {
+                audioNode.disconnect(analyserNode)
+            }
+        }
+        return undefined
+    }, [audioNode, analyserNode])
+    useAnimationFrame(() => {
+        if (analyserNode && array) {
+            analyserNode.getByteFrequencyData(array)
+        }
+    })
+    return undefined
+}
 
 const AudioTrackRenderer = ({
     audioTrackId,
@@ -68,7 +116,7 @@ const AudioTrackRenderer = ({
         node.distanceModel = 'linear'
         node.maxDistance = 10000
         node.refDistance = 1
-        node.rolloffFactor = 10
+        node.rolloffFactor = 5
         node.coneInnerAngle = 45
         node.coneOuterAngle = 90
         node.coneOuterGain = 0.3
@@ -104,7 +152,7 @@ const AudioTrackRenderer = ({
             audioRef.current.srcObject = stream
             audioRef.current.autoplay = true
             audioRef.current.muted = true
-            audioRef.current.play().catch((err) => console.error(err))
+            audioRef.current.play().catch((err) => reportError(err))
             const source = audioContext.createMediaStreamSource(stream)
             setSourceNode(source)
         }
@@ -163,35 +211,40 @@ const AudioTrackRenderer = ({
 
     useEffect(() => {
         if (audioContext && pannerNode) {
+            /**
+             * WebAudio API is using x, z for the horizontal and y for the vertical position,
+             * so we have to assign:
+             * x = x
+             * y = z
+             * z = y
+             */
             pannerNode.positionX.setValueAtTime(position.x, audioContext.currentTime)
-            pannerNode.positionY.setValueAtTime(position.y, audioContext.currentTime)
-            pannerNode.positionZ.setValueAtTime(position.z, audioContext.currentTime)
-            pannerNode.orientationX.setValueAtTime(position.rX, audioContext.currentTime)
-            pannerNode.orientationY.setValueAtTime(position.rY, audioContext.currentTime)
-            pannerNode.orientationZ.setValueAtTime(position.rZ, audioContext.currentTime)
+            pannerNode.positionY.setValueAtTime(position.z, audioContext.currentTime)
+            pannerNode.positionZ.setValueAtTime(position.y, audioContext.currentTime)
+            const orientation = yRotationToVector(position.rZ)
+            pannerNode.orientationX.setValueAtTime(orientation[0], audioContext.currentTime)
+            pannerNode.orientationY.setValueAtTime(orientation[1], audioContext.currentTime)
+            pannerNode.orientationZ.setValueAtTime(orientation[2], audioContext.currentTime)
+
             if (position.directivity === 'cardoid') {
                 // eslint-disable-next-line no-param-reassign
-                pannerNode.coneInnerAngle = 90
+                pannerNode.coneInnerAngle = 60
                 // eslint-disable-next-line no-param-reassign
-                pannerNode.coneOuterAngle = 360
+                pannerNode.coneOuterAngle = 120
+                // eslint-disable-next-line no-param-reassign
+                pannerNode.coneOuterGain = 0.5
             } else {
                 // eslint-disable-next-line no-param-reassign
-                pannerNode.coneInnerAngle = 45
+                pannerNode.coneInnerAngle = 360
                 // eslint-disable-next-line no-param-reassign
-                pannerNode.coneOuterAngle = 90
-                pannerNode.coneOuterGain = 0.3
+                pannerNode.coneOuterAngle = 360
+                // eslint-disable-next-line no-param-reassign
+                pannerNode.coneOuterGain = 0
             }
-            console.log(
-                'Switched node to ',
-                position.x,
-                position.y,
-                position.z,
-                position.rX,
-                position.rY,
-                position.rZ
-            )
         }
     }, [audioContext, pannerNode, position])
+
+    useLevelPublishing(audioTrackId, audioContext, pannerNode)
 
     return (
         <audio ref={audioRef}>
@@ -229,10 +282,10 @@ const StageDeviceRenderer = ({
     const [pannerNode] = useState<IPannerNode<IAudioContext>>(() => {
         const node = audioContext.createPanner()
         node.panningModel = 'HRTF'
-        node.distanceModel = 'linear'
+        node.distanceModel = 'exponential'
         node.maxDistance = 10000
         node.refDistance = 1
-        node.rolloffFactor = 10
+        node.rolloffFactor = 20
         return node
     })
     const [gainNode] = useState<IGainNode<IAudioContext>>(audioContext.createGain())
@@ -241,7 +294,6 @@ const StageDeviceRenderer = ({
 
     useEffect(() => {
         if (audioContext) {
-            console.log('Creating oscillator')
             const node = audioContext.createOscillator()
             node.type = 'square'
             node.frequency.setValueAtTime(
@@ -307,11 +359,12 @@ const StageDeviceRenderer = ({
     useEffect(() => {
         if (audioContext && pannerNode) {
             pannerNode.positionX.setValueAtTime(position.x, audioContext.currentTime)
-            pannerNode.positionY.setValueAtTime(position.y, audioContext.currentTime)
-            pannerNode.positionZ.setValueAtTime(position.z, audioContext.currentTime)
-            pannerNode.orientationX.setValueAtTime(position.rX, audioContext.currentTime)
-            pannerNode.orientationY.setValueAtTime(position.rY, audioContext.currentTime)
-            pannerNode.orientationZ.setValueAtTime(position.rZ, audioContext.currentTime)
+            pannerNode.positionY.setValueAtTime(position.z, audioContext.currentTime)
+            pannerNode.positionZ.setValueAtTime(position.y, audioContext.currentTime)
+            const orientation = yRotationToVector(position.rZ)
+            pannerNode.orientationX.setValueAtTime(orientation[0], audioContext.currentTime)
+            pannerNode.orientationY.setValueAtTime(orientation[1], audioContext.currentTime)
+            pannerNode.orientationZ.setValueAtTime(orientation[2], audioContext.currentTime)
             if (position.directivity === 'cardoid') {
                 // eslint-disable-next-line no-param-reassign
                 pannerNode.coneInnerAngle = 90
@@ -319,22 +372,15 @@ const StageDeviceRenderer = ({
                 pannerNode.coneOuterAngle = 360
             } else {
                 // eslint-disable-next-line no-param-reassign
-                pannerNode.coneInnerAngle = 45
+                pannerNode.coneInnerAngle = 30
+                // pannerNode.coneOuterAngle = 90
                 // eslint-disable-next-line no-param-reassign
-                pannerNode.coneOuterAngle = 90
                 pannerNode.coneOuterGain = 0.3
             }
-            console.log(
-                'Switched node to ',
-                position.x,
-                position.y,
-                position.z,
-                position.rX,
-                position.rY,
-                position.rZ
-            )
         }
     }, [audioContext, pannerNode, position])
+
+    useLevelPublishing(stageDeviceId, audioContext, gainNode)
 
     return (
         <>
@@ -408,6 +454,8 @@ const StageMemberRenderer = ({
         customVolume?.muted,
     ])
 
+    useLevelPublishing(stageMemberId, audioContext, gainNode)
+
     return (
         <>
             {stageDeviceIds.map((stageDeviceId) => (
@@ -476,6 +524,8 @@ const GroupRenderer = ({
         customVolume?.muted,
     ])
 
+    useLevelPublishing(groupId, audioContext, gainNode)
+
     return (
         <>
             {stageMemberIds.map((stageMemberId) => (
@@ -504,13 +554,13 @@ const ListenerRenderer = ({
 
     useEffect(() => {
         if (audioContext) {
-            console.log('[AudioRenderer] Changed position of listener')
             audioContext.listener.positionX.setValueAtTime(position.x, audioContext.currentTime)
-            audioContext.listener.positionY.setValueAtTime(position.y, audioContext.currentTime)
-            audioContext.listener.positionZ.setValueAtTime(position.z, audioContext.currentTime)
-            audioContext.listener.forwardX.setValueAtTime(position.rX, audioContext.currentTime)
-            audioContext.listener.forwardY.setValueAtTime(position.rY, audioContext.currentTime)
-            audioContext.listener.forwardZ.setValueAtTime(position.rZ, audioContext.currentTime)
+            audioContext.listener.positionY.setValueAtTime(position.z, audioContext.currentTime)
+            audioContext.listener.positionZ.setValueAtTime(position.y, audioContext.currentTime)
+            const orientation = yRotationToVector(position.rZ)
+            audioContext.listener.forwardX.setValueAtTime(orientation[0], audioContext.currentTime)
+            audioContext.listener.forwardY.setValueAtTime(orientation[1], audioContext.currentTime)
+            audioContext.listener.forwardZ.setValueAtTime(orientation[2], audioContext.currentTime)
         }
     }, [audioContext, position])
 
@@ -522,18 +572,43 @@ const StageRenderer = ({
     audioContext,
     destination,
     deviceId,
+    useReverb,
 }: {
     stageId: string
     audioContext: IAudioContext
     destination: IAudioNode<IAudioContext>
     deviceId: string
+    useReverb: boolean
 }): JSX.Element => {
     const groupIds = useStageSelector((state) => state.groups.byStage[stageId] || [])
     const localStageDeviceId = useStageSelector<string | undefined>(
-        (state) =>
-            state.stageDevices.byStageAndDevice[stageId] &&
-            state.stageDevices.byStageAndDevice[stageId][deviceId]
+        (state) => state.globals.localStageDeviceId
     )
+    const [convolverNode, setConvolverNode] = useState<IConvolverNode<IAudioContext> | undefined>()
+
+    useEffect(() => {
+        if (useReverb) {
+            fetch('/static/media/SpokaneWomansClub.mp4')
+                .then((response) => response.arrayBuffer())
+                .then((buffer) => audioContext.decodeAudioData(buffer))
+                .then((audioBuffer) => {
+                    const node = audioContext.createConvolver()
+                    node.buffer = audioBuffer
+                    return setConvolverNode(node)
+                })
+                .catch((err) => reportError(err))
+        } else {
+            setConvolverNode(undefined)
+        }
+    }, [audioContext, useReverb])
+
+    useEffect(() => {
+        if (convolverNode && destination) {
+            convolverNode.connect(destination)
+            return () => convolverNode.disconnect(destination)
+        }
+        return undefined
+    }, [convolverNode, destination])
 
     return (
         <>
@@ -549,7 +624,7 @@ const StageRenderer = ({
                     key={groupId}
                     groupId={groupId}
                     audioContext={audioContext}
-                    destination={destination}
+                    destination={convolverNode || destination}
                     deviceId={deviceId}
                 />
             ))}
@@ -566,17 +641,20 @@ const AudioRenderProvider = ({ children }: { children: React.ReactNode }) => {
     )
 
     return (
-        <Context.Provider value={{ analyser, setAnalyser }}>
-            {children}
-            {stageId && localDeviceId && audioContext && started && destination && (
-                <StageRenderer
-                    stageId={stageId}
-                    audioContext={audioContext}
-                    destination={destination}
-                    deviceId={localDeviceId}
-                />
-            )}
-        </Context.Provider>
+        <LevelProvider>
+            <Context.Provider value={{ analyser, setAnalyser }}>
+                {children}
+                {stageId && localDeviceId && audioContext && started && destination && (
+                    <StageRenderer
+                        stageId={stageId}
+                        audioContext={audioContext}
+                        destination={destination}
+                        deviceId={localDeviceId}
+                        useReverb={false}
+                    />
+                )}
+            </Context.Provider>
+        </LevelProvider>
     )
 }
 

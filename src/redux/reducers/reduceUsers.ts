@@ -2,10 +2,10 @@ import omit from 'lodash/omit'
 import without from 'lodash/without'
 import { User, ServerDeviceEvents, ServerDevicePayloads } from '@digitalstage/api-types'
 import upsert from '../utils/upsert'
-import RemoteUsers from '../collections/RemoteUsers'
+import Users from '../collections/Users'
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes'
 
-const addUser = (state: RemoteUsers, user: User): RemoteUsers => ({
+const addUser = (state: Users, user: User): Users => ({
     ...state,
     byId: {
         ...state.byId,
@@ -14,8 +14,8 @@ const addUser = (state: RemoteUsers, user: User): RemoteUsers => ({
     allIds: upsert<string>(state.allIds, user._id),
 })
 
-function reduceRemoteUsers(
-    state: RemoteUsers = {
+function reduceUsers(
+    state: Users = {
         byId: {},
         allIds: [],
     },
@@ -23,7 +23,7 @@ function reduceRemoteUsers(
         type: string
         payload: any
     }
-): RemoteUsers {
+): Users {
     switch (action.type) {
         case AdditionalReducerTypes.RESET: {
             return {
@@ -32,19 +32,23 @@ function reduceRemoteUsers(
             }
         }
         case ServerDeviceEvents.StageJoined: {
-            const { remoteUsers } = action.payload as ServerDevicePayloads.StageJoined
+            const { users } = action.payload as ServerDevicePayloads.StageJoined
             let updated = { ...state }
-            if (remoteUsers)
-                remoteUsers.forEach((user) => {
+            if (users)
+                users.forEach((user) => {
                     updated = addUser(updated, user)
                 })
             return updated
         }
-        case ServerDeviceEvents.RemoteUserAdded: {
+        case ServerDeviceEvents.UserReady: {
             const user = action.payload as User
             return addUser(state, user)
         }
-        case ServerDeviceEvents.RemoteUserChanged:
+        case ServerDeviceEvents.UserAdded: {
+            const user = action.payload as User
+            return addUser(state, user)
+        }
+        case ServerDeviceEvents.UserChanged:
             return {
                 ...state,
                 byId: {
@@ -55,7 +59,7 @@ function reduceRemoteUsers(
                     },
                 },
             }
-        case ServerDeviceEvents.RemoteUserRemoved:
+        case ServerDeviceEvents.UserRemoved:
             return {
                 ...state,
                 byId: omit(state.byId, action.payload),
@@ -66,4 +70,4 @@ function reduceRemoteUsers(
     }
 }
 
-export default reduceRemoteUsers
+export default reduceUsers

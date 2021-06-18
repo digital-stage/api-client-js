@@ -1,10 +1,10 @@
 import { User } from '@digitalstage/api-types'
 
-interface RemoteUsers {
+interface Users {
     byId: {
         [id: string]: User
     }
     allIds: string[]
 }
 
-export default RemoteUsers
+export default Users

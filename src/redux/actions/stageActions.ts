@@ -5,16 +5,16 @@ const messageSent = (message: ServerDevicePayloads.ChatMessageSend) => ({
     payload: message,
 })
 
-const addRemoteUser = (user: ServerDevicePayloads.RemoteUserAdded) => ({
-    type: ServerDeviceEvents.RemoteUserAdded,
+const addUser = (user: ServerDevicePayloads.UserAdded) => ({
+    type: ServerDeviceEvents.UserAdded,
     payload: user,
 })
-const changeRemoteUser = (user: ServerDevicePayloads.RemoteUserChanged) => ({
-    type: ServerDeviceEvents.RemoteUserChanged,
+const changeUser = (user: ServerDevicePayloads.UserChanged) => ({
+    type: ServerDeviceEvents.UserChanged,
     payload: user,
 })
-const removeRemoteUser = (userId: ServerDevicePayloads.RemoteUserRemoved) => ({
-    type: ServerDeviceEvents.RemoteUserRemoved,
+const removeUser = (userId: ServerDevicePayloads.UserRemoved) => ({
+    type: ServerDeviceEvents.UserRemoved,
     payload: userId,
 })
 const addStage = (stage: ServerDevicePayloads.StageAdded) => ({
@@ -233,9 +233,9 @@ const removeCustomAudioTrackPosition = (
 
 const server = {
     messageSent,
-    addRemoteUser,
-    changeRemoteUser,
-    removeRemoteUser,
+    addUser,
+    changeUser,
+    removeUser,
     addStage,
     changeStage,
     removeStage,
