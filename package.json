@@ -51,7 +51,7 @@
     }
   ],
   "devDependencies": {
-    "@digitalstage/api-types": "^0.2.5",
+    "@digitalstage/api-types": "^0.2.6",
     "@size-limit/preset-small-lib": "^4.12.0",
     "@types/debug": "^4.1.5",
     "@types/js-cookie": "^2.2.6",
