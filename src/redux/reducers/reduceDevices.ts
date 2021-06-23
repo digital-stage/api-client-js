@@ -29,7 +29,11 @@ function reduceDevices(
                 ...state,
                 byId: {
                     ...state.byId,
-                    [device._id]: device,
+                    [device._id]: {
+                        ...device,
+                        createdAt: new Date(device.createdAt),
+                        lastLoginAt: new Date(device.lastLoginAt),
+                    },
                 },
                 allIds: upsert<string>(state.allIds, device._id),
             }
