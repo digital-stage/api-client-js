@@ -57,10 +57,10 @@
     "@types/js-cookie": "^2.2.6",
     "@types/lodash": "^4.14.170",
     "@types/react": "^17.0.11",
-    "@types/react-dom": "^17.0.7",
-    "@typescript-eslint/eslint-plugin": "^4.27.0",
-    "@typescript-eslint/parser": "^4.27.0",
-    "eslint": "^7.28.0",
+    "@types/react-dom": "^17.0.8",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "eslint": "^7.29.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
@@ -106,6 +106,6 @@
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "redux-devtools-extension": "^2.13.9",
-    "standardized-audio-context": "^25.2.7"
+    "standardized-audio-context": "^25.2.9"
   }
 }

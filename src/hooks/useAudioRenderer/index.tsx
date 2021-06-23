@@ -87,22 +87,21 @@ const useLevelPublishing = (
 }
 
 const AudioTrackRenderer = ({
-    audioTrackId,
+    audioTrack,
     audioContext,
     destination,
     deviceId,
 }: {
-    audioTrackId: string
+    audioTrack: AudioTrack
     audioContext: IAudioContext
     destination: IAudioNode<IAudioContext>
     deviceId: string
 }): JSX.Element => {
-    const audioTrack = useStageSelector<AudioTrack>((state) => state.audioTracks.byId[audioTrackId])
     const customVolume = useStageSelector<CustomAudioTrackVolume | undefined>((state) =>
         state.customAudioTrackVolumes.byDeviceAndAudioTrack[deviceId] &&
-        state.customAudioTrackVolumes.byDeviceAndAudioTrack[deviceId][audioTrackId]
+        state.customAudioTrackVolumes.byDeviceAndAudioTrack[deviceId][audioTrack._id]
             ? state.customAudioTrackVolumes.byId[
-                  state.customAudioTrackVolumes.byDeviceAndAudioTrack[deviceId][audioTrackId]
+                  state.customAudioTrackVolumes.byDeviceAndAudioTrack[deviceId][audioTrack._id]
               ]
             : undefined
     )
@@ -129,8 +128,8 @@ const AudioTrackRenderer = ({
         if (audioTrack.deviceId === deviceId) {
             // use local producer instead
             setTrack((prev) => {
-                if (!prev && audioProducers[audioTrackId]) {
-                    const { track: t } = audioProducers[audioTrackId]
+                if (!prev && audioProducers[audioTrack._id]) {
+                    const { track: t } = audioProducers[audioTrack._id]
                     if (t !== null) return t
                 }
                 return prev
@@ -138,13 +137,13 @@ const AudioTrackRenderer = ({
         } else {
             // use consumers
             setTrack((prev) => {
-                if (!prev && audioConsumers[audioTrackId]) {
-                    return audioConsumers[audioTrackId].track
+                if (!prev && audioConsumers[audioTrack._id]) {
+                    return audioConsumers[audioTrack._id].track
                 }
                 return prev
             })
         }
-    }, [audioTrackId, audioConsumers, audioProducers, audioTrack.deviceId, deviceId])
+    }, [audioTrack._id, audioConsumers, audioProducers, audioTrack.deviceId, deviceId])
 
     useEffect(() => {
         if (audioRef.current && audioContext && track) {
@@ -244,7 +243,7 @@ const AudioTrackRenderer = ({
         }
     }, [audioContext, pannerNode, position])
 
-    useLevelPublishing(audioTrackId, audioContext, pannerNode)
+    useLevelPublishing(audioTrack._id, audioContext, pannerNode)
 
     return (
         <audio ref={audioRef}>
@@ -276,8 +275,10 @@ const StageDeviceRenderer = ({
               ]
             : undefined
     )
-    const audioTrackIds = useStageSelector(
-        (state) => state.audioTracks.byStageDevice[stageDeviceId] || []
+    const audioTracks = useStageSelector((state) =>
+        state.audioTracks.byStageDevice[stageDeviceId]
+            ? state.audioTracks.byStageDevice[stageDeviceId].map((id) => state.audioTracks.byId[id])
+            : []
     )
     const [pannerNode] = useState<IPannerNode<IAudioContext>>(() => {
         const node = audioContext.createPanner()
@@ -384,10 +385,10 @@ const StageDeviceRenderer = ({
 
     return (
         <>
-            {audioTrackIds.map((audioTrackId) => (
+            {audioTracks.map((audioTrack) => (
                 <AudioTrackRenderer
-                    key={audioTrackId}
-                    audioTrackId={audioTrackId}
+                    key={audioTrack._id}
+                    audioTrack={audioTrack}
                     audioContext={audioContext}
                     destination={gainNode}
                     deviceId={deviceId}

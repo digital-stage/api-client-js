@@ -2,13 +2,20 @@ import mediasoupClient from 'mediasoup-client'
 import { ITeckosClient } from 'teckos-client'
 import debug from 'debug'
 import {
+    AudioTrack,
     ClientDeviceEvents,
     ClientDevicePayloads,
+    MediasoupAudioTrack,
     MediasoupDevice,
+    MediasoupVideoTrack,
+    VideoTrack,
     WebMediaDevice,
 } from '@digitalstage/api-types'
+import { Device } from 'mediasoup-client/lib/Device'
+import { useCallback } from 'react'
+import { Producer } from 'mediasoup-client/lib/Producer'
 
-const report = debug('useMediasoup:utils')
+const report = debug('oldUseMediasoup:utils')
 const reportError = report.extend('error')
 
 export enum RouterEvents {
@@ -104,6 +111,21 @@ export const getAudioTracks = (options: {
             audio: audioOptions,
         })
         .then((stream) => stream.getAudioTracks())
+}
+
+export const getRTPCapabilities = (routerConnection: ITeckosClient) => {
+    return new Promise<mediasoupClient.types.RtpCapabilities>((resolve, reject) => {
+        routerConnection.emit(
+            RouterRequests.GetRTPCapabilities,
+            {},
+            (error: string, retrievedRtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
+                if (error) {
+                    reject(new Error(error))
+                }
+                resolve(retrievedRtpCapabilities)
+            }
+        )
+    })
 }
 
 export const createWebRTCTransport = (
@@ -330,6 +352,104 @@ export const closeConsumer = (
             return resolve(consumer)
         })
     )
+
+export const produce = (
+    sendTransport: mediasoupClient.types.Transport,
+    track: MediaStreamTrack
+): Promise<mediasoupClient.types.Producer> => {
+    report(`Creating producer for track ${track.id}`)
+    if (!track) throw new Error('Could not create producer: Track is undefined')
+    return createProducer(sendTransport, track).then((producer) => {
+        if (producer.paused) {
+            report(`Producer ${producer.id} is paused`)
+        }
+        return producer
+    })
+}
+
+export const publishProducer = (
+    apiConnection: ITeckosClient,
+    stageId: string,
+    producer: Producer
+) =>
+    new Promise<MediasoupVideoTrack | MediasoupAudioTrack>((resolve, reject) => {
+        let payload: ClientDevicePayloads.CreateVideoTrack & ClientDevicePayloads.CreateAudioTrack =
+            {
+                type: 'mediasoup',
+                stageId,
+                producerId: producer.id,
+            }
+        if (producer.kind === 'audio') {
+            payload = {
+                ...payload,
+                y: -1,
+                rZ: 0,
+            }
+        }
+        apiConnection.emit(
+            producer.kind === 'video'
+                ? ClientDeviceEvents.CreateVideoTrack
+                : ClientDeviceEvents.CreateAudioTrack,
+            payload,
+            (error: string | null, track?: VideoTrack | AudioTrack) => {
+                if (error) {
+                    return reject(error)
+                }
+                if (!track) {
+                    return reject(new Error('No video track provided by server'))
+                }
+                if (producer.kind === 'audio') {
+                    return resolve(track as MediasoupAudioTrack)
+                }
+                return resolve(track as MediasoupVideoTrack)
+            }
+        )
+    })
+
+export const consume = (
+    routerConnection: ITeckosClient,
+    receiveTransport: mediasoupClient.types.Transport,
+    device: mediasoupClient.Device,
+    producerId: string
+): Promise<mediasoupClient.types.Consumer> => {
+    report(`Consuming ${producerId}`)
+    return createConsumer(routerConnection, device, receiveTransport, producerId).then(
+        async (localConsumer) => {
+            report(`Created consumer ${localConsumer.id} to consume ${producerId}`)
+            if (localConsumer.paused) {
+                report(`Consumer ${localConsumer.id} is paused, try to resume it`)
+                await resumeConsumer(routerConnection, localConsumer)
+            }
+            if (localConsumer.paused) {
+                reportError(`Consumer ${localConsumer.id} is still paused after resume`)
+            }
+            return localConsumer
+        }
+    )
+}
+
+export const connect = (
+    routerConnection: ITeckosClient
+): Promise<{
+    device: mediasoupClient.types.Device
+    sendTransport: mediasoupClient.types.Transport
+    receiveTransport: mediasoupClient.types.Transport
+}> => {
+    const device = new Device()
+    return getRTPCapabilities(routerConnection)
+        .then((rtpCapabilities) => device.load({ routerRtpCapabilities: rtpCapabilities }))
+        .then(() =>
+            Promise.all([
+                createWebRTCTransport(routerConnection, device, 'send'),
+                createWebRTCTransport(routerConnection, device, 'receive'),
+            ])
+        )
+        .then((transports) => ({
+            device,
+            sendTransport: transports[0],
+            receiveTransport: transports[1],
+        }))
+}
 
 export const enumerateDevices = (): Promise<{
     inputAudioDevices: WebMediaDevice[]

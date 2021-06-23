@@ -46,12 +46,14 @@ const getInitialDevice = async (
             inputVideoDevices,
             canAudio: outputAudioDevices.length > 0 || inputAudioDevices.length > 0,
             canVideo: inputVideoDevices.length > 0,
+            receiveAudio: true,
         }
     }
     return {
         type: 'node',
         uuid,
         requestSession: permanent && !uuid,
+        receiveAudio: true,
     }
 }
 export default getInitialDevice

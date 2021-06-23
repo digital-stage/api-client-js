@@ -9,9 +9,9 @@ import getInitialDevice from '../utils/getInitialDevice'
 const d = debug('connection')
 const err = d.extend('error')
 
-type IApiConnectionContext = ITeckosClient | undefined
+export type IApiConnectionContext = ITeckosClient | undefined
 
-const ApiConnectionContext = createContext<IApiConnectionContext>(undefined)
+export const ApiConnectionContext = createContext<IApiConnectionContext>(undefined)
 
 const useConnection = (): IApiConnectionContext =>
     React.useContext<IApiConnectionContext>(ApiConnectionContext)
@@ -23,9 +23,8 @@ export const ApiConnectionProvider = (props: { children: React.ReactNode; apiUrl
     const { children, apiUrl } = props
 
     useEffect(() => {
-        d('useEffect')
         if (store && token) {
-            getInitialDevice(false)
+            getInitialDevice(true)
                 .then((initialDevice) => {
                     const socket = new TeckosClientWithJWT(
                         apiUrl,
