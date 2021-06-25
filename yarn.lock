@@ -930,10 +930,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@digitalstage/api-types@^0.2.5":
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/@digitalstage/api-types/-/api-types-0.2.6.tgz#0a2779c028ab2145e19dfd6ecaed340c5a00be47"
-  integrity sha512-I7B5lv0O8JnQuDXhzwbS+sjIY0ZcxqWQnyj8wzzLidCup/tARxLIG42s3DIjo1wW/Rbv2XG0rS/AicWD3awpSg==
+"@digitalstage/api-types@^0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@digitalstage/api-types/-/api-types-0.2.7.tgz#7b83e2882c30f3ef99c0d11b71c87897ffeea984"
+  integrity sha512-aiP5i+nJ5tRl8vXuZHjWvbZ6QXPBd/WWVP7Co2LKulueWCdF0Jw5ChstMS6RqItHaxsOtU7nV5w3owg0TnyorA==
 
 "@eslint/eslintrc@^0.4.2":
   version "0.4.2"
@@ -9236,11 +9236,6 @@ ws@^7.0.0, ws@^7.3.1, ws@^7.4.0:
   version "7.4.5"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.5.tgz#a484dd851e9beb6fdb420027e3885e8ce48986c1"
   integrity sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g==
-
-ws@^7.5.0:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.0.tgz#0033bafea031fb9df041b2026fc72a571ca44691"
-  integrity sha512-6ezXvzOZupqKj4jUqbQ9tXuJNo+BR2gU8fFRk3XCP3e0G6WT414u5ELe6Y0vtp7kmSJ3F7YWObSNr1ESsgi4vw==
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

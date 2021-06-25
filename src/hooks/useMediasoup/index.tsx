@@ -469,8 +469,8 @@ const MediasoupProvider = connect(mapStateToProps)(
         audioTracks: MediasoupAudioTrack[]
     }) => (
         <ApiConnectionContext.Consumer>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             {(apiConnection) => (
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 <MediasoupProviderWithProps apiConnection={apiConnection} {...props} />
             )}
         </ApiConnectionContext.Consumer>

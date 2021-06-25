@@ -12,7 +12,6 @@ import {
     WebMediaDevice,
 } from '@digitalstage/api-types'
 import { Device } from 'mediasoup-client/lib/Device'
-import { useCallback } from 'react'
 import { Producer } from 'mediasoup-client/lib/Producer'
 
 const report = debug('oldUseMediasoup:utils')
