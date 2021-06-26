@@ -1,12 +1,12 @@
 import Cookie from 'js-cookie'
 import { MediasoupDevice, WebMediaDevice } from '@digitalstage/api-types'
-import { detect } from 'detect-browser'
+import * as Bowser from 'bowser'
 
 const getInitialDevice = async (
     permanent: boolean
 ): Promise<Partial<Omit<MediasoupDevice, '_id'>>> => {
     const uuid = Cookie.get('device')
-    const browser = detect()
+    const browser = Bowser.getParser(window.navigator.userAgent)
     if (navigator !== undefined) {
         const inputAudioDevices: WebMediaDevice[] = []
         const outputAudioDevices: WebMediaDevice[] = []
@@ -43,8 +43,8 @@ const getInitialDevice = async (
             uuid,
             requestSession: permanent && !uuid,
             type: 'mediasoup',
-            os: browser ? browser.os : undefined,
-            browser: browser ? browser.name : undefined,
+            os: browser.getOSName(),
+            browser: browser.getBrowserName(),
             inputAudioDevices,
             outputAudioDevices,
             inputVideoDevices,
