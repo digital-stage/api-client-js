@@ -5,6 +5,9 @@ import { debug } from 'debug'
 import { useAuth } from './useAuth'
 import registerSocketHandler from '../redux/registerSocketHandler'
 import getInitialDevice from '../utils/getInitialDevice'
+import {ClientDeviceEvents} from "@digitalstage/api-types";
+import AdditionalReducerTypes from "../redux/actions/AdditionalReducerTypes";
+import allActions from "../redux/actions";
 
 const d = debug('connection')
 const err = d.extend('error')
@@ -24,9 +27,10 @@ export const ApiConnectionProvider = (props: { children: React.ReactNode; apiUrl
 
     useEffect(() => {
         if (store && token) {
+            let socket: TeckosClient
             getInitialDevice(true)
                 .then((initialDevice) => {
-                    const socket = new TeckosClientWithJWT(
+                     socket = new TeckosClientWithJWT(
                         apiUrl,
                         {
                             reconnection: true,
@@ -45,21 +49,19 @@ export const ApiConnectionProvider = (props: { children: React.ReactNode; apiUrl
                     d('Connecting...')
                     socket.connect()
                     setConnection(socket)
-                    return undefined
+                    return socket
                 })
                 .catch((error) => err(error))
-        }
-    }, [store, token, apiUrl])
-
-    useEffect(() => {
-        if (connection) {
             return () => {
-                connection.removeAllListeners()
-                connection.disconnect()
+                if(socket) {
+                    socket.removeAllListeners()
+                    socket.disconnect()
+                    store.dispatch(allActions.client.reset())
+                }
             }
         }
         return undefined
-    }, [connection])
+    }, [store, token, apiUrl])
 
     return (
         <ApiConnectionContext.Provider value={connection}>{children}</ApiConnectionContext.Provider>

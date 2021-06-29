@@ -33,6 +33,7 @@ const report = debug('useMediasoup')
 const reportError = report.extend('error')
 
 export interface IMediasoupContext {
+    connected: boolean
     videoConsumers: {
         [videoTrackId: string]: Consumer
     }
@@ -48,6 +49,7 @@ export interface IMediasoupContext {
 }
 
 const MediasoupContext = createContext<IMediasoupContext>({
+    connected: false,
     videoProducers: {},
     videoConsumers: {},
     audioProducers: {},
@@ -110,7 +112,7 @@ type InternalMediasoupProviderState = {
     routerConnection?: ITeckosClient
     sendTransport?: mediasoupClient.types.Transport
     receiveTransport?: mediasoupClient.types.Transport
-} & IMediasoupContext
+} & Omit<IMediasoupContext, "connected">
 
 class MediasoupProviderWithProps extends React.Component<
     InternalMediasoupProviderProps,
@@ -443,11 +445,12 @@ class MediasoupProviderWithProps extends React.Component<
 
     render() {
         const { children } = this.props
-        const { audioConsumers, audioProducers, videoConsumers, videoProducers } = this.state
+        const { routerConnection, audioConsumers, audioProducers, videoConsumers, videoProducers } = this.state
 
         return (
             <MediasoupContext.Provider
                 value={{
+                    connected: !!routerConnection,
                     audioConsumers,
                     audioProducers,
                     videoConsumers,
